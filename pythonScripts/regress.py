@@ -205,6 +205,7 @@ try:
 except FileExistsError:
     pass
 model = "lin"
+#to do fix this path
 fp = '/glade/work/kwheelan/linear_data/finalPreds_{}_tmax_{}_{}.nc'.format(model, str(lat),str(lon))
 try:
     os.remove(fp)

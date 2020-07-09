@@ -1,15 +1,24 @@
-# Linear_downscaling
+## Linear_downscaling
 
-This repository contains two Jupyter notebooks for linear downscaling.
+#### Katrina Wheelan
+#### July 9, 2020
+#### NCAR
 
-*Precip_DownScaling.ipynb* linearly downscales precipitation data using large scale predictors. The notebook employs a logistic model to predict yes/no precip and then a linear model to predict intensity. It has an optional stochastic component to correct the distribution.
+This repository contains custom Jupyter notebooks, Python scripts, and batch scripts for linearly downscaling climate data.
 
-*Temp_Downscaling_MonthlyModel.ipynb* similarly downscales maximum temperature data using large scale predictors. There is only a linear model. Eventually the model will condition on month. The model also includes an optional stochastic component.
+**Directories**:
+ * *notebooks/* - Jupyter notebooks for interactive/customizable downscaling
+   * *Precip_DownScaling.ipynb* - A Jupyter notebook that linearly downscales precipitation data using large scale predictors. The notebook employs a logistic model to predict yes/no precip and then a linear model to predict intensity. It has an optional stochastic component to correct the distribution.
 
-*Tmin_Downscaling_MonthlyModel.ipynb* downscales min temperature data (IN PROGRESS)
+  * *Temp_Downscaling_MonthlyModel.ipynb* - similarly downscales maximum temperature data using large scale predictors. The model controls by month, employing 3 linear methods: (1) manual linear regression, using the same predictors but different coefficients for each month; (2) LASSO linear regress using a single model; (3) LASSO regression conditioned on month. The chosen model also includes an optional stochastic component.
 
-*Graphs.ipynb* Shows various metrics to compare different models 
+  * *Tmin_Downscaling_MonthlyModel.ipynb* - downscales min temperature data (IN PROGRESS)
 
-*betas/* a folder to store betas from regressions for re-use
+  * *Graphs.ipynb* - Shows various metrics to compare different models 
 
-*pythonScripts* A folder to store scripts called by bash scripts
+ * *betas/* - a folder to store betas from regressions for re-use
+
+ * *pythonScripts* - A folder to store scripts called by bash scripts
+ 
+ * *bashScripts/* - Will contain batch scripts for submission to the supercomputer
+
