@@ -2,7 +2,7 @@
 A file to linearly downscale predictors
 
 Right now this just does linear regression and uses all predictors that are passed.
-Updated 6.23.2020, K. Wheelan
+Updated 7.16.2020, K. Wheelan
 
 Usage: regress.py <lat> <lon> <obs filepath> <location to save data> <any pred file paths>+
 
@@ -28,15 +28,20 @@ import os
 import sys
 
 
+print("Progress:")
+
 
 #set variables based on commandline arguments
+if len(sys.argv) < 5:
+    exit("Usage: regress.py <lat> <lon> <obsPath> <save_path> <preds>+")
+
 lat = float(sys.argv[1])
 lon = float(sys.argv[2])
 obsPath = sys.argv[3] #filepath for obs data
 save_path = sys.argv[4]
 preds = [ path for path in sys.argv[5:] ] #paths for preds files
 
-
+print(f"Lat: {lat}, Lon: {lon}")
 
 ### TODO:
 #update this based on given predictors
@@ -61,6 +66,13 @@ for var in other_predictors:
     for level in levels:
         file = ROOT + var + '_' + SERIES + '_p' + str(level) + EXT
         predictors = xr.merge([predictors, xr.open_dataset(file).rename({var: var + '_p' + str(level)})])
+
+print("Loaded predictor files")
+
+
+
+
+
 
 #convert to pandas dataframe in order to use scikit-learn later
 
@@ -97,6 +109,9 @@ all_preds = [key for key in X_all.keys()] #the names of the predictors
 X_all['constant'] = 1 + 0*X_all[all_preds[0]] #added the last part so it's dependent on lat, lon, and time
 if not 'constant' in all_preds: all_preds += ['constant'] #adding "constant" to the list of variable names
 
+print("Loaded obs data.")
+
+
 #separate even years for training and odd for testing
 def evenOdd(ds):
     """Input: xarray dataset
@@ -116,8 +131,13 @@ for data in [X_train, X_test, Y_train, Y_test]:
     data['timecopy'] = data['time']
     data['time'] = data['month']
 
+print("Prepped data for regression")
+
 ## TODO:
 #saving training/testing data
+print("Saved prepped data")
+
+
 
 # Fit regression model
 #TODO verify this chunk
@@ -159,6 +179,9 @@ for month in range(1, 13):
 
 coefMatrix = coefMatrix.drop('coefficient', axis=1)
 
+print("Fit linear model.")
+
+
 #get linear hand-selected predictor test data
 x_test_subset = [np.matrix([X_test.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in range(1,13)]
 
@@ -176,6 +199,9 @@ try:
 except: pass
 eval(betas).to_csv(fp)
 
+print("Saved betas.")
+
+
 #run model to predict for even AND odd years
 X_all_cp = X_all
 X_all_cp['time'] = X_all_cp['time-copy'].dt.month
@@ -185,7 +211,7 @@ def knit_data(x_all, betas):
     for month in range(1,13):
         X_month = X_all_cp.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
-        X_month["preds"]= ({'time' : 'time'}, pd.DataFrame(np.matmul(x_all[month-1], betas[monthsFull[month-1]])).values[0])
+        X_month["preds"]= ({'time' : 'time'}, np.matmul(x_all[month-1], betas[monthsFull[month-1]]))
         X_month['time'] = X_month['time-copy']
         if month == 1:
             X_preds = 0
@@ -198,6 +224,10 @@ def knit_data(x_all, betas):
 #predictions
 X_preds_lin = knit_data(x_all_hand, coefMatrix)
 
+print("Calculated predictions for testing and training data.")
+
+
+
 #saves the fnal predictions (no stochastic component) as netCDF
 ROOT = os.path.join(save_path,'preds')
 try:
@@ -206,8 +236,11 @@ except FileExistsError:
     pass
 model = "lin"
 #to do fix this path
-fp = '/glade/work/kwheelan/linear_data/finalPreds_{}_tmax_{}_{}.nc'.format(model, str(lat),str(lon))
+fp = os.path.join(ROOT, 'finalPreds_{}_tmax_{}_{}.nc'.format(model, str(lat),str(lon)))
 try:
     os.remove(fp)
 except: pass
 eval("X_preds_" + model).to_netcdf(fp)
+
+print("Saved predictions.")
+print("Done.")
