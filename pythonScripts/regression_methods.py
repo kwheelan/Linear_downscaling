@@ -68,7 +68,7 @@ def standardize(predictors):
         predictors[col] = zscore(predictors[col])
         return predictors
 
-def prep_data(obsPath, predictors, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
+def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
     """
         Creating readable xarray objects from obs data and predictors
         Input:
