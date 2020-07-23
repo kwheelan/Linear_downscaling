@@ -14,7 +14,7 @@ Usage: regress.py <lat> <lon> <obs filepath> <location to save data> <any pred f
 #add a switch for two step regression (precip)
 
 #import necessary packages
-import regression_methods
+from regression_methods import *
 import_dependencies()
 
 #Set globals

@@ -23,7 +23,7 @@ LOCATION=$TMPDIR
 
 for LAT in $(seq 32.125 2 38.125)
 do
-    for LON in $(seq -102.875 2 -94.875)
+    for LON in $(seq -101.875 2 -93.875)
     do
 	python regress.py $LAT $LON $OBS $LOCATION
     done
