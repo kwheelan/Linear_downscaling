@@ -6,23 +6,16 @@ __all__ = ['import_dependencies', 'load_predictors', 'zscore', 'standardize','pr
 'add_month', 'add_constant_col', 'evenOdd', 'add_month_filter', 'fit_linear_model',
 'fit_monthly_linear_models', 'save_betas', 'predict_linear', 'save_preds']
 
+import xarray as xr
+import sklearn
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression
+from sklearn.model_selection import ShuffleSplit, cross_val_score, GridSearchCV
+from sklearn.metrics import log_loss
+import matplotlib.pyplot as plt
+import os
 
-#import necessary packages
-def import_dependencies():
-    import warnings
-    warnings.filterwarnings('ignore')
-    import xarray as xr
-    import sklearn
-    import pandas as pd
-    import numpy as np
-    from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression
-    from sklearn.model_selection import ShuffleSplit, cross_val_score, GridSearchCV
-    from sklearn.metrics import log_loss
-    import matplotlib.pyplot as plt
-    import os
-    import sys
-
-import_dependencies()
 
 def load_predictors():
     """

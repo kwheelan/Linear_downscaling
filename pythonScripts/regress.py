@@ -15,7 +15,18 @@ Usage: regress.py <lat> <lon> <obs filepath> <location to save data> <any pred f
 
 #import necessary packages
 from regression_methods import *
-import_dependencies()
+import warnings
+warnings.filterwarnings('ignore')
+import xarray as xr
+import sklearn
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression
+from sklearn.model_selection import ShuffleSplit, cross_val_score, GridSearchCV
+from sklearn.metrics import log_loss
+import matplotlib.pyplot as plt
+import os
+import sys
 
 #Set globals
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
