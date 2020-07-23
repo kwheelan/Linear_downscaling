@@ -52,7 +52,7 @@ print("Loaded predictor files")
 
 #standardize data, trim dates, add month and constant cols
 predictors = standardize(predictors)
-X_all, Y_all = prep_data(obsPath, predictors)
+X_all, Y_all = prep_data(obsPath, predictors, lat, lon)
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all, all_preds)
 print("Loaded obs data.")
