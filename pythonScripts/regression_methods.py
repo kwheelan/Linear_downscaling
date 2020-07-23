@@ -17,6 +17,10 @@ import matplotlib.pyplot as plt
 import os
 
 
+#Set globals
+monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
+
 def load_predictors():
     """
         Read in predictors from specified files.
@@ -74,6 +78,8 @@ def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd =
         Input:
             obsPath: filepath entered as a commandline argument
             predictors: existing xarray obj
+            lat: latitude; float
+            lon: longitude; float
             dateStart (optional): cutoff date for start of data
             dateEnd (optional): cutoff date for end of data
         Output:
@@ -83,6 +89,7 @@ def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd =
     obs = xr.open_mfdataset(obsPath).sel(time = slice(dateStart, dateEnd))
     X_all = predictors.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
     Y_all = obs.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
+    return X_all, Y_all
 
 def add_month(X_all, Y_all):
     """
@@ -103,16 +110,16 @@ def add_month(X_all, Y_all):
         if not 'month' in all_preds: all_preds += ['month'] #adding "month" to the list of variable names
     return X_all, Y_all, all_preds
 
-def add_constant_col(X_all, all_preds):
+def add_constant_col(X_all):
     """
         Adds a column of ones for a constant (since the obs aren't normalized they aren't centered around zero)
         Input:
             X_all, xarray obj of predictors
-            all_preds, list of predictors
         Output:
             X_all, xarray obj of predictors
             all_preds, list of predictors
     """
+    all_preds = [key for key in X_all.keys()] #the names of the predictors
     X_all['constant'] = 1 + 0*X_all[all_preds[0]] #added the last part so it's dependent on lat, lon, and time
     if not 'constant' in all_preds:
         all_preds += ['constant'] #adding "constant" to the list of variable names
@@ -174,7 +181,6 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep):
 
         #get just subset of predictors
         x_train_subset = np.matrix([X_train.sel(time = month)[key].values for key in preds_to_keep]).transpose()
-        x_test_subset = np.matrix([X_test.sel(time = month)[key].values for key in preds_to_keep]).transpose()
 
         #calculate coefficients for training data
         coefs = fit_linear_model(x_train_subset, y,
@@ -188,11 +194,14 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep):
     coefMatrix = coefMatrix.drop('coefficient', axis=1)
     return coefMatrix
 
-def save_betas(save_path, coefMatrix):
+def save_betas(save_path, coefMatrix, lat, lon):
     """
         Save betas to disk
         Input:
             save_path, a string containing the desired save location
+            coefMatrix, the matrix of betas to save
+            lat, latitude (float)
+            lon, longitude (float)
         Output:
             None
     """
@@ -201,19 +210,19 @@ def save_betas(save_path, coefMatrix):
         os.mkdir(ROOT)
     except FileExistsError:
         pass
-    betas = "coefMatrix"
-    fp = os.path.join(ROOT, '{}_tmax_{}_{}.nc'.format(betas, str(lat),str(lon)))
+    fp = os.path.join(ROOT, '{}_tmax_{}_{}.nc'.format('betas', str(lat),str(lon)))
     try:
         os.remove(fp)
     except: pass
-    eval(betas).to_csv(fp)
+    coefMatrix.to_csv(fp)
 
-def predict_linear(X_all, betas):
+def predict_linear(X_all, betas, preds_to_keep):
     """
         Predict using each monthly model then combine all predicted data.
         Input:
             X_all, an xarray obj with predictors
             betas, an array of coefficients for each month
+            preds_to_keep, the predictors to include in the model
         Output:
             an xarray obj containing a 'preds' column
     """
@@ -223,7 +232,7 @@ def predict_linear(X_all, betas):
     for month in range(1,13):
         X_month = X_all.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
-        X_month["preds"]= ({'time' : 'time'}, np.matmul(x_all[month-1], betas[monthsFull[month-1]]))
+        X_month["preds"]= ({'time' : 'time'}, np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]]))
         X_month['time'] = X_month['time-copy']
         if month == 1:
             X_preds = 0
@@ -233,12 +242,14 @@ def predict_linear(X_all, betas):
 
     return X_preds.sortby('time')
 
-def save_preds(save_path, preds):
+def save_preds(save_path, preds, lat, lon):
     """
         Saves predictions to disk as netcdf
         Input:
             save_path as str
             preds, xarray obj
+            lat, latitude (float)
+            lon, longitude (float)
         Output:
             None
     """
@@ -247,7 +258,7 @@ def save_preds(save_path, preds):
         os.mkdir(ROOT)
     except FileExistsError:
         pass
-    fp = os.path.join(ROOT, 'finalPreds_{}_tmax_{}_{}.nc'.format(model, str(lat),str(lon)))
+    fp = os.path.join(ROOT, 'finalPreds_tmax_{}_{}.nc'.format(str(lat),str(lon)))
     try:
         os.remove(fp)
     except: pass

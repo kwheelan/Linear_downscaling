@@ -28,9 +28,6 @@ import matplotlib.pyplot as plt
 import os
 import sys
 
-#Set globals
-monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
 
 #set variables based on commandline arguments
 if len(sys.argv) < 5:
@@ -54,7 +51,7 @@ print("Loaded predictor files")
 predictors = standardize(predictors)
 X_all, Y_all = prep_data(obsPath, predictors, lat, lon)
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
-X_all, all_preds = add_constant_col(X_all, all_preds)
+X_all, all_preds = add_constant_col(X_all)
 print("Loaded obs data.")
 
 #separate testing and training data by even and odd years
@@ -85,15 +82,15 @@ print("Fit linear model.")
 
 
 #saves the betas
-save_betas(file_path, coefMatrix)
+save_betas(save_path, coefMatrix, lat, lon)
 print("Saved betas.")
 
 #predict for all data using betas
-final_predictions = predict_linear(X_all, coefMatrix)
+final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
 
 # TODO: add stochasticity, transformations
 
-save_preds(save_path, final_predictions)
+save_preds(save_path, final_predictions, lat, lon)
 print("Saved predictions.")
 print("Done.")
