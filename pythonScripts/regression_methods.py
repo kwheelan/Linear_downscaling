@@ -2,6 +2,11 @@
 A module of functions for regression/downscaling
 """
 
+__all__ = ['import_dependencies', 'load_predictors', 'zscore', 'standardize','prep_data',
+'add_month', 'add_constant_col', 'evenOdd', 'add_month_filter', 'fit_linear_model',
+'fit_monthly_linear_models', 'save_betas', 'predict_linear', 'save_preds']
+
+
 #import necessary packages
 def import_dependencies():
     import warnings
