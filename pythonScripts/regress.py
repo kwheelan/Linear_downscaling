@@ -100,7 +100,7 @@ print("Saved predictions.")
 # generate plots
 plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon)
 plot_hot_days(Y_all, preds, save_path, lat, lon)
- plot_all_seasons(Y_all, preds)
+plot_all_seasons(Y_all, preds)
 print("Generated plots.")
 
 print("Done.")
