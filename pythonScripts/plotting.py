@@ -60,7 +60,7 @@ def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
     plot_path = make_plot_folder(save_path, lat, lon)
     plt.saveimg(os.path.join(plot_path, 'monthly_means.png'))
 
-def plot_cond_days(Y_all, preds, cond, save_path, lat, lon, title = "Conditional Day Count"):
+def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day Count", comp = "greater", thresh = 35):
     """
         Saving a plot of days that satisify cond.
         Ex. number of days over 35 degrees C
@@ -74,8 +74,12 @@ def plot_cond_days(Y_all, preds, cond, save_path, lat, lon, title = "Conditional
         Output: None
     """
     Y_all['time'], preds['time'] = Y_all.month, preds.month
-    obsDaysCount = [sum(Y_all.sel(time=m).tmax.values eval(cond)) for m in range(1,13)]
-    modelDaysCount = [sum(lin.sel(time=m).preds.values eval(cond)) for m in range(1,13)]
+    if comp.lower() = "greater":
+        obsDaysCount = [sum(Y_all.sel(time=m).tmax.values > thresh for m in range(1,13)]
+        modelDaysCount = [sum(lin.sel(time=m).preds.values > thresh for m in range(1,13)]
+    else:
+        obsDaysCount = [sum(Y_all.sel(time=m).tmax.values < thresh for m in range(1,13)]
+        modelDaysCount = [sum(lin.sel(time=m).preds.values < thresh for m in range(1,13)]
     plt.plot(monthsAbrev, obsAvgs, '-b', label = 'obs')
     plt.plot(monthsAbrev, modelAvgs, '-r', label='model')
     plt.title(title)

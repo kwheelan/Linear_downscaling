@@ -4,7 +4,7 @@ A module of functions for regression/downscaling
 
 __all__ = ['load_predictors', 'zscore', 'standardize','prep_data',
 'add_month', 'add_constant_col', 'evenOdd', 'add_month_filter', 'fit_linear_model',
-'fit_monthly_linear_models', 'save_betas', 'predict_linear', 'save_preds']
+'fit_monthly_linear_models', 'fit_monthly_lasso_models', 'save_betas', 'predict_linear', 'save_preds']
 
 import xarray as xr
 import sklearn
@@ -185,14 +185,48 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep):
         #calculate coefficients for training data
         coefs = fit_linear_model(x_train_subset, y,
                     keys=preds_to_keep).rename(index = {0: 'coefficient'}).transpose()
-
+        #set up beta matrix
         if month == 1:
             coefMatrix = coefs
-
+        #store betas
         coefMatrix[monthsFull[month-1]] = coefs.values
-
     coefMatrix = coefMatrix.drop('coefficient', axis=1)
     return coefMatrix
+
+def fit_monthly_lasso_models(X_train, Y_train):
+    """
+        LASSO regressor that uses BIC to optimize the alpha (L1 regulator)
+        Input:
+            X_train, an xarray obj of predictors
+            Y_train, an xarray obj of observed predictands
+        Output:
+            an array of betas from the regression for each month
+    """
+    reg = sklearn.linear_model.Lasso(fit_intercept = False, alpha=0.5)
+
+    #getting predictor names
+    keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
+
+    #running LASSO for each month
+    for month in range(1, 13):
+
+        #get obs data
+        y = Y_train.sel(time = month).tmax.values #obs values
+
+        #creating numpy matrices
+        X_train_np = np.matrix([X_train.sel(time = month)[key].values for key in keys]).transpose()
+        X_test_np = np.matrix([X_test.sel(time = month)[key].values for key in keys]).transpose()
+        reg.fit(X_train_np, y)
+
+        lasso_preds = [all_preds[i] for i in range(len(reg.coef_)) ]
+        betas_LASSO = pd.DataFrame(index = lasso_preds,
+                                data = [coef for coef in reg.coef_ ], columns = ['January'])
+        if month == 1:
+            betas_LASSO_list = betas_LASSO
+
+        betas_LASSO_list[monthsFull[month-1]] = betas_LASSO.values
+
+    return betas_LASSO_list
 
 def save_betas(save_path, coefMatrix, lat, lon):
     """

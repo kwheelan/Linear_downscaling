@@ -77,7 +77,8 @@ preds_to_drop = ["month", "lat", "lon"]
 preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 
 #fit a different model for each month
-coefMatrix = fit_monthly_linear_models(X_train, Y_train, preds_to_keep)
+# coefMatrix = fit_monthly_linear_models(X_train, Y_train, preds_to_keep)
+coefMatrix = fit_monthly_lasso_models(X_train, Y_train)
 print("Fit linear model.")
 
 #get linear hand-selected predictor test data
