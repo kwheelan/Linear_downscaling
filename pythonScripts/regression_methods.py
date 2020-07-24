@@ -215,10 +215,10 @@ def fit_monthly_lasso_models(X_train, Y_train):
 
         #creating numpy matrices
         X_train_np = np.matrix([X_train.sel(time = month)[key].values for key in keys]).transpose()
-        X_test_np = np.matrix([X_test.sel(time = month)[key].values for key in keys]).transpose()
+        #X_test_np = np.matrix([X_test.sel(time = month)[key].values for key in keys]).transpose()
         reg.fit(X_train_np, y)
 
-        lasso_preds = [all_preds[i] for i in range(len(reg.coef_)) ]
+        lasso_preds = [keys[i] for i in range(len(reg.coef_)) ]
         betas_LASSO = pd.DataFrame(index = lasso_preds,
                                 data = [coef for coef in reg.coef_ ], columns = ['January'])
         if month == 1:

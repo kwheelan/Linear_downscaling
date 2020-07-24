@@ -35,7 +35,7 @@ def make_plot_folder(save_path, lat, lon):
         os.mkdir(os.path.join(save_path, folder))
     except:
         pass #assume folder exists
-    return folder
+    return os.path.join(save_path, folder)
 
 def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
     """
@@ -58,7 +58,7 @@ def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
     plt.legend()
     plt.show()
     plot_path = make_plot_folder(save_path, lat, lon)
-    plt.saveimg(os.path.join(plot_path, 'monthly_means.png'))
+    plt.savefig(os.path.join(plot_path, 'monthly_means.png'))
 
 def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day Count", comp = "greater", thresh = 35):
     """
@@ -74,21 +74,21 @@ def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day C
         Output: None
     """
     Y_all['time'], preds['time'] = Y_all.month, preds.month
-    if comp.lower() = "greater":
-        obsDaysCount = [sum(Y_all.sel(time=m).tmax.values > thresh for m in range(1,13)]
-        modelDaysCount = [sum(lin.sel(time=m).preds.values > thresh for m in range(1,13)]
+    if comp.lower() == "greater":
+        obsDaysCount = [sum(Y_all.sel(time=m).tmax.values > thresh) for m in range(1,13)]
+        modelDaysCount = [sum(preds.sel(time=m).preds.values > thresh) for m in range(1,13)]
     else:
-        obsDaysCount = [sum(Y_all.sel(time=m).tmax.values < thresh for m in range(1,13)]
-        modelDaysCount = [sum(lin.sel(time=m).preds.values < thresh for m in range(1,13)]
-    plt.plot(monthsAbrev, obsAvgs, '-b', label = 'obs')
-    plt.plot(monthsAbrev, modelAvgs, '-r', label='model')
+        obsDaysCount = [sum(Y_all.sel(time=m).tmax.values < thresh) for m in range(1,13)]
+        modelDaysCount = [sum(preds.sel(time=m).preds.values < thresh) for m in range(1,13)]
+    plt.plot(monthsAbrev, obsDaysCount, '-b', label = 'obs')
+    plt.plot(monthsAbrev, modelDaysCount, '-r', label='model')
     plt.title(title)
     plt.ylabel('Temperature (Celcius)')
     plt.xlabel('Month')
     plt.legend()
     plt.show()
     plot_path = make_plot_folder(save_path, lat, lon)
-    plt.saveimg(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
 
 def plot_hot_days(Y_all, preds, save_path, lat, lon):
         """
@@ -100,7 +100,7 @@ def plot_hot_days(Y_all, preds, save_path, lat, lon):
                    lon - longitude as a float
             Output: None
         """
-        plot_cond_days(Y_all, preds, cond = "> 35", save_path, lat, lon, title="Number of Days over 35 Degrees Celcius")
+        plot_cond_days(Y_all, preds, save_path, lat, lon, title="Number of Days over 35 Degrees Celcius", comp="greater", thresh=35)
 
 def annualSeasonPlot(Y_all, preds, startDate, endDate, title = "Seasonal Plot"):
     """
@@ -126,7 +126,7 @@ def annualSeasonPlot(Y_all, preds, startDate, endDate, title = "Seasonal Plot"):
     plt.xlabel('Year')
     plt.legend()
     plt.show()
-    plt.saveimg(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
 
 def plot_all_seasons(Y_all, preds):
     """
@@ -136,7 +136,7 @@ def plot_all_seasons(Y_all, preds):
             preds as xarray obj
         Output: None
     """
-    annualSeasonPlot('12-01', '02-28', "Seasonal Plot: Dec-Jan-Feb")
-    annualSeasonPlot('03-01', '05-30', "Seasonal Plot: Mar-Apr-May")
-    annualSeasonPlot('06-01', '08-31', "Seasonal Plot: Jun-Jul-Aug")
-    annualSeasonPlot('09-01', '11-30', "Seasonal Plot: Sep-Oct-Nov")
+    annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb")
+    annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May")
+    annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug")
+    annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov")
