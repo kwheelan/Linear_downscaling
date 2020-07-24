@@ -263,24 +263,3 @@ def save_preds(save_path, preds, lat, lon):
         os.remove(fp)
     except: pass
     preds.to_netcdf(fp)
-
-
-def plot_monthly_avgs(Y_all, preds, save_path):
-    """
-        Saving a plot of monthly averages for predictand.
-        Input: Y_all (obs data) as xarray obj
-               preds as xarray obj
-               save_path, str of location for saving img
-        Output: None
-    """
-    Y_all['time'], preds['time'] = Y_all.time.dt.month, preds.month
-    modelAvgs = [float(preds.sel(time = m).mean(dim = 'time').preds) for m in range(1,13)]
-    obsAvgs = [float(Y_all.sel(time = m).mean(dim = 'time').tmax) for m in range(1,13)]
-    plt.plot(monthsAbrev, obsAvgs, '-b', label = 'obs')
-    plt.plot(monthsAbrev, modelAvgs, '-r', label='model')
-    plt.title("Mean Monthly Max Temperature for Observed and Modeled Data")
-    plt.ylabel('Temperature (Celcius)')
-    plt.xlabel('Month')
-    plt.legend()
-    plt.show()
-    plt.saveimg(os.path.join(save_path, 'plot.png'))

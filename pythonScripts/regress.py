@@ -13,8 +13,11 @@ Usage: regress.py <lat> <lon> <obs filepath> <location to save data> <any pred f
 #add stochasticity
 #add a switch for two step regression (precip)
 
-#import necessary packages
+#import functions from other files
 from regression_methods import *
+from plotting import *
+
+#import necessary packages
 import warnings
 warnings.filterwarnings('ignore')
 import xarray as xr
@@ -93,4 +96,8 @@ print("Calculated predictions for testing and training data.")
 
 save_preds(save_path, final_predictions, lat, lon)
 print("Saved predictions.")
+
+plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon)
+print("Generated plots.")
+
 print("Done.")
