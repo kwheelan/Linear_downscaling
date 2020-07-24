@@ -37,6 +37,48 @@ def make_plot_folder(save_path, lat, lon):
         pass #assume folder exists
     return os.path.join(save_path, folder)
 
+def annualSeasonPlot(Y_all, preds, startDate, endDate, title = "Seasonal Plot"):
+    """
+        Plots seasonal avgs compared to an observed moving average
+        Input:
+            Y_all (obs data) as xarray obj
+            preds as xarray obj
+            startDate of season as a string; ex. '12-01'
+            endDate of season as a string; ex. '02-28'
+            title as a string; ex. 'Season plot: winter'
+        Output: None
+    """
+    winter = startDate[0:2] > endDate[0:2]
+    startDate, endDate = '-' + startDate, '-' + endDate
+    obsSeasonAvg = [Y_all.sel(time = slice(str(y)+startDate, str(y+winter) + endDate)).tmax.mean(dim = 'time') for y in range(1980, 2014) ]
+    modelSeasonAvg = [preds.sel(time = slice(str(y)+startDate, str(y+winter)+endDate)).preds.mean(dim = 'time') for y in range(1980, 2014) ]
+    movingAvg = [sum([obsSeasonAvg[t+i] for i in range(5)])/5 for t in range(len(obsSeasonAvg)-4)]
+
+    plotModels(range(1980, 2014), [obsSeasonAvg, modelSeasonAvg])
+    plt.plot(range(1983, 2013), movingAvg, '-k', label = "5-yr moving average")
+    plt.title(title)
+    plt.ylabel('Temp (Celcius)')
+    plt.xlabel('Year')
+    plt.legend()
+    plt.show()
+    plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
+
+def plot_all_seasons(Y_all, preds):
+    """
+        Plots 4 plots of seasonal avgs compared to an observed moving average
+        Input:
+            Y_all (obs data) as xarray obj
+            preds as xarray obj
+        Output: None
+    """
+    try:
+        annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb")
+        annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May")
+        annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug")
+        annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov")
+    except: pass
+
+
 def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
     """
         Saving a plot of monthly averages for predictand.
@@ -101,42 +143,3 @@ def plot_hot_days(Y_all, preds, save_path, lat, lon):
             Output: None
         """
         plot_cond_days(Y_all, preds, save_path, lat, lon, title="Number of Days over 35 Degrees Celcius", comp="greater", thresh=35)
-
-def annualSeasonPlot(Y_all, preds, startDate, endDate, title = "Seasonal Plot"):
-    """
-        Plots seasonal avgs compared to an observed moving average
-        Input:
-            Y_all (obs data) as xarray obj
-            preds as xarray obj
-            startDate of season as a string; ex. '12-01'
-            endDate of season as a string; ex. '02-28'
-            title as a string; ex. 'Season plot: winter'
-        Output: None
-    """
-    winter = startDate[0:2] > endDate[0:2]
-    startDate, endDate = '-' + startDate, '-' + endDate
-    obsSeasonAvg = [Y_all.sel(time = slice(str(y)+startDate, str(y+winter) + endDate)).tmax.mean(dim = 'time') for y in range(1980, 2014) ]
-    modelSeasonAvg = [preds.sel(time = slice(str(y)+startDate, str(y+winter)+endDate)).preds.mean(dim = 'time') for y in range(1980, 2014) ]
-    movingAvg = [sum([obsSeasonAvg[t+i] for i in range(5)])/5 for t in range(len(obsSeasonAvg)-4)]
-
-    plotModels(range(1980, 2014), [obsSeasonAvg, modelSeasonAvg])
-    plt.plot(range(1983, 2013), movingAvg, '-k', label = "5-yr moving average")
-    plt.title(title)
-    plt.ylabel('Temp (Celcius)')
-    plt.xlabel('Year')
-    plt.legend()
-    plt.show()
-    plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
-
-def plot_all_seasons(Y_all, preds):
-    """
-        Plots 4 plots of seasonal avgs compared to an observed moving average
-        Input:
-            Y_all (obs data) as xarray obj
-            preds as xarray obj
-        Output: None
-    """
-    annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb")
-    annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May")
-    annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug")
-    annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov")
