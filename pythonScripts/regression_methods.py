@@ -21,7 +21,7 @@ import os
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
 
-def load_predictors():
+def load_all_predictors():
     """
         Read in predictors from specified files.
         Input: None (change to filenames)
@@ -50,6 +50,36 @@ def load_predictors():
         for level in levels:
             file = ROOT + var + '_' + SERIES + '_p' + str(level) + EXT
             predictors = xr.merge([predictors, xr.open_dataset(file).rename({var: var + '_p' + str(level)})])
+
+    return predictors
+
+def load_selected_predictors(preds):
+    """
+        Reading in selected predictors (netCDF files) as xarray objects
+        Input:
+            preds, an array of filepaths to the predictor files
+        Output:
+            merged predictors as an xarray object
+    """
+    ROOT = '/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/ERA-I/mpigrid/' #where the files are saved
+    EXT = '_19790101-20181231_dayavg_mpigrid.nc' #date range at the end of the file
+    SERIES = 'ERAI_NAmerica'
+
+    #The variables to use
+    surface_predictors = ['mslp', 'uas', 'vas'] #, 'ps']
+    surface_predictors = [f"{v}_{SERIES}_surf" for v in surface_predictors if v in preds]
+    #Each of these predictors is taken at each pressure level below
+    other_predictors = ['Q', 'RH', 'U', 'V', 'Z', 'Vort', 'Div']
+    levels = [500, 700, 850] #pressure levels
+    level_preds = [f"{v}_{SERIES}_p{level}" for v in other_predictors for level in levels if f"{v}_p{level}" in preds]
+    preds = surface_predictors + level_preds
+
+    #Surface predictors
+    for var in preds:
+        file = ROOT + var + EXT
+        if var == preds[0]:
+            predictors = xr.open_dataset(file)[var]
+        predictors = xr.merge([predictors, xr.open_dataset(file)[var]])
 
     return predictors
 

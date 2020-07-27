@@ -46,7 +46,10 @@ print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
 
 #import predictors
-predictors = load_predictors()
+if preds = ['all']:
+    predictors = load_all_predictors()
+else:
+    predictors = load_selected_predictors(preds)
 print("Loaded predictor files")
 
 

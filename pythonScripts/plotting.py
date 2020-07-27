@@ -54,7 +54,8 @@ def annualSeasonPlot(Y_all, preds, startDate, endDate, title = "Seasonal Plot"):
     modelSeasonAvg = [preds.sel(time = slice(str(y)+startDate, str(y+winter)+endDate)).preds.mean(dim = 'time') for y in range(1980, 2014) ]
     movingAvg = [sum([obsSeasonAvg[t+i] for i in range(5)])/5 for t in range(len(obsSeasonAvg)-4)]
 
-    plotModels(range(1980, 2014), [obsSeasonAvg, modelSeasonAvg])
+    plt.plot(range(1980, 2014), obsSeasonAvg, '-b', label = 'obs')
+    plt.plot(range(1980, 2014), modelSeasonAvg, '-r', label='model')
     plt.plot(range(1983, 2013), movingAvg, '-k', label = "5-yr moving average")
     plt.title(title)
     plt.ylabel('Temp (Celcius)')
