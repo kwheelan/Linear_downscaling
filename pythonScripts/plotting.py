@@ -62,8 +62,10 @@ def annualSeasonPlot(Y_all, preds, startDate, endDate, title = "Seasonal Plot"):
     plt.legend()
     plt.show()
     plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
+    plt.clf()
 
-def plot_all_seasons(Y_all, preds):
+
+def plot_all_seasons(obsPath, preds):
     """
         Plots 4 plots of seasonal avgs compared to an observed moving average
         Input:
@@ -71,8 +73,9 @@ def plot_all_seasons(Y_all, preds):
             preds as xarray obj
         Output: None
     """
+    Y_all = xr.open_dataset(obsPath)
+    annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb")
     try:
-        annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb")
         annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May")
         annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug")
         annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov")
@@ -101,6 +104,7 @@ def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
     plt.show()
     plot_path = make_plot_folder(save_path, lat, lon)
     plt.savefig(os.path.join(plot_path, 'monthly_means.png'))
+    plt.clf()
 
 def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day Count", comp = "greater", thresh = 35):
     """
@@ -131,6 +135,7 @@ def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day C
     plt.show()
     plot_path = make_plot_folder(save_path, lat, lon)
     plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
+    plt.clf()
 
 def plot_hot_days(Y_all, preds, save_path, lat, lon):
         """
