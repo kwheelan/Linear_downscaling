@@ -109,7 +109,7 @@ print("Prepped data for regression")
 #===============================================================================
 
 # exclude variables that aren't predictors
-preds_to_drop = ["month", "lat", "lon", "timecopy", "time-copy"] #changed line
+preds_to_drop = ["month", "lat", "lon"]
 preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 
 #fit a different model for each month
