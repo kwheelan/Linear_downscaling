@@ -186,13 +186,13 @@ def evenOdd(ds):
         Input: xarray dataset
         Output: even and odd year datasets as xarray objects
     """
-    ds['time-copy'] = ds['time'] #backup time
+    ds['timecopy'] = ds['time'] #backup time
     #classify years as even or odd
     ds['time'] =  pd.DatetimeIndex(ds.time.values).year%2 == 0
     even, odd = ds.sel(time = True), ds.sel(time = False)
     #reset to original time data
-    even['time'], odd['time'] = even['time-copy'],odd['time-copy']
-    return even.drop('time-copy'), odd.drop('time-copy')
+    even['time'], odd['time'] = even['timecopy'],odd['timecopy']
+    return even.drop('timecopy'), odd.drop('timecopy')
 
 def add_month_filter(data):
     """
@@ -333,13 +333,13 @@ def predict_linear(X_all, betas, preds_to_keep):
             an xarray obj containing a 'preds' column
     """
     X_all_cp = X_all
-    X_all_cp['time'] = X_all_cp['time-copy'].dt.month
+    X_all_cp['time'] = X_all_cp['timecopy'].dt.month
     X_all_hand = [np.matrix([X_all_cp.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in range(1,13)]
     for month in range(1,13):
         X_month = X_all.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
         X_month["preds"]= ({'time' : 'time'}, np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]]))
-        X_month['time'] = X_month['time-copy']
+        X_month['time'] = X_month['timecopy']
         if month == 1:
             X_preds = 0
             X_preds = X_month
