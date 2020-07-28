@@ -37,6 +37,7 @@ from plotting import *
 
 #import necessary packages
 import warnings
+warnings.filterwarnings('ignore')
 import xarray as xr
 import sklearn
 import pandas as pd
@@ -64,6 +65,7 @@ dateStart = '1980-01-01'
 dateEnd = '2005-12-31'
 method = "OLS"
 train = False
+standardize = False
 
 print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
@@ -83,7 +85,8 @@ Clean up and prep the data for analysis.
 
 
 #standardize data, trim dates, add month and constant cols
-predictors = standardize(predictors)
+if standardize:
+    predictors = standardize(predictors)
 X_all, Y_all = prep_data(obsPath, predictors, lat, lon, dateStart = dateStart, dateEnd = dateEnd)
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)
@@ -129,6 +132,10 @@ print("Fit linear model.")
 save_betas(save_path, coefMatrix, lat, lon)
 print("Saved betas.")
 
+#==============================================================================
+"""Generating predictions"""
+#==============================================================================
+
 #predict for all data using betas
 final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
@@ -139,10 +146,15 @@ corrected_preds = inflate_variance(-0.5, 4, final_predictions)
 save_preds(save_path, final_predictions, lat, lon)
 print("Saved predictions.")
 
-# generate plots
+
+#==============================================================================
+"""Generate plots."""
+#==============================================================================
+
 plot_all_seasons(Y_all, final_predictions, save_path, lat, lon)
 plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon)
 plot_hot_days(Y_all, final_predictions, save_path, lat, lon)
+save_stats(Y_all, final_predictions, lat, lon, save_path)
 
 print("Generated plots.")
 
