@@ -1,10 +1,19 @@
+
+#==============================================================================
 """"
 A module of functions for regression/downscaling
-"""
 
-__all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standardize','prep_data',
-'add_month', 'add_constant_col', 'evenOdd', 'add_month_filter', 'fit_linear_model',
-           'fit_monthly_linear_models', 'fit_monthly_lasso_models', 'save_betas', 'predict_linear', 'save_preds', 'inflate_variance']
+K. Wheelan
+July, 2020
+"""
+#================================================================================
+
+
+__all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standardize',
+            'prep_data','add_month', 'add_constant_col', 'evenOdd', 'add_month_filter',
+            'fit_linear_model', 'fit_monthly_linear_models', 'fit_monthly_lasso_models',
+            'save_betas', 'predict_linear', 'save_preds', 'inflate_variance']
+
 
 import xarray as xr
 import sklearn
@@ -20,6 +29,13 @@ import os
 #Set globals
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
+
+#==============================================================================
+"""
+Functions for loading files.
+"""
+#===============================================================================
+
 
 def load_all_predictors():
     """
@@ -82,6 +98,15 @@ def load_selected_predictors(preds):
         predictors = xr.merge([predictors, xr.open_dataset(file)[preds[i].split('_')[0]]])
 
     return predictors
+
+
+
+
+#==============================================================================
+"""
+Functions for prepping data for regression.
+"""
+#==============================================================================
 
 def zscore(variable):
     """
@@ -178,6 +203,14 @@ def add_month_filter(data):
     data['timecopy'] = data['time']
     data['time'] = data['month']
     return data
+
+
+#==============================================================================
+"""
+Functions for fitting regression model.
+"""
+#==============================================================================
+
 
 def fit_linear_model(X, y, keys=None):
     """
@@ -280,6 +313,15 @@ def save_betas(save_path, coefMatrix, lat, lon):
     except: pass
     coefMatrix.to_csv(fp)
 
+
+
+
+#==============================================================================
+"""
+Functions for generating predictions from model.
+"""
+#==============================================================================
+
 def predict_linear(X_all, betas, preds_to_keep):
     """
         Predict using each monthly model then combine all predicted data.
@@ -340,4 +382,4 @@ def inflate_variance(mu, sigma, preds):
     """
     stochast = np.random.normal(mu, sigma, preds.preds.shape[0])
     preds['preds'] = preds.preds + stochast
-    return preds 
+    return preds

@@ -1,8 +1,16 @@
+
+#==============================================================================
 """
 A module of plotting functions for the downscaled predictions.
-"""
 
-__all__ = ['plot_monthly_avgs', 'plot_hot_days', 'plot_all_seasons']
+Katrina Wheelan
+July 2020
+
+# TODO: make Plot class to avoid passing vars back and forth
+"""
+#==============================================================================
+
+__all__ = ['plot_monthly_avgs', 'plot_hot_days', 'plot_all_seasons', 'save_stats']
 
 #import dependencies
 import xarray as xr
@@ -19,6 +27,12 @@ import os
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
 
+
+#===============================================================================
+"""
+Plotting functions for downscaled data.
+"""
+#===============================================================================
 
 def make_plot_folder(save_path, lat, lon):
     """
@@ -73,6 +87,9 @@ def plot_all_seasons(Y_all, preds, save_path, lat, lon):
         Input:
             Y_all (obs data) as xarray obj
             preds as xarray obj
+            save_path, str of location for saving img
+            lat - latitude as a float
+            lon - longitude as a float
         Output: None
     """
     Y_all['time'] = Y_all['time-copy']
@@ -80,7 +97,7 @@ def plot_all_seasons(Y_all, preds, save_path, lat, lon):
     annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May", save_path, lat, lon)
     annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug", save_path, lat, lon)
     annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov", save_path, lat, lon)
-    
+
 
 
 def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
@@ -120,7 +137,7 @@ def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day C
                title - a str plot title and plot file name
         Output: None
     """
-# to do: divide by number of years 
+# to do: divide by number of years
     Y_all['time'], preds['time'] = Y_all.month, preds.month
     if comp.lower() == "greater":
         obsDaysCount = [sum(Y_all.sel(time=m).tmax.values > thresh) for m in range(1,13)]
@@ -150,3 +167,32 @@ def plot_hot_days(Y_all, preds, save_path, lat, lon):
             Output: None
         """
         plot_cond_days(Y_all, preds, save_path, lat, lon, title="Number of Days over 35 Degrees Celcius", comp="greater", thresh=35)
+
+
+
+#===============================================================================
+"""
+Saving summary statistics.
+"""
+#===============================================================================
+
+def save_stats(Y_all, preds, lat, lon, save_path):
+    """
+        Saving a txt file with data on the modeled predictions
+        Input: Y_all (obs data) as xarray obj
+               preds as xarray obj
+               save_path, str of location for saving img
+               lat - latitude as a float
+               lon - longitude as a float
+        Output: None
+        # TODO: r-squared; standard error
+    """
+    plot_path = make_plot_folder(save_path, lat, lon)
+    f = open(os.join.path(plot_path, "stats.txt"), "w")
+    f.write("Observations:")
+    f.write(f"Mean: {float(mean(Y_all.tmax))}")
+    f.write(f"Variance: {float(var(Y_all.tmax))}\n")
+    f.write("Modeled Data:")
+    f.write(f"Mean: {float(mean(preds.preds))}")
+    f.write(f"Variance: {float(var(preds.preds))}\n")
+    f.close()
