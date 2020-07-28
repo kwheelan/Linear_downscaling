@@ -2,9 +2,9 @@
 A module of functions for regression/downscaling
 """
 
-__all__ = ['load_predictors', 'zscore', 'standardize','prep_data',
+__all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standardize','prep_data',
 'add_month', 'add_constant_col', 'evenOdd', 'add_month_filter', 'fit_linear_model',
-'fit_monthly_linear_models', 'fit_monthly_lasso_models', 'save_betas', 'predict_linear', 'save_preds']
+           'fit_monthly_linear_models', 'fit_monthly_lasso_models', 'save_betas', 'predict_linear', 'save_preds', 'inflate_variance']
 
 import xarray as xr
 import sklearn
@@ -72,14 +72,14 @@ def load_selected_predictors(preds):
     other_predictors = ['Q', 'RH', 'U', 'V', 'Z', 'Vort', 'Div']
     levels = [500, 700, 850] #pressure levels
     level_preds = [f"{v}_{SERIES}_p{level}" for v in other_predictors for level in levels if f"{v}_p{level}" in preds]
-    preds = surface_predictors + level_preds
+    preds_long = surface_predictors + level_preds
 
     #Surface predictors
-    for var in preds:
-        file = ROOT + var + EXT
-        if var == preds[0]:
-            predictors = xr.open_dataset(file)[var]
-        predictors = xr.merge([predictors, xr.open_dataset(file)[var]])
+    for i in range(len(preds)):
+        file = ROOT + preds_long[i] + EXT
+        if i == 0:
+            predictors = xr.open_dataset(file)[preds[i].split('_')[0]]
+        predictors = xr.merge([predictors, xr.open_dataset(file)[preds[i].split('_')[0]]])
 
     return predictors
 
@@ -327,3 +327,17 @@ def save_preds(save_path, preds, lat, lon):
         os.remove(fp)
     except: pass
     preds.to_netcdf(fp)
+
+def inflate_variance(mu, sigma, preds):
+    """
+        Adds a stochastic element by sampling from a normal distribution centered at mu with spread sigma.
+        Input:
+              mu, mean of sampling ditribution for white noise (float)
+              sigma, variance of sampling distribution for white noise (float)
+              preds, the raw predictions as xarray obj
+        Output:
+             predictions plus the stochastic elements
+    """
+    stochast = np.random.normal(mu, sigma, preds.preds.shape[0])
+    preds['preds'] = preds.preds + stochast
+    return preds 

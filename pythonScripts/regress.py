@@ -46,7 +46,7 @@ print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
 
 #import predictors
-if preds = ['all']:
+if preds == ['all']:
     predictors = load_all_predictors()
 else:
     predictors = load_selected_predictors(preds)
@@ -96,13 +96,14 @@ print("Saved betas.")
 final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
 
-# TODO: add stochasticity, transformations
+# TODO: transformations
+corrected_preds = inflate_variance(-0.5, 4, final_predictions)
 
 save_preds(save_path, final_predictions, lat, lon)
 print("Saved predictions.")
 
 # generate plots
-plot_all_seasons(obsPath, final_predictions)
+plot_all_seasons(Y_all, final_predictions, save_path, lat, lon)
 plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon)
 plot_hot_days(Y_all, final_predictions, save_path, lat, lon)
 

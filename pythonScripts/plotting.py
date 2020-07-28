@@ -37,7 +37,7 @@ def make_plot_folder(save_path, lat, lon):
         pass #assume folder exists
     return os.path.join(save_path, folder)
 
-def annualSeasonPlot(Y_all, preds, startDate, endDate, title = "Seasonal Plot"):
+def annualSeasonPlot(Y_all, preds, startDate, endDate, title, save_path, lat, lon):
     """
         Plots seasonal avgs compared to an observed moving average
         Input:
@@ -62,11 +62,12 @@ def annualSeasonPlot(Y_all, preds, startDate, endDate, title = "Seasonal Plot"):
     plt.xlabel('Year')
     plt.legend()
     plt.show()
+    plot_path = make_plot_folder(save_path, lat, lon)
     plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
     plt.clf()
 
 
-def plot_all_seasons(obsPath, preds):
+def plot_all_seasons(Y_all, preds, save_path, lat, lon):
     """
         Plots 4 plots of seasonal avgs compared to an observed moving average
         Input:
@@ -74,13 +75,12 @@ def plot_all_seasons(obsPath, preds):
             preds as xarray obj
         Output: None
     """
-    Y_all = xr.open_dataset(obsPath)
-    annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb")
-    try:
-        annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May")
-        annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug")
-        annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov")
-    except: pass
+    Y_all['time'] = Y_all['time-copy']
+    annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb", save_path, lat, lon)
+    annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May", save_path, lat, lon)
+    annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug", save_path, lat, lon)
+    annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov", save_path, lat, lon)
+    
 
 
 def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
@@ -120,6 +120,7 @@ def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day C
                title - a str plot title and plot file name
         Output: None
     """
+# to do: divide by number of years 
     Y_all['time'], preds['time'] = Y_all.month, preds.month
     if comp.lower() == "greater":
         obsDaysCount = [sum(Y_all.sel(time=m).tmax.values > thresh) for m in range(1,13)]
@@ -130,7 +131,7 @@ def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day C
     plt.plot(monthsAbrev, obsDaysCount, '-b', label = 'obs')
     plt.plot(monthsAbrev, modelDaysCount, '-r', label='model')
     plt.title(title)
-    plt.ylabel('Temperature (Celcius)')
+    plt.ylabel('Number of Days')
     plt.xlabel('Month')
     plt.legend()
     plt.show()
