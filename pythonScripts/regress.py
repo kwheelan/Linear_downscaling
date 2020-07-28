@@ -62,6 +62,8 @@ preds = [ path for path in sys.argv[5:] ] #paths for preds files
 #to be customized:
 dateStart = '1980-01-01'
 dateEnd = '2005-12-31'
+method = "OLS"
+train = False
 
 print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
@@ -100,8 +102,6 @@ else:
     X_all, Y_all = add_month_filter(X_all), add_month_filter(Y_all)
 
 print("Prepped data for regression")
-
-
 
 
 #==============================================================================
