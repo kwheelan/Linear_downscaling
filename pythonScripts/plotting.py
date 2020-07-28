@@ -92,7 +92,7 @@ def plot_all_seasons(Y_all, preds, save_path, lat, lon):
             lon - longitude as a float
         Output: None
     """
-    Y_all['time'] = Y_all['time-copy']
+    Y_all['time'] = Y_all['timecopy']
     annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb", save_path, lat, lon)
     annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May", save_path, lat, lon)
     annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug", save_path, lat, lon)
