@@ -121,7 +121,7 @@ if train:
 else:
     if method == 'OLS':
         coefMatrix = fit_monthly_linear_models(X_all, Y_all, preds_to_keep)
-    elif method == 'LASSO'
+    elif method == 'LASSO':
         coefMatrix = fit_monthly_lasso_models(X_all, Y_all)
 print("Fit linear model.")
 
