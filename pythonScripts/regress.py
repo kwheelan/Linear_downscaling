@@ -116,7 +116,7 @@ preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 if train:
     if method == 'OLS':
         coefMatrix = fit_monthly_linear_models(X_train, Y_train, preds_to_keep)
-    elif method == 'LASSO'
+    elif method == 'LASSO':
         coefMatrix = fit_monthly_lasso_models(X_train, Y_train)
 else:
     if method == 'OLS':
