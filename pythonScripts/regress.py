@@ -87,7 +87,7 @@ Clean up and prep the data for analysis.
 
 #standardize data, trim dates, add month and constant cols
 
-print(f"mslp: mean: {np.mean(predictors.mslp)} var: {np.var(predictors.mslp)}\n")
+print(f"mslp: mean: {float(np.mean(predictors.mslp))} var: {float(np.var(predictors.mslp))}\n")
 
 if stdize:
     predictors = standardize(predictors)
@@ -96,8 +96,8 @@ X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)
 print("Loaded obs data.")
 
-print(f"predictors mslp: mean: {np.mean(predictors.mslp)} var: {np.var(predictors.mslp)}\n")
-print(f"X_all stdized mslp: mean: {np.mean(X_all.mslp)} var: {np.var(X_all.mslp)}\n")
+print(f"predictors mslp: mean: {float(np.mean(predictors.mslp))} var: {float(np.var(predictors.mslp))}\n")
+print(f"X_all stdized mslp: mean: {float(np.mean(X_all.mslp))} var: {float(np.var(X_all.mslp))}\n")
 
 if train:
     #separate testing and training data by even and odd years

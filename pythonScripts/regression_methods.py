@@ -115,7 +115,7 @@ def zscore(variable):
         Input: an Xarray dataset
         Output: a standardized Xarray object
     """
-    return (variable - np.mean(variable)) / math.sqrt(np.std(variable))
+    return (variable - np.mean(variable)) / np.std(variable)
 
 def standardize(predictors):
     """
@@ -125,7 +125,7 @@ def standardize(predictors):
     """
     for col in [i for i in predictors.keys()]:
         #standardize each predictor
-        predictors[col] = zscore(predictors[col])
+        predictors[col] = (('time', 'lat', 'lon'), zscore(np.Array(predictors[col])))
         return predictors
 
 def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
