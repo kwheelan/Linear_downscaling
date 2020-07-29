@@ -51,7 +51,7 @@ def make_plot_folder(save_path, lat, lon):
         pass #assume folder exists
     return os.path.join(save_path, folder)
 
-def annualSeasonPlot(Y_all, preds, startDate, endDate, title, save_path, lat, lon):
+def annualSeasonPlot(Y_all, preds, startDate, endDate, title, save_path, lat, lon, predictand):
     """
         Plots seasonal avgs compared to an observed moving average
         Input:
@@ -64,7 +64,7 @@ def annualSeasonPlot(Y_all, preds, startDate, endDate, title, save_path, lat, lo
     """
     winter = startDate[0:2] > endDate[0:2]
     startDate, endDate = '-' + startDate, '-' + endDate
-    obsSeasonAvg = [Y_all.sel(time = slice(str(y)+startDate, str(y+winter) + endDate)).tmax.mean(dim = 'time') for y in range(1980, 2014) ]
+    obsSeasonAvg = [Y_all.sel(time = slice(str(y)+startDate, str(y+winter) + endDate))[predictand].mean(dim = 'time') for y in range(1980, 2014) ]
     modelSeasonAvg = [preds.sel(time = slice(str(y)+startDate, str(y+winter)+endDate)).preds.mean(dim = 'time') for y in range(1980, 2014) ]
     movingAvg = [sum([obsSeasonAvg[t+i] for i in range(5)])/5 for t in range(len(obsSeasonAvg)-4)]
 
@@ -100,7 +100,7 @@ def plot_all_seasons(Y_all, preds, save_path, lat, lon):
 
 
 
-def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
+def plot_monthly_avgs(Y_all, preds, save_path, lat, lon, predictand):
     """
         Saving a plot of monthly averages for predictand.
         Input: Y_all (obs data) as xarray obj
@@ -112,7 +112,7 @@ def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
     """
     Y_all['time'], preds['time'] = Y_all.month, preds.month
     modelAvgs = [float(preds.sel(time = m).mean(dim = 'time').preds) for m in range(1,13)]
-    obsAvgs = [float(Y_all.sel(time = m).mean(dim = 'time').tmax) for m in range(1,13)]
+    obsAvgs = [float(Y_all.sel(time = m).mean(dim = 'time')[predictand]) for m in range(1,13)]
     plt.plot(monthsAbrev, obsAvgs, '-b', label = 'obs')
     plt.plot(monthsAbrev, modelAvgs, '-r', label='model')
     plt.title("Mean Monthly Max Temperature for Observed and Modeled Data")
@@ -124,7 +124,7 @@ def plot_monthly_avgs(Y_all, preds, save_path, lat, lon):
     plt.savefig(os.path.join(plot_path, 'monthly_means.png'))
     plt.clf()
 
-def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day Count", comp = "greater", thresh = 35):
+def plot_cond_days(Y_all, preds, save_path, lat, lon, predictand, title = "Conditional Day Count", comp = "greater", thresh = 35):
     """
         Saving a plot of days that satisify cond.
         Ex. number of days over 35 degrees C
@@ -140,10 +140,10 @@ def plot_cond_days(Y_all, preds, save_path, lat, lon, title = "Conditional Day C
 # to do: divide by number of years
     Y_all['time'], preds['time'] = Y_all.month, preds.month
     if comp.lower() == "greater":
-        obsDaysCount = [sum(Y_all.sel(time=m).tmax.values > thresh) for m in range(1,13)]
+        obsDaysCount = [sum(Y_all.sel(time=m)[predictand].values > thresh) for m in range(1,13)]
         modelDaysCount = [sum(preds.sel(time=m).preds.values > thresh) for m in range(1,13)]
     else:
-        obsDaysCount = [sum(Y_all.sel(time=m).tmax.values < thresh) for m in range(1,13)]
+        obsDaysCount = [sum(Y_all.sel(time=m)[predictand].values < thresh) for m in range(1,13)]
         modelDaysCount = [sum(preds.sel(time=m).preds.values < thresh) for m in range(1,13)]
     plt.plot(monthsAbrev, obsDaysCount, '-b', label = 'obs')
     plt.plot(monthsAbrev, modelDaysCount, '-r', label='model')
@@ -166,9 +166,17 @@ def plot_hot_days(Y_all, preds, save_path, lat, lon):
                    lon - longitude as a float
             Output: None
         """
-        plot_cond_days(Y_all, preds, save_path, lat, lon, title="Number of Days over 35 Degrees Celcius", comp="greater", thresh=35)
+        plot_cond_days(Y_all, preds, save_path, lat, lon, predictand = 'tmax', title="Number of Days over 35 Degrees Celcius", comp="greater", thresh=35)
 
-
+def plot_dist(data, title):
+    """
+        Generates and saves a plot of the distribution of given data
+        Input:
+            data as xarray obj
+        Output:
+            none
+    """
+    pass
 
 #===============================================================================
 """
@@ -176,7 +184,7 @@ Saving summary statistics.
 """
 #===============================================================================
 
-def save_stats(Y_all, preds, lat, lon, save_path):
+def save_stats(Y_all, preds, lat, lon, save_path, predictand):
     """
         Saving a txt file with data on the modeled predictions
         Input: Y_all (obs data) as xarray obj
@@ -190,7 +198,7 @@ def save_stats(Y_all, preds, lat, lon, save_path):
     plot_path = make_plot_folder(save_path, lat, lon)
     f = open(os.path.join(plot_path, "stats.txt"), "w")
     f.write("Observations:\n")
-    f.write(f"Mean: {float(np.mean(Y_all.tmax))}\n")
+    f.write(f"Mean: {float(np.mean(Y_all[predictand]))}\n")
     f.write(f"Variance: {float(np.var(Y_all.tmax))}\n\n")
     f.write("Modeled Data:\n")
     f.write(f"Mean: {float(np.mean(preds.preds))}\n")

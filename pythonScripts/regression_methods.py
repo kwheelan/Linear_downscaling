@@ -38,38 +38,6 @@ Functions for loading files.
 #===============================================================================
 
 
-def load_all_predictors():
-    """
-        Read in predictors from specified files.
-        Input: None (change to filenames)
-        Output: Merged predictors as an xarray object
-    """
-    ### TODO:
-    #update this based on given predictors
-    ROOT = '/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/ERA-I/mpigrid/' #where the files are saved
-    EXT = '_19790101-20181231_dayavg_mpigrid.nc' #date range at the end of the file
-    SERIES = 'ERAI_NAmerica'
-
-    #The variables to use
-    surface_predictors = ['mslp', 'uas', 'vas'] #, 'ps']
-    #Each of these predictors is taken at each pressure level below
-    other_predictors = ['Q', 'RH', 'U', 'V', 'Z', 'Vort', 'Div']
-    levels = [500, 700, 850] #pressure levels
-
-    #Surface predictors
-    for var in surface_predictors:
-        file = ROOT + var + '_' + SERIES + '_surf' + EXT
-        if var == 'mslp': predictors = xr.open_dataset(file)[var]
-        predictors = xr.merge([predictors, xr.open_dataset(file)[var]])
-
-    #Other predictors (at multiple pressure levels)
-    for var in other_predictors:
-        for level in levels:
-            file = ROOT + var + '_' + SERIES + '_p' + str(level) + EXT
-            predictors = xr.merge([predictors, xr.open_dataset(file).rename({var: var + '_p' + str(level)})])
-
-    return predictors
-
 def load_selected_predictors(preds):
     """
         Reading in selected predictors (netCDF files) as xarray objects
@@ -81,7 +49,7 @@ def load_selected_predictors(preds):
     ROOT = '/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/ERA-I/mpigrid/' #where the files are saved
     EXT = '_19790101-20181231_dayavg_mpigrid.nc' #date range at the end of the file
     SERIES = 'ERAI_NAmerica'
-    
+
 
     #The variables to use
     surface_predictors = ['mslp', 'uas', 'vas'] #, 'ps']
@@ -102,6 +70,20 @@ def load_selected_predictors(preds):
         predictors = xr.merge([predictors, xr.open_dataset(file)[var.split('_')[0]]]).rename({var: preds_long[i]})
 
     return predictors
+
+def load_all_predictors():
+    """
+        Read in predictors from specified files.
+        Input: None (change to filenames)
+        Output: Merged predictors as an xarray object
+    """
+    surface_predictors = ['mslp', 'uas', 'vas'] #, 'ps']
+    #Each of these predictors is taken at each pressure level below
+    other_predictors = ['Q', 'RH', 'U', 'V', 'Z', 'Vort', 'Div']
+    levels = [500, 700, 850] #pressure levels
+    level_preds = [f"{v}_p{level}" for v in other_predictors for level in levels]
+
+    return load_selected_predictors(surface_predictors + level_preds)
 
 
 
@@ -233,19 +215,19 @@ def fit_linear_model(X, y, keys=None):
         b[keys[i]] = betas[0,i] #assigning names to each coefficient
     return b
 
-def fit_monthly_linear_models(X_train, Y_train, preds_to_keep):
+def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand):
     """
         Fits a linear model for each month of training data
         Input:
             X_train, an xarray obj of predictors
-            Y_train, an xarray obj of observed predictands
+            Y_train, an xarray obj of observed predictand
             preds_to_keep, a list of key values of predictors to include in the regression
         Output:
             coefMatrix, an array of betas from the regression for each month
     """
     for month in range(1, 13):
         #get obs data
-        y = Y_train.sel(time = month).tmax.values #obs values
+        y = Y_train.sel(time = month)[predictand].values #obs values
 
         #get just subset of predictors
         x_train_subset = np.matrix([X_train.sel(time = month)[key].values for key in preds_to_keep]).transpose()
@@ -261,7 +243,7 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep):
     coefMatrix = coefMatrix.drop('coefficient', axis=1)
     return coefMatrix
 
-def fit_monthly_lasso_models(X_train, Y_train):
+def fit_monthly_lasso_models(X_train, Y_train, predictand):
     """
         LASSO regressor that uses BIC to optimize the alpha (L1 regulator)
         Input:
@@ -279,7 +261,7 @@ def fit_monthly_lasso_models(X_train, Y_train):
     for month in range(1, 13):
 
         #get obs data
-        y = Y_train.sel(time = month).tmax.values #obs values
+        y = Y_train.sel(time = month)[predictand].values #obs values
 
         #creating numpy matrices
         X_train_np = np.matrix([X_train.sel(time = month)[key].values for key in keys]).transpose()
@@ -296,7 +278,7 @@ def fit_monthly_lasso_models(X_train, Y_train):
 
     return betas_LASSO_list
 
-def save_betas(save_path, coefMatrix, lat, lon):
+def save_betas(save_path, coefMatrix, lat, lon, predictand):
     """
         Save betas to disk
         Input:
@@ -312,7 +294,7 @@ def save_betas(save_path, coefMatrix, lat, lon):
         os.mkdir(ROOT)
     except FileExistsError:
         pass
-    fp = os.path.join(ROOT, '{}_tmax_{}_{}.nc'.format('betas', str(lat),str(lon)))
+    fp = os.path.join(ROOT, f"betas_{predictand}_{lat}_{lon}.nc")
     try:
         os.remove(fp)
     except: pass
@@ -353,7 +335,7 @@ def predict_linear(X_all, betas, preds_to_keep):
 
     return X_preds.sortby('time')
 
-def save_preds(save_path, preds, lat, lon):
+def save_preds(save_path, preds, lat, lon, predictand):
     """
         Saves predictions to disk as netcdf
         Input:
@@ -369,7 +351,7 @@ def save_preds(save_path, preds, lat, lon):
         os.mkdir(ROOT)
     except FileExistsError:
         pass
-    fp = os.path.join(ROOT, 'finalPreds_tmax_{}_{}.nc'.format(str(lat),str(lon)))
+    fp = os.path.join(ROOT, f"finalPreds_{predictand}_{lat}_{lon}.nc")
     try:
         os.remove(fp)
     except: pass

@@ -122,18 +122,18 @@ preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 #fit a different model for each month
 if train:
     if method == 'OLS':
-        coefMatrix = fit_monthly_linear_models(X_train, Y_train, preds_to_keep)
+        coefMatrix = fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand)
     elif method == 'LASSO':
-        coefMatrix = fit_monthly_lasso_models(X_train, Y_train)
+        coefMatrix = fit_monthly_lasso_models(X_train, Y_train, predictand)
 else:
     if method == 'OLS':
-        coefMatrix = fit_monthly_linear_models(X_all, Y_all, preds_to_keep)
+        coefMatrix = fit_monthly_linear_models(X_all, Y_all, preds_to_keep, predictand)
     elif method == 'LASSO':
-        coefMatrix = fit_monthly_lasso_models(X_all, Y_all)
+        coefMatrix = fit_monthly_lasso_models(X_all, Y_all, predictand)
 print("Fit linear model.")
 
 #saves the betas
-save_betas(save_path, coefMatrix, lat, lon)
+save_betas(save_path, coefMatrix, lat, lon, predictand)
 print("Saved betas.")
 
 #==============================================================================
@@ -148,7 +148,7 @@ print("Calculated predictions for testing and training data.")
 if inflate:
     corrected_preds = inflate_variance(-0.5, 4, final_predictions)
 
-save_preds(save_path, final_predictions, lat, lon)
+save_preds(save_path, final_predictions, lat, lon, predictand)
 print("Saved predictions.")
 
 
@@ -156,10 +156,10 @@ print("Saved predictions.")
 """Generate plots."""
 #==============================================================================
 
-plot_all_seasons(Y_all, final_predictions, save_path, lat, lon)
-plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon)
+plot_all_seasons(Y_all, final_predictions, save_path, lat, lon, predictand)
+plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon, predictand)
 plot_hot_days(Y_all, final_predictions, save_path, lat, lon)
-save_stats(Y_all, final_predictions, lat, lon, save_path)
+save_stats(Y_all, final_predictions, lat, lon, save_path, predictand)
 
 print("Generated plots.")
 
