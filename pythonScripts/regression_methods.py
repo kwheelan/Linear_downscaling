@@ -126,7 +126,7 @@ def standardize(predictors):
     """
     for col in predictors.keys():
         #standardize each predictor
-        predictors[col] = (('time'), zscore(predictors[col].data)
+        predictors[col] = (('time'), zscore(predictors[col].data))
         return predictors
 
 def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
