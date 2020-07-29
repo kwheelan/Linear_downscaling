@@ -124,10 +124,22 @@ def standardize(predictors):
         Input: predictors xarray object
         Output: predictors xarray object
     """
+    # for col in predictors.keys():
+    #     mean = predictors[col].mean("time")
+    #     std = predictors[col].std("time")
+    #     predictors[col] = xr.apply_ufunc(
+    #         lambda x, m, s: (x - m) / s,
+    #         predictors[col],
+    #         mean,
+    #         std,
+    #     )
+    # return predictors
+
+
     for col in predictors.keys():
         #standardize each predictor
         predictors[col] = (('time'), zscore(predictors[col].data))
-        return predictors
+    return predictors
 
 def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
     """
