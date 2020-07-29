@@ -65,7 +65,7 @@ dateStart = '1980-01-01'
 dateEnd = '2005-12-31'
 method = "OLS"
 train = True
-standardize = False
+standardize = True
 
 print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
