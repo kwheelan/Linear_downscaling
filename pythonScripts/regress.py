@@ -66,6 +66,7 @@ dateEnd = '2005-12-31'
 method = "OLS"
 train = False
 stdize = True
+inflate = False
 
 print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
