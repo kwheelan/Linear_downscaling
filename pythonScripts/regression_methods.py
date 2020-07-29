@@ -124,9 +124,9 @@ def standardize(predictors):
         Input: predictors xarray object
         Output: predictors xarray object
     """
-    for col in [i for i in predictors.keys()]:
+    for col in predictors.keys():
         #standardize each predictor
-        predictors[col] = (('time'), zscore(np.array(predictors[col])))
+        predictors[col] = (('time'), zscore(predictors[col].data)
         return predictors
 
 def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
