@@ -64,7 +64,7 @@ preds = [ path for path in sys.argv[5:] ] #paths for preds files
 dateStart = '1980-01-01'
 dateEnd = '2005-12-31'
 method = "OLS"
-train = True
+train = False
 stdize = True
 
 print("Progress:")
@@ -141,7 +141,8 @@ final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
 
 # TODO: transformations
-corrected_preds = inflate_variance(-0.5, 4, final_predictions)
+if inflate:
+    corrected_preds = inflate_variance(-0.5, 4, final_predictions)
 
 save_preds(save_path, final_predictions, lat, lon)
 print("Saved predictions.")
