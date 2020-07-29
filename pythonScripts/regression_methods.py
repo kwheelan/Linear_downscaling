@@ -117,6 +117,7 @@ def zscore(variable):
     """
     return (variable - np.mean(variable)) / np.std(variable)
 
+
 def standardize(predictors):
     """
         Standardizes predictors (assumes normality)
@@ -125,7 +126,7 @@ def standardize(predictors):
     """
     for col in [i for i in predictors.keys()]:
         #standardize each predictor
-        predictors[col] = (('time', 'lat', 'lon'), zscore(np.Array(predictors[col])))
+        predictors[col] = (('time', 'lat', 'lon'), zscore(np.array(predictors[col])))
         return predictors
 
 def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
