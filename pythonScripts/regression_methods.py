@@ -224,7 +224,7 @@ def fit_linear_model(X, y, keys=None):
         keys = [key for key in X.keys()]
         X = np.matrix([X[key].values for key in keys]).transpose() #X matrix; rows are days, columns are variables
     XT = X.transpose()
-    betas = np.dot(np.matmul(np.linalg.inv(np.dot(XT,X)), XT), y)
+    betas = np.matmul(np.matmul(np.linalg.inv(np.matmul(XT,X)), XT), y)
     b = pd.DataFrame(index = range(1))
     for i in range(len(keys)):
         b[keys[i]] = betas[0,i] #assigning names to each coefficient
@@ -340,7 +340,7 @@ def predict_linear(X_all, betas, preds_to_keep):
     for month in range(1,13):
         X_month = X_all.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
-        X_month["preds"]= ({'time' : 'time'}, np.dot(X_all_hand[month-1], betas[monthsFull[month-1]]))
+        X_month["preds"]= ({'time' : 'time'}, np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]]))
         X_month['time'] = X_month['timecopy']
         if month == 1:
             X_preds = 0
