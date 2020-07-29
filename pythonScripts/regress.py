@@ -59,6 +59,7 @@ lon = float(sys.argv[2])
 obsPath = sys.argv[3] #filepath for obs data
 save_path = sys.argv[4]
 preds = [ path for path in sys.argv[5:] ] #paths for preds files
+print(preds)
 
 #to be customized:
 dateStart = '1980-01-01'
@@ -87,8 +88,6 @@ Clean up and prep the data for analysis.
 
 #standardize data, trim dates, add month and constant cols
 
-print(f"var: mean: {float(np.mean(predictors.vas.data))} var: {float(np.var(predictors.vas.data))}\n")
-
 X_all, Y_all = prep_data(obsPath, predictors, lat, lon, dateStart = dateStart, dateEnd = dateEnd)
 if stdize:
     #standardize predictors
@@ -96,8 +95,6 @@ if stdize:
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)
 print("Loaded obs data.")
-
-print(f"X_all stdized var: mean: {float(np.mean(X_all.vas.data))} var: {float(np.var(X_all.vas.data))}\n")
 
 if train:
     #separate testing and training data by even and odd years
