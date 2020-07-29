@@ -19,6 +19,7 @@ import xarray as xr
 import sklearn
 import pandas as pd
 import numpy as np
+import math
 from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression
 from sklearn.model_selection import ShuffleSplit, cross_val_score, GridSearchCV
 from sklearn.metrics import log_loss
@@ -114,7 +115,7 @@ def zscore(variable):
         Input: an Xarray dataset
         Output: a standardized Xarray object
     """
-    return (variable - np.mean(variable)) / np.std(variable)
+    return (variable - np.mean(variable)) / math.sqrt(np.std(variable))
 
 def standardize(predictors):
     """
