@@ -65,7 +65,7 @@ dateStart = '1980-01-01'
 dateEnd = '2005-12-31'
 method = "OLS"
 train = True
-standardize = True
+stdize = True
 
 print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
@@ -85,7 +85,7 @@ Clean up and prep the data for analysis.
 
 
 #standardize data, trim dates, add month and constant cols
-if standardize:
+if stdize:
     predictors = standardize(predictors)
 X_all, Y_all = prep_data(obsPath, predictors, lat, lon, dateStart = dateStart, dateEnd = dateEnd)
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
