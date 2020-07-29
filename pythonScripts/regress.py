@@ -64,7 +64,7 @@ preds = [ path for path in sys.argv[5:] ] #paths for preds files
 dateStart = '1980-01-01'
 dateEnd = '2005-12-31'
 method = "OLS"
-train = False
+train = True
 standardize = False
 
 print("Progress:")
