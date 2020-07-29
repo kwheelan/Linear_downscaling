@@ -186,9 +186,9 @@ def save_stats(Y_all, preds, lat, lon, save_path):
                lon - longitude as a float
         Output: None
         # TODO: r-squared; standard error
-    """
+    """ 
     plot_path = make_plot_folder(save_path, lat, lon)
-    f = open(os.join.path(plot_path, "stats.txt"), "w")
+    f = open(os.path.join(plot_path, "stats.txt"), "w")
     f.write("Observations:")
     f.write(f"Mean: {float(mean(Y_all.tmax))}")
     f.write(f"Variance: {float(var(Y_all.tmax))}\n")
