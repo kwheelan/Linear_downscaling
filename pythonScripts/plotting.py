@@ -193,6 +193,6 @@ def save_stats(Y_all, preds, lat, lon, save_path):
     f.write(f"Mean: {float(np.mean(Y_all.tmax))}")
     f.write(f"Variance: {float(np.var(Y_all.tmax))}\n")
     f.write("Modeled Data:")
-    f.write(f"Mean: {float(mean(preds.preds))}")
-    f.write(f"Variance: {float(var(preds.preds))}\n")
+    f.write(f"Mean: {float(np.mean(preds.preds))}")
+    f.write(f"Variance: {float(np.var(preds.preds))}\n")
     f.close()
