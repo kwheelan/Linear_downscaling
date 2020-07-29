@@ -89,9 +89,10 @@ Clean up and prep the data for analysis.
 
 print(f"mslp: mean: {float(np.mean(predictors.mslp.data))} var: {float(np.var(predictors.mslp.data))}\n")
 
-if stdize:
-    predictors = standardize(predictors)
 X_all, Y_all = prep_data(obsPath, predictors, lat, lon, dateStart = dateStart, dateEnd = dateEnd)
+if stdize:
+    #standardize predictors
+    X_all = standardize(X_all)
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)
 print("Loaded obs data.")

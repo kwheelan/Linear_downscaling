@@ -143,7 +143,7 @@ def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd =
             X_all, an xarray object of predictors
             Y_all, an xarray object of obs
     """
-    obs = xr.open_mfdataset(obsPath).sel(time = slice(dateStart, dateEnd))
+    obs = xr.open_dataset(obsPath).sel(time = slice(dateStart, dateEnd))
     X_all = predictors.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
     Y_all = obs.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
     return X_all, Y_all
