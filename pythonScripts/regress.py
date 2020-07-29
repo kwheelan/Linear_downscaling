@@ -87,7 +87,7 @@ Clean up and prep the data for analysis.
 
 #standardize data, trim dates, add month and constant cols
 
-print(f"mslp: mean: {np.mean(X_all.mslp)} var: {np.var(X_all.mslp)}\n")
+print(f"mslp: mean: {np.mean(predictors.mslp)} var: {np.var(predictors.mslp)}\n")
 
 if stdize:
     predictors = standardize(predictors)
