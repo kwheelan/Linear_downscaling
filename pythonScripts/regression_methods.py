@@ -81,6 +81,7 @@ def load_selected_predictors(preds):
     ROOT = '/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/ERA-I/mpigrid/' #where the files are saved
     EXT = '_19790101-20181231_dayavg_mpigrid.nc' #date range at the end of the file
     SERIES = 'ERAI_NAmerica'
+    
 
     #The variables to use
     surface_predictors = ['mslp', 'uas', 'vas'] #, 'ps']
@@ -98,7 +99,7 @@ def load_selected_predictors(preds):
         if i == 0:
             predictors = xr.open_dataset(file)[var.split('_')[0]]
         # add new col and rename using level
-        predictors = xr.merge([predictors, xr.open_dataset(file)[var.split('_')[0]].rename({var: preds_long[i]})])
+        predictors = xr.merge([predictors, xr.open_dataset(file)[var.split('_')[0]]]).rename({var: preds_long[i]})
 
     return predictors
 
