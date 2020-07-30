@@ -62,13 +62,15 @@ preds = [ path for path in sys.argv[5:] ] #paths for preds files
 #NOTE: surface predictors must proceed predictors measured at a specific level
 
 #to be customized:
+predictand = "tmax"
 dateStart = '1980-01-01'
 dateEnd = '2005-12-31'
 method = "OLS"
 train = False
 stdize = True
-inflate = False
-predictand = "tmax"
+inflate = True
+inflate_mean = 0
+inflate_var = 1 #equivalent to variance inflation?
 
 print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
@@ -147,7 +149,7 @@ print("Calculated predictions for testing and training data.")
 
 # TODO: transformations
 if inflate:
-    corrected_preds = inflate_variance(-0.5, 4, final_predictions)
+    corrected_preds = inflate_variance(inflate_mean, inflate_var, final_predictions)
 
 save_preds(save_path, final_predictions, lat, lon, predictand)
 print("Saved predictions.")
@@ -161,7 +163,7 @@ plot_all_seasons(Y_all, final_predictions, save_path, lat, lon, predictand)
 plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon, predictand)
 plot_hot_days(Y_all, final_predictions, save_path, lat, lon)
 save_stats(Y_all, final_predictions, lat, lon, save_path, predictand)
-plot_dist(Y_all[predictand], 'Observed Distribution', save_path, lat, lon)
+plot_dist(Y_all[predictand], 'Observed Distribution', save_path, lat, lon, predictand)
 plot_dist(final_predictions.preds, 'Modeled Distribution', save_path, lat, lon, predictand)
 
 print("Generated plots.")
