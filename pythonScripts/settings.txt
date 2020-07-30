@@ -1,0 +1,33 @@
+
+#==============================================================================
+"""
+Initialization options
+"""
+#==============================================================================
+
+{
+
+'lat' : 38.125,
+'lon' : -101.875,
+'predictand' : 'tmax',
+'preds_surface' : ['mslp', 'vas'],
+'preds_level' : ['Z_p500', 'RH_p500', 'RH_p700', 'Q_p850']
+
+'dateStart' : '1980-01-01',
+'dateEnd' : '2005-12-31',
+
+'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc',
+'save_path' : '/glade/scratch/$USER/downscaling_data',
+
+'method' : 'OLS',
+'train' : False,
+'stdize' : True,
+
+'inflate' : True,
+'inflate_mean' : 0,
+'inflate_var' : 1
+
+'plot_options' : True
+'stat_output' : True
+
+}
