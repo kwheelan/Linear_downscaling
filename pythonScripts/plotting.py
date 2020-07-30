@@ -81,7 +81,7 @@ def annualSeasonPlot(Y_all, preds, startDate, endDate, title, save_path, lat, lo
     plt.clf()
 
 
-def plot_all_seasons(Y_all, preds, save_path, lat, lon):
+def plot_all_seasons(Y_all, preds, save_path, lat, lon, predictand):
     """
         Plots 4 plots of seasonal avgs compared to an observed moving average
         Input:
@@ -93,10 +93,10 @@ def plot_all_seasons(Y_all, preds, save_path, lat, lon):
         Output: None
     """
     Y_all['time'] = Y_all['timecopy']
-    annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb", save_path, lat, lon)
-    annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May", save_path, lat, lon)
-    annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug", save_path, lat, lon)
-    annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov", save_path, lat, lon)
+    annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb", save_path, lat, lon, predictand)
+    annualSeasonPlot(Y_all, preds, '03-01', '05-30', "Seasonal Plot Mar-Apr-May", save_path, lat, lon, predictand)
+    annualSeasonPlot(Y_all, preds, '06-01', '08-31', "Seasonal Plot Jun-Jul-Aug", save_path, lat, lon, predictand)
+    annualSeasonPlot(Y_all, preds, '09-01', '11-30', "Seasonal Plot Sep-Oct-Nov", save_path, lat, lon, predictand)
 
 
 
