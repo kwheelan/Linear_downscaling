@@ -57,7 +57,10 @@ def load_selected_predictors(preds):
     #Each of these predictors is taken at each pressure level below
     other_predictors = ['Q', 'RH', 'U', 'V', 'Z', 'Vort', 'Div']
     levels = [500, 700, 850] #pressure levels
-    level_preds = [f"{v.split('_')[0]}_{SERIES}_p{level}" for v in preds for level in levels if v.split('_')[0] in other_predictors]
+    #all combinations of predictors and levels
+    full = [f"{v}_p{level}" for v in other_predictors for level in levels ]
+    # filter specfied predictors
+    level_preds = [f"{v.split('_')[0]}_{SERIES}_{v.split('_')[1]}" for v in preds if v in full]
     preds_long = surface_predictors + level_preds
 
     #Surface predictors

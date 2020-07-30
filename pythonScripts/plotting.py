@@ -166,7 +166,7 @@ def plot_hot_days(Y_all, preds, save_path, lat, lon):
         """
         plot_cond_days(Y_all, preds, save_path, lat, lon, predictand = 'tmax', title="Number of Days over 35 Degrees Celcius", comp="greater", thresh=35)
 
-def plot_dist(data, title, save_path, lat, lon):
+def plot_dist(data, title, save_path, lat, lon, predictand):
     """
         Generates and saves a plot of the distribution of given data
         Input:
@@ -180,8 +180,11 @@ def plot_dist(data, title, save_path, lat, lon):
     """
     plt.hist(data, bins = 25)
     plt.title(title)
+    plt.ylabel("Number of points") # TODO: make into percentage
+    plt.xlabel(predictand)
     plot_path = make_plot_folder(save_path, lat, lon)
     plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
+    plt.clf()
 
 #===============================================================================
 """

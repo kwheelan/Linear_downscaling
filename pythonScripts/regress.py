@@ -59,6 +59,7 @@ lon = float(sys.argv[2])
 obsPath = sys.argv[3] #filepath for obs data
 save_path = sys.argv[4]
 preds = [ path for path in sys.argv[5:] ] #paths for preds files
+#NOTE: surface predictors must proceed predictors measured at a specific level
 
 #to be customized:
 dateStart = '1980-01-01'
@@ -161,7 +162,7 @@ plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon, predictand)
 plot_hot_days(Y_all, final_predictions, save_path, lat, lon)
 save_stats(Y_all, final_predictions, lat, lon, save_path, predictand)
 plot_dist(Y_all[predictand], 'Observed Distribution', save_path, lat, lon)
-plot_dist(final_predictions.preds, 'Modeled Distribution', save_path, lat, lon)
+plot_dist(final_predictions.preds, 'Modeled Distribution', save_path, lat, lon, predictand)
 
 print("Generated plots.")
 
