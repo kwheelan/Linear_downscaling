@@ -59,7 +59,6 @@ lon = float(sys.argv[2])
 obsPath = sys.argv[3] #filepath for obs data
 save_path = sys.argv[4]
 preds = [ path for path in sys.argv[5:] ] #paths for preds files
-print(preds)
 
 #to be customized:
 dateStart = '1980-01-01'
