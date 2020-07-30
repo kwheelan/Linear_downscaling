@@ -160,6 +160,8 @@ plot_all_seasons(Y_all, final_predictions, save_path, lat, lon, predictand)
 plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon, predictand)
 plot_hot_days(Y_all, final_predictions, save_path, lat, lon)
 save_stats(Y_all, final_predictions, lat, lon, save_path, predictand)
+plot_dist(Y_all, 'Observed Distribution', save_path, lat, lon)
+plot_dist(final_predictions, 'Modeled Distribution', save_path, lat, lon)
 
 print("Generated plots.")
 

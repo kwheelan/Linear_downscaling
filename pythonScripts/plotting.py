@@ -10,7 +10,8 @@ July 2020
 """
 #==============================================================================
 
-__all__ = ['plot_monthly_avgs', 'plot_hot_days', 'plot_all_seasons', 'save_stats']
+__all__ = ['plot_monthly_avgs', 'plot_hot_days', 'plot_all_seasons', 'save_stats',
+            'plot_dist']
 
 #import dependencies
 import xarray as xr
@@ -75,7 +76,6 @@ def annualSeasonPlot(Y_all, preds, startDate, endDate, title, save_path, lat, lo
     plt.ylabel('Temp (Celcius)')
     plt.xlabel('Year')
     plt.legend()
-    plt.show()
     plot_path = make_plot_folder(save_path, lat, lon)
     plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
     plt.clf()
@@ -119,7 +119,6 @@ def plot_monthly_avgs(Y_all, preds, save_path, lat, lon, predictand):
     plt.ylabel('Temperature (Celcius)')
     plt.xlabel('Month')
     plt.legend()
-    plt.show()
     plot_path = make_plot_folder(save_path, lat, lon)
     plt.savefig(os.path.join(plot_path, 'monthly_means.png'))
     plt.clf()
@@ -151,7 +150,6 @@ def plot_cond_days(Y_all, preds, save_path, lat, lon, predictand, title = "Condi
     plt.ylabel('Number of Days')
     plt.xlabel('Month')
     plt.legend()
-    plt.show()
     plot_path = make_plot_folder(save_path, lat, lon)
     plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
     plt.clf()
@@ -168,15 +166,22 @@ def plot_hot_days(Y_all, preds, save_path, lat, lon):
         """
         plot_cond_days(Y_all, preds, save_path, lat, lon, predictand = 'tmax', title="Number of Days over 35 Degrees Celcius", comp="greater", thresh=35)
 
-def plot_dist(data, title):
+def plot_dist(data, title, save_path, lat, lon):
     """
         Generates and saves a plot of the distribution of given data
         Input:
             data as xarray obj
+            title, a string to appear on plot
+            save_path, str of location for saving img
+            lat - latitude as a float
+            lon - longitude as a float
         Output:
             none
     """
-    pass
+    plt.hist(data, bins = 25)
+    plt.title(title)
+    plot_path = make_plot_folder(save_path, lat, lon)
+    plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
 
 #===============================================================================
 """
