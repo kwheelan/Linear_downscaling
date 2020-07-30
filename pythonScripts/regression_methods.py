@@ -67,7 +67,7 @@ def load_selected_predictors(preds):
         if i == 0:
             predictors = xr.open_dataset(file)[var.split('_')[0]]
         # add new col and rename using level
-        predictors = xr.merge([predictors, xr.open_dataset(file)[var.split('_')[0]]]).rename({var.split('_')[0]]]: preds[i]})
+        predictors = xr.merge([predictors, xr.open_dataset(file)[var.split('_')[0]]]).rename({var.split('_')[0]: preds[i]})
 
     return predictors
 
