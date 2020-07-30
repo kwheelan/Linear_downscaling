@@ -67,6 +67,7 @@ method = "OLS"
 train = False
 stdize = True
 inflate = False
+predictand = "tmax"
 
 print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
