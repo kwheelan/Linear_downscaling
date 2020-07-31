@@ -23,6 +23,6 @@ LOCATION=$TMPDIR
 
 export LAT=32.125
 export LON=-102.875
+export PREDS=mslp
 
-python regress.py $LAT $LON $OBS $LOCATION
-
+python regress.py $LAT $LON $OBS $LOCATION $PREDS
