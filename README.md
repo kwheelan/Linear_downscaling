@@ -21,7 +21,7 @@ This repository contains custom Jupyter notebooks, Python scripts, and batch scr
     * *regression_tools.py* - A module of functions to perform the necessary steps for downscaling
     * *plotting.py* - A module of plotting functions for the modeled data
     * *SDSM_process.py* - A short script I wrote to plot SDSM data.
-    * *setings.txt* - Currently does nothing; I want to edit regress.py to read in settings from this file
+    * *settings.txt* - Currently does nothing; I want to edit regress.py to read in settings from this file
 
  * *bashScripts/* - Contains batch scripts for submission to the NCAR supercomputer
 
