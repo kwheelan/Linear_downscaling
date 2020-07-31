@@ -1,0 +1,7 @@
+Observations:
+Mean: 20.33043670654297
+Variance: 122.28717041015625
+
+Modeled Data:
+Mean: 20.344420132673473
+Variance: 112.82254102534202
