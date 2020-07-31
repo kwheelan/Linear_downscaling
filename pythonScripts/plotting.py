@@ -110,8 +110,8 @@ def plot_monthly_avgs(Y_all, preds, save_path, lat, lon, predictand):
                lon - longitude as a float
         Output: None
     """
-    Y_all['time'], preds['time'] = Y_all.month, preds.month
-    modelAvgs = [float(preds.sel(time = m).mean(dim = 'time').preds) for m in range(1,13)]
+    Y_all['time'], preds['time'] = Y_all['month'], preds['month']
+    modelAvgs = [float(preds.sel(time = m).mean(dim = 'time')['preds']) for m in range(1,13)]
     obsAvgs = [float(Y_all.sel(time = m).mean(dim = 'time')[predictand]) for m in range(1,13)]
     plt.plot(monthsAbrev, obsAvgs, '-b', label = 'obs')
     plt.plot(monthsAbrev, modelAvgs, '-r', label='model')

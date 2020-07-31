@@ -1,0 +1,55 @@
+Now using NPL virtual environment at path:
+    /glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417
+
+Use deactivate to remove NPL from environment
+
+Progress:
+Lat: 32.125, Lon: -102.875
+Loaded predictor files
+Loaded obs data.
+Prepped data for regression
+Fit linear model.
+Saved betas.
+Calculated predictions for testing and training data.
+Saved predictions.
+Traceback (most recent call last):
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 4844, in get_slice_bound
+    return self._searchsorted_monotonic(label, side)
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 4805, in _searchsorted_monotonic
+    raise ValueError("index must be monotonic increasing or decreasing")
+ValueError: index must be monotonic increasing or decreasing
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "regress.py", line 104, in <module>
+    plot_all_seasons(Y_all, final_predictions)
+  File "/glade/work/kwheelan/Linear_downscaling/pythonScripts/plotting.py", line 139, in plot_all_seasons
+    annualSeasonPlot(Y_all, preds, '12-01', '02-28', "Seasonal Plot Dec-Jan-Feb")
+  File "/glade/work/kwheelan/Linear_downscaling/pythonScripts/plotting.py", line 118, in annualSeasonPlot
+    obsSeasonAvg = [Y_all.sel(time = slice(str(y)+startDate, str(y+winter) + endDate)).tmax.mean(dim = 'time') for y in range(1980, 2014) ]
+  File "/glade/work/kwheelan/Linear_downscaling/pythonScripts/plotting.py", line 118, in <listcomp>
+    obsSeasonAvg = [Y_all.sel(time = slice(str(y)+startDate, str(y+winter) + endDate)).tmax.mean(dim = 'time') for y in range(1980, 2014) ]
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/xarray/core/dataset.py", line 2066, in sel
+    self, indexers=indexers, method=method, tolerance=tolerance
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/xarray/core/coordinates.py", line 397, in remap_label_indexers
+    obj, v_indexers, method=method, tolerance=tolerance
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/xarray/core/indexing.py", line 270, in remap_label_indexers
+    idxr, new_idx = convert_label_indexer(index, label, dim, method, tolerance)
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/xarray/core/indexing.py", line 124, in convert_label_indexer
+    _sanitize_slice_element(label.step),
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 4712, in slice_indexer
+    start_slice, end_slice = self.slice_locs(start, end, step=step, kind=kind)
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 4925, in slice_locs
+    start_slice = self.get_slice_bound(start, "left", kind)
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 4847, in get_slice_bound
+    raise err
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 4841, in get_slice_bound
+    slc = self.get_loc(label)
+  File "/glade/u/apps/dav/opt/python/3.7.5/gnu/8.3.0/pkg-library/20200417/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 2648, in get_loc
+    return self._engine.get_loc(self._maybe_cast_indexer(key))
+  File "pandas/_libs/index.pyx", line 111, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 133, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 163, in pandas._libs.index.IndexEngine._get_loc_duplicates
+  File "pandas/_libs/index_class_helper.pxi", line 127, in pandas._libs.index.Int64Engine._maybe_get_bool_indexer
+KeyError: '1980-12-01'
