@@ -109,7 +109,7 @@ def plot_all_seasons(plotData):
 
 
 
-def plot_monthly_avgs(plotData.obs, preds, save_path, lat, lon, predictand):
+def plot_monthly_avgs(plotData, preds, save_path, lat, lon, predictand):
     """
         Saving a plot of monthly averages for predictand.
         Input: plotData.obs (obs data) as xarray obj
@@ -132,7 +132,7 @@ def plot_monthly_avgs(plotData.obs, preds, save_path, lat, lon, predictand):
     plt.savefig(os.path.join(plot_path, 'monthly_means.png'))
     plt.clf()
 
-def plot_cond_days(plotData.obs, preds, save_path, lat, lon, predictand, title = "Conditional Day Count", comp = "greater", thresh = 35):
+def plot_cond_days(plotData, preds, save_path, lat, lon, predictand, title = "Conditional Day Count", comp = "greater", thresh = 35):
     """
         Saving a plot of days that satisify cond.
         Ex. number of days over 35 degrees C
@@ -163,7 +163,7 @@ def plot_cond_days(plotData.obs, preds, save_path, lat, lon, predictand, title =
     plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
     plt.clf()
 
-def plot_hot_days(plotData.obs, preds, save_path, lat, lon):
+def plot_hot_days(plotData, preds, save_path, lat, lon):
         """
             Saving a plot of days over 35 degrees C
             Input: plotData.obs (obs data) as xarray obj
@@ -201,7 +201,7 @@ Saving summary statistics.
 """
 #===============================================================================
 
-def save_stats(plotData.obs, preds, lat, lon, save_path, predictand):
+def save_stats(plotData, preds, lat, lon, save_path, predictand):
     """
         Saving a txt file with data on the modeled predictions
         Input: plotData.obs (obs data) as xarray obj
