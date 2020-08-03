@@ -11,7 +11,7 @@ July 2020
 #==============================================================================
 
 __all__ = ['plot_monthly_avgs', 'plot_hot_days', 'plot_all_seasons', 'save_stats',
-            'plot_dist', 'Plot']
+            'plot_dists', 'Plot']
 
 #import dependencies
 import xarray as xr
@@ -141,14 +141,16 @@ def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
         Output: None
     """
 # to do: divide by number of years
-    plotData.obs['time'], preds['time'] = plotData.obs.month, preds.month
+    plotData.obs['time'] = plotData.obs.month
+    for key in plotData.models.keys():
+        plotData.models[key]['time'] = plotData.models[key].month
     if comp.lower() == "greater":
-        obsDaysCount = [sum(plotData.obs.sel(time=m)[predictand].values > thresh) for m in range(1,13)]
+        obsDaysCount = [sum(plotData.obs.sel(time=m)[plotData.predictand].values > thresh) for m in range(1,13)]
         modelDaysCount = dict()
         for model in plotData.models.keys():
             modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values > thresh) for m in range(1,13)]
     else:
-        obsDaysCount = [sum(plotData.obs.sel(time=m)[predictand].values < thresh) for m in range(1,13)]
+        obsDaysCount = [sum(plotData.obs.sel(time=m)[plotData.predictand].values < thresh) for m in range(1,13)]
         modelDaysCount = dict()
         for model in plotData.models.keys():
             modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values > thresh) for m in range(1,13)]
@@ -178,7 +180,7 @@ def plot_cold_days(plotData):
     """ todo """
     plot_cond_days(plotData, title="Number of Days under 0 Degrees Celcius", comp="less", thresh = 0)
 
-def plot_dist(data, title, save_path, lat, lon, predictand):
+def plot_dist(plotData, data, title):
     """
         Generates and saves a plot of the distribution of given data
         Input:
@@ -190,13 +192,20 @@ def plot_dist(data, title, save_path, lat, lon, predictand):
         Output:
             none
     """
-    plt.hist(data, bins = 25)
+    plt.hist(eval(data), bins = 25)
     plt.title(title)
     plt.ylabel("Number of points") # TODO: make into percentage
-    plt.xlabel(predictand)
-    plot_path = make_plot_folder(save_path, lat, lon)
-    plt.savefig(os.path.join(plot_path, f"{title.replace(' ','')}.png"))
+    plt.xlabel(plotData.predictand)
+    plt.savefig(os.path.join(plotData.plot_path, f"{title.replace(' ','')}.png"))
     plt.clf()
+
+def plot_dists(plotData):
+    """
+        Plots obs and model distribution.
+    """
+    plot_dist(plotData, "plotData.obs[plotData.predictand]", "Distribution of Observed Data")
+    for model in plotData.models.keys():
+        plot_dist(plotData, f"plotData.models['{model}'].preds", f"Distribution of {model} Predictions")
 
 #===============================================================================
 """
@@ -204,7 +213,7 @@ Saving summary statistics.
 """
 #===============================================================================
 
-def save_stats(plotData, preds, lat, lon, save_path, predictand):
+def save_stats(plotData):
     """
         Saving a txt file with data on the modeled predictions
         Input: plotData.obs (obs data) as xarray obj
@@ -215,12 +224,12 @@ def save_stats(plotData, preds, lat, lon, save_path, predictand):
         Output: None
         # TODO: r-squared; standard error
     """
-    plot_path = make_plot_folder(save_path, lat, lon)
-    f = open(os.path.join(plot_path, "stats.txt"), "w")
+    f = open(os.path.join(plotData.plot_path, "stats.txt"), "w")
     f.write("Observations:\n")
-    f.write(f"Mean: {float(np.mean(plotData.obs[predictand]))}\n")
-    f.write(f"Variance: {float(np.var(plotData.obs.tmax))}\n\n")
-    f.write("Modeled Data:\n")
-    f.write(f"Mean: {float(np.mean(preds.preds))}\n")
-    f.write(f"Variance: {float(np.var(preds.preds))}\n")
+    f.write(f"Mean: {float(np.mean(plotData.obs[plotData.predictand]))}\n")
+    f.write(f"Variance: {float(np.var(plotData.obs[plotData.predictand]))}\n\n")
+    for key in plotData.models.keys():
+        f.write(f"Modeled Data ({key}):\n")
+        f.write(f"Mean: {float(np.mean(plotData.models[key].preds))}\n")
+        f.write(f"Variance: {float(np.var(plotData.models[key].preds))}\n")
     f.close()

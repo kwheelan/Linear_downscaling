@@ -148,10 +148,13 @@ plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all, models
 
 plot_all_seasons(plotData)
 plot_monthly_avgs(plotData)
-# #plot_hot_days(Y_all, final_predictions, settings['save_path'], lat, lon)
-# save_stats(Y_all, final_predictions, lat, lon, settings['save_path'], predictand)
-# plot_dist(Y_all[predictand], 'Observed Distribution', settings['save_path'], lat, lon, predictand)
-# plot_dist(final_predictions.preds, 'Modeled Distribution', settings['save_path'], lat, lon, predictand)
+if settings['predictand'] == 'tmax':
+    plot_hot_days(plotData)
+elif settings['predictand'] == 'tmin':
+    plot_cold_days(plotData)
+save_stats(plotData)
+plot_dists(plotData)
+
 
 print("Generated plots.")
 
