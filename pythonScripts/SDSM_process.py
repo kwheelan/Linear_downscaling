@@ -27,16 +27,20 @@ f.close()
 obs = xr.open_dataset(obsPath).sel(time = slice(dateStart, dateEnd))
 Y_all = obs.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
 preds = xr.open_dataset('/glade/scratch/kwheelan/downscaling_data/preds/finalPreds_tmax_38.125_-101.875.nc')
+SDSM = preds.copy()
 
 #set up variables
 Y_all['timecopy'] = Y_all['time']
 Y_all['month'] = Y_all.time.dt.month
-preds['preds'] = ({'time':'time'}, sdsm_preds)
+SDSM['preds'] = ({'time':'time'}, sdsm_preds)
 
-# generate plots
-plot_all_seasons(Y_all, preds, save_path, lat, lon, predictand)
-plot_monthly_avgs(Y_all, preds, save_path, lat, lon, predictand)
-plot_hot_days(Y_all, preds, save_path, lat, lon)
-save_stats(Y_all, preds, lat, lon, save_path, predictand)
-plot_dist(Y_all[predictand], 'Observed Distribution', save_path, lat, lon, predictand)
-plot_dist(preds.preds, 'SDSM Modeled Distribution', save_path, lat, lon, predictand)
+plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all, models = {'Python': preds, 'SDSM': SDSM})
+
+plot_all_seasons(plotData)
+plot_monthly_avgs(plotData)
+if settings['predictand'] == 'tmax':
+    plot_hot_days(plotData)
+elif settings['predictand'] == 'tmin':
+    plot_cold_days(plotData)
+save_stats(plotData)
+plot_dists(plotData)
