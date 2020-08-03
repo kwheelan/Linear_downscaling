@@ -144,12 +144,14 @@ print("Saved predictions.")
 """Generate plots."""
 #==============================================================================
 
+plotData = Plot(save_path, lat, lon, predictand, obs = Y_all, models = [final_predictions])
+
 plot_all_seasons(Y_all, final_predictions, settings['save_path'], lat, lon, predictand)
-plot_monthly_avgs(Y_all, final_predictions, settings['save_path'], lat, lon, predictand)
-#plot_hot_days(Y_all, final_predictions, settings['save_path'], lat, lon)
-save_stats(Y_all, final_predictions, lat, lon, settings['save_path'], predictand)
-plot_dist(Y_all[predictand], 'Observed Distribution', settings['save_path'], lat, lon, predictand)
-plot_dist(final_predictions.preds, 'Modeled Distribution', settings['save_path'], lat, lon, predictand)
+# plot_monthly_avgs(Y_all, final_predictions, settings['save_path'], lat, lon, predictand)
+# #plot_hot_days(Y_all, final_predictions, settings['save_path'], lat, lon)
+# save_stats(Y_all, final_predictions, lat, lon, settings['save_path'], predictand)
+# plot_dist(Y_all[predictand], 'Observed Distribution', settings['save_path'], lat, lon, predictand)
+# plot_dist(final_predictions.preds, 'Modeled Distribution', settings['save_path'], lat, lon, predictand)
 
 print("Generated plots.")
 
