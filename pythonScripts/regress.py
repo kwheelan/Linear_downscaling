@@ -49,28 +49,13 @@ import matplotlib.pyplot as plt
 import os
 import sys
 
+with f as open("settings.txt"):
+    settings  = eval(f.read())
 
-#set variables based on commandline arguments
-if len(sys.argv) < 5:
-    exit("Usage: regress.py <lat> <lon> <obsPath> <save_path> <preds>+")
-
-lat = float(sys.argv[1])
-lon = float(sys.argv[2])
-obsPath = sys.argv[3] #filepath for obs data
-save_path = sys.argv[4]
-preds = [ path for path in sys.argv[5:] ] #paths for preds files
-#NOTE: surface predictors must proceed predictors measured at a specific level
-
-#to be customized:
-predictand = "tmax"
-dateStart = '1980-01-01'
-dateEnd = '2005-12-31'
-method = "OLS"
-train = False
-stdize = True
-inflate = True
-inflate_mean = 0
-inflate_var = 1 #equivalent to variance inflation?
+lat = settings['lat']
+lon = settings['lon']
+predictand = settings['predictand']
+preds = settings['preds_surface'] + settings['preds_level']
 
 print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
@@ -91,15 +76,15 @@ Clean up and prep the data for analysis.
 
 #standardize data, trim dates, add month and constant cols
 
-X_all, Y_all = prep_data(obsPath, predictors, lat, lon, dateStart = dateStart, dateEnd = dateEnd)
-if stdize:
+X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon, dateStart = settings['dateStart'], dateEnd = settings['dateEnd'])
+if settings['stdize']:
     #standardize predictors
     X_all = standardize(X_all)
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)
 print("Loaded obs data.")
 
-if train:
+if settings['train']:
     #separate testing and training data by even and odd years
     X_train, X_test = evenOdd(X_all)
     Y_train, Y_test = evenOdd(Y_all)
@@ -123,20 +108,20 @@ preds_to_drop = ["month", "lat", "lon"]
 preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 
 #fit a different model for each month
-if train:
-    if method == 'OLS':
+if settings['train']:
+    if settings['method'] == 'OLS':
         coefMatrix = fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand)
-    elif method == 'LASSO':
+    elif settings['method'] == 'LASSO':
         coefMatrix = fit_monthly_lasso_models(X_train, Y_train, predictand)
 else:
-    if method == 'OLS':
+    if settings['method'] == 'OLS':
         coefMatrix = fit_monthly_linear_models(X_all, Y_all, preds_to_keep, predictand)
-    elif method == 'LASSO':
+    elif settings['method'] == 'LASSO':
         coefMatrix = fit_monthly_lasso_models(X_all, Y_all, predictand)
 print("Fit linear model.")
 
 #saves the betas
-save_betas(save_path, coefMatrix, lat, lon, predictand)
+save_betas(settings['save_path'], coefMatrix, lat, lon, predictand)
 print("Saved betas.")
 
 #==============================================================================
@@ -148,10 +133,10 @@ final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
 
 # TODO: transformations
-if inflate:
-    corrected_preds = inflate_variance(inflate_mean, inflate_var, final_predictions)
+if settings['inflate']:
+    corrected_preds = inflate_variance(settings['inflate_mean'], settings['inflate_var'], final_predictions)
 
-save_preds(save_path, final_predictions, lat, lon, predictand)
+save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
 print("Saved predictions.")
 
 
@@ -159,12 +144,12 @@ print("Saved predictions.")
 """Generate plots."""
 #==============================================================================
 
-plot_all_seasons(Y_all, final_predictions, save_path, lat, lon, predictand)
-plot_monthly_avgs(Y_all, final_predictions, save_path, lat, lon, predictand)
-plot_hot_days(Y_all, final_predictions, save_path, lat, lon)
-save_stats(Y_all, final_predictions, lat, lon, save_path, predictand)
-plot_dist(Y_all[predictand], 'Observed Distribution', save_path, lat, lon, predictand)
-plot_dist(final_predictions.preds, 'Modeled Distribution', save_path, lat, lon, predictand)
+plot_all_seasons(Y_all, final_predictions, settings['save_path'], lat, lon, predictand)
+plot_monthly_avgs(Y_all, final_predictions, settings['save_path'], lat, lon, predictand)
+plot_hot_days(Y_all, final_predictions, settings['save_path'], lat, lon)
+save_stats(Y_all, final_predictions, lat, lon, settings['save_path'], predictand)
+plot_dist(Y_all[predictand], 'Observed Distribution', settings['save_path'], lat, lon, predictand)
+plot_dist(final_predictions.preds, 'Modeled Distribution', settings['save_path'], lat, lon, predictand)
 
 print("Generated plots.")
 
