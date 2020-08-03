@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 import os
 import sys
 
-with f as open("settings.txt"):
+with open("settings.txt") as f:
     settings  = eval(f.read())
 
 lat = settings['lat']
@@ -146,7 +146,7 @@ print("Saved predictions.")
 
 plot_all_seasons(Y_all, final_predictions, settings['save_path'], lat, lon, predictand)
 plot_monthly_avgs(Y_all, final_predictions, settings['save_path'], lat, lon, predictand)
-plot_hot_days(Y_all, final_predictions, settings['save_path'], lat, lon)
+#plot_hot_days(Y_all, final_predictions, settings['save_path'], lat, lon)
 save_stats(Y_all, final_predictions, lat, lon, settings['save_path'], predictand)
 plot_dist(Y_all[predictand], 'Observed Distribution', settings['save_path'], lat, lon, predictand)
 plot_dist(final_predictions.preds, 'Modeled Distribution', settings['save_path'], lat, lon, predictand)
