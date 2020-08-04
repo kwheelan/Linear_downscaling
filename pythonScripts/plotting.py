@@ -1,4 +1,5 @@
 
+
 #==============================================================================
 """
 A module of plotting functions for the downscaled predictions.
@@ -10,7 +11,8 @@ August 2020
 #==============================================================================
 
 __all__ = ['Plot', 'plot_monthly_avgs', 'plot_hot_days', 'plot_all_seasons',
-            'plot_annual_avgs', 'plot_annual_avgs_bar', 'save_stats', 'plot_dists']
+            'plot_annual_avgs', 'plot_annual_avgs_bar', 'save_stats', 'plot_dists',
+            'boxplot', 'violin']
 
 #import dependencies
 import xarray as xr
@@ -49,7 +51,7 @@ class Plot:
             endYr : last year of data (int)
     """
 
-    __slots__ = ['plot_path', 'lat', 'lon', 'predictand', 'obs', 'models']
+    __slots__ = ['plot_path', 'lat', 'lon', 'predictand', 'obs', 'models', 'startYr','endYr']
 
     def __init__(self, save_path, lat, lon, predictand, obs, models, startDate, endDate):
         # create a folder to save the plots
@@ -64,7 +66,7 @@ class Plot:
         self.predictand = predictand
         self.obs = obs
         self.models = models #a dict of xarray objs; must have preds as a var
-        self.startYr, self.endYr = startDate[:4], endDate[:4]
+        self.startYr, self.endYr = int(startDate[:4]), int(endDate[:4])
 
 
 #===============================================================================
@@ -92,18 +94,18 @@ def annualSeasonPlot(plotData, startDate, endDate, title):
     endYr = plotData.endYr
 
     #create time series for plotting
-    obsSeasonAvg = [plotData.obs.sel(time = slice(str(y)+startDate, str(y+winter) + endDate))[plotData.predictand].mean(dim = 'time') for y in range(startYr, endYr + 1) ]
+    obsSeasonAvg = [plotData.obs.sel(time = slice(str(y)+startDate, str(y+winter) + endDate))[plotData.predictand].mean(dim = 'time') for y in range(startYr, endYr+1) ]
     modelSeasonAvg = dict()
     for model in plotData.models.keys():
-        modelSeasonAvg[model] = [plotData.models[model].sel(time = slice(str(y)+startDate, str(y+winter)+endDate)).preds.mean(dim = 'time') for y in range(startYr, endYr + 1) ]
+        modelSeasonAvg[model] = [plotData.models[model].sel(time = slice(str(y)+startDate, str(y+winter)+endDate)).preds.mean(dim = 'time') for y in range(startYr, endYr+1) ]
 
     movingAvg = [sum([obsSeasonAvg[t+i] for i in range(5)])/5 for t in range(len(obsSeasonAvg)-4)]
 
     #plot lines
-    plt.plot(range(startYr, endYr + 1), obsSeasonAvg, '-b', label = 'obs')
+    plt.plot(range(startYr, endYr + 1), obsSeasonAvg, label = 'obs')
     for model in plotData.models.keys():
         plt.plot(range(startYr, endYr + 1), modelSeasonAvg[model], label=model)
-    plt.plot(range(startYr+2, endYr-2), movingAvg, '-k', label = "5-yr moving average")
+    plt.plot(range(startYr+2, endYr-1), movingAvg, '-k', label = "5-yr moving average")
 
     #label and save figure
     plt.title(title)
@@ -153,7 +155,7 @@ def plot_monthly_avgs(plotData):
     obsAvgs = [float(plotData.obs.sel(time = m).mean(dim = 'time')[plotData.predictand]) for m in range(1,13)]
 
     #plot lines
-    plt.plot(monthsAbrev, obsAvgs, '-b', label = 'obs')
+    plt.plot(monthsAbrev, obsAvgs, label = 'obs')
     for model in plotData.models.keys():
         plt.plot(monthsAbrev, modelAvgs[model], label=model)
 
@@ -185,7 +187,7 @@ def plot_annual_avgs(plotData):
     obsAvgs = [float(plotData.obs.sel(time = yr).mean(dim = 'time')[plotData.predictand]) for yr in range(startYr, endYr+1)]
 
     #plot data
-    plt.plot(range(startYr, endYr+1), obsAvgs, '-b', label = 'obs')
+    plt.plot(range(startYr, endYr+1), obsAvgs, label = 'obs')
     for model in plotData.models.keys():
         plt.plot(range(startYr, endYr+1), modelAvgs[model], label=model)
 
@@ -198,7 +200,7 @@ def plot_annual_avgs(plotData):
     plt.savefig(os.path.join(plotData.plot_path, 'annual_means.png'))
     plt.clf()
 
-def autolabel(rects):
+def autolabel(rects, ax):
     """
     Attach a text label above each bar in *rects*, displaying its height.
     Source: https://matplotlib.org/3.1.1/gallery/lines_bars_and_markers/barchart.html
@@ -210,6 +212,8 @@ def autolabel(rects):
                     xytext=(0, 3),  # 3 points vertical offset
                     textcoords="offset points",
                     ha='center', va='bottom')
+
+    return ax
 
 def plot_annual_avgs_bar(plotData):
     """
@@ -223,16 +227,16 @@ def plot_annual_avgs_bar(plotData):
     plotData.obs['time'] = plotData.obs.timecopy.dt.year
     modelAvgs = dict()
     #take just first model
-    model = plotData.models.keys()[0]
+    model = [key for key in plotData.models.keys()][0]
     plotData.models[model]['time'] = plotData.models[model].timecopy.dt.year
 
-    #calculate annaul means
-    modelAvgs[model] = [float(plotData.models[model].sel(time = yr).mean(dim = 'time')['preds']) for yr in range(startYr, endYr+1)]
+    #calculate annual means
+    modelAvgs = [float(plotData.models[model].sel(time = yr).mean(dim = 'time')['preds']) for yr in range(startYr, endYr+1)]
     obsAvgs = [float(plotData.obs.sel(time = yr).mean(dim = 'time')[plotData.predictand]) for yr in range(startYr, endYr+1)]
 
     #labels are years with data
     labels = range(startYr, endYr+1)
-    x = np.arrange(len(labels))
+    x = np.arange(len(labels))
     width = 5 / len(labels) #the width of the bars
 
     # set barplot objects
@@ -241,19 +245,19 @@ def plot_annual_avgs_bar(plotData):
     rects2 = ax.bar(x + width/2, modelAvgs, width, label = "model")
 
     # create appropriate labels
-    ax.set_ylabel(f"Annual Mean plotData.predictand")
+    ax.set_ylabel(f"Annual Mean {plotData.predictand}")
     ax.set_title("Annual Means")
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.legend()
 
     # label data values for heights of bars
-    autolabel(rects1)
-    autolabel(rects2)
+    #ax = autolabel(rects1, ax)
+    #ax = autolabel(rects2, ax)
     fig.tight_layout()
 
     #save plot
-    plt.savefig(os.path.join(plotData.plot_path, 'annual_means.png'))
+    plt.savefig(os.path.join(plotData.plot_path, 'annual_means_bar.png'))
     plt.clf()
 
 def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
@@ -287,7 +291,7 @@ def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
             modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values >= thresh)/yearCount for m in range(1,13)]
 
     #plot data as a line plot
-    plt.plot(monthsAbrev, obsDaysCount, '-b', label = 'obs')
+    plt.plot(monthsAbrev, obsDaysCount, label = 'obs')
     for model in plotData.models.keys():
         plt.plot(monthsAbrev, modelDaysCount[model], label=model)
 
@@ -301,18 +305,61 @@ def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
     plt.savefig(os.path.join(plotData.plot_path, f"{title.replace(' ','')}.png"))
     plt.clf()
 
+def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
+    """
+        Saving a plot of days that satisify cond.
+        Ex. number of days over 35 degrees C
+        Input: plotData, Plot obj
+               title - a str plot title and plot file name
+               comp - "greater" or "less" for comparison to the threshold
+               thresh - cutoff for days to count (inclusive)
+        Output: None
+    """
+    # condition data on year
+    plotData.obs['time'] = plotData.obs.timecopy.dt.year
+    for key in plotData.models.keys():
+        plotData.models[key]['time'] = plotData.models[key].timecopy.dt.year
+
+    # count number of days filling criteria by month to create time series
+    if comp.lower() == "greater": #greater than or equal to thresh
+        obsDaysCount = [sum(plotData.obs.sel(time=y)[plotData.predictand].values >= thresh) for y in range(plotData.startYr, plotData.endYr + 1)]
+        modelDaysCount = dict()
+        for model in plotData.models.keys():
+            modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values >= thresh) for m in range(plotData.startYr, plotData.endYr + 1)]
+    else: #less than or equal to thresh
+        obsDaysCount = [sum(plotData.obs.sel(time=m)[plotData.predictand].values <= thresh) for m in range(plotData.startYr, plotData.endYr + 1)]
+        modelDaysCount = dict()
+        for model in plotData.models.keys():
+            modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values >= thresh) for m in range(plotData.startYr, plotData.endYr + 1)]
+
+    #plot data as a line plot
+    plt.plot(range(plotData.startYr, plotData.endYr + 1), obsDaysCount, label = 'obs')
+    for model in plotData.models.keys():
+        plt.plot(range(plotData.startYr, plotData.endYr + 1), modelDaysCount[model], label=model)
+
+    # label plot
+    plt.title(title)
+    plt.ylabel('Number of Days')
+    plt.xlabel('Year')
+    plt.legend()
+
+    #save figure
+    plt.savefig(os.path.join(plotData.plot_path, f"{title.replace(' ','')}.png"))
+    plt.clf()                  
+
 def plot_hot_days(plotData):
-        """
-            Saving a plot of days over 35 degrees C
-            Input: plotData, a Plot object with necessary data
-            Output: None
-        """
-        plot_cond_days(plotData, title="Number of Days at least 35 Degrees Celcius", comp="greater", thresh=35)
+    """
+       Saving a plot of days over 35 degrees C
+       Input: plotData, a Plot object with necessary data
+       Output: None
+    """
+    plot_cond_days(plotData, title="Number of Days at least 35 Degrees Celcius by Month", comp="greater", thresh=35)
+    plot_cond_days_by_year(plotData, title="Number of Days at least 35 Degrees Celcius by Year", comp="greater", thresh=35)
 
 def plot_cold_days(plotData):
     """ todo """
-    plot_cond_days(plotData, title="Number of Freezing Days", comp="less", thresh = 0)
-
+    plot_cond_days(plotData, title="Number of Freezing Days by Month", comp="less", thresh = 0)
+    plot_cond_days_by_year(plotData, title="Number of Freezing Days by Year", comp="less", thresh = 0)
 
 #==============================================================================
 """Plotting distributions:
@@ -332,7 +379,8 @@ def plot_dist(plotData, data, title):
             none
     """
     # plot histogram; weight by proportion of points
-    plt.hist(eval(data), bins = 25, weights = np.ones(len(data.values)) / (len(data.values))
+    from matplotlib.ticker import FuncFormatter, PercentFormatter
+    plt.hist(eval(data), bins = 25, weights = np.ones(len(eval(data).values)) / (len(eval(data).values)))
 
     #label plot
     plt.title(title)
@@ -353,6 +401,36 @@ def plot_dists(plotData):
     # plot any model distributions
     for model in plotData.models.keys():
         plot_dist(plotData, f"plotData.models['{model}'].preds", f"Distribution of {model} Predictions")
+
+
+def boxplot(plotData):
+    """ creates a boxplot of obs and any model data"""
+    labels = ['obs'] + list(plotData.models.keys())
+    data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
+    plt.boxplot(data, vert = False, whis = 0.75, labels = labels)
+    plt.title("Boxplots for Observed and Modeled Data")
+    plt.xlabel(plotData.predictand)
+    plt.savefig(os.path.join(plotData.plot_path, "boxplots.png"))
+
+def violin(plotData):
+    """ creates a violin plot of obs and any model data"""
+    labels = ['obs'] + list(plotData.models.keys())
+    data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
+    fig, ax = plt.subplots()
+    
+    #set up x-axis
+    ax.get_xaxis().set_tick_params(direction='out')
+    ax.xaxis.set_ticks_position('bottom')
+    ax.set_xticks(np.arange(1, len(labels) + 1))
+    ax.set_xticklabels(labels)
+    ax.set_xlim(0.25, len(labels) + 0.75)
+    
+    #make plot
+    plt.violinplot(data)
+    plt.title("Violin Plots for Observed and Modeled Data")
+    plt.ylabel(plotData.predictand)
+    plt.savefig(os.path.join(plotData.plot_path, "violinplots.png")) 
+
 
 #===============================================================================
 """

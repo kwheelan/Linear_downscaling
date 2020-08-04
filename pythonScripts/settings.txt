@@ -19,7 +19,7 @@
 
 'inflate' : True,
 'inflate_mean' : 0,
-'inflate_var' : 1,
+'inflate_var' : 1.2,
 
 'plot_options' : True,
 'stat_output' : True

@@ -145,8 +145,8 @@ print("Saved predictions.")
 #==============================================================================
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
-                models = {'OLS': final_predictions}, startDate = settings['startDate'],
-                endDate = settings['endDate'])
+                models = {'OLS': final_predictions}, startDate = settings['dateStart'],
+                endDate = settings['dateEnd'])
 
 plot_all_seasons(plotData)
 plot_monthly_avgs(plotData)
@@ -158,7 +158,8 @@ plot_annual_avgs(plotData)
 plot_annual_avgs_bar(plotData)
 save_stats(plotData)
 plot_dists(plotData)
-
+boxplot(plotData)
+violin(plotData)
 
 print("Generated plots.")
 
