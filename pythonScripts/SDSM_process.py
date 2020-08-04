@@ -4,10 +4,13 @@
 #==============================================================================
 
 #import packages
+
 import xarray as xr
 import pandas as pd
 import numpy as np
 from plotting import *
+import warnings
+warnings.filterwarnings('ignore')
 
 lat = 38.125
 lon = -101.875
@@ -34,13 +37,13 @@ Y_all['timecopy'] = Y_all['time']
 Y_all['month'] = Y_all.time.dt.month
 SDSM['preds'] = ({'time':'time'}, sdsm_preds)
 
-plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all, models = {'Python': preds, 'SDSM': SDSM})
+plotData = Plot(".", lat, lon, predictand, obs = Y_all, models = {'Python': preds, 'SDSM': SDSM})
 
 plot_all_seasons(plotData)
 plot_monthly_avgs(plotData)
-if settings['predictand'] == 'tmax':
+if predictand == 'tmax':
     plot_hot_days(plotData)
-elif settings['predictand'] == 'tmin':
+elif predictand == 'tmin':
     plot_cold_days(plotData)
 save_stats(plotData)
 plot_dists(plotData)

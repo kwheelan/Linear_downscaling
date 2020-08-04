@@ -231,5 +231,5 @@ def save_stats(plotData):
     for key in plotData.models.keys():
         f.write(f"Modeled Data ({key}):\n")
         f.write(f"Mean: {float(np.mean(plotData.models[key].preds))}\n")
-        f.write(f"Variance: {float(np.var(plotData.models[key].preds))}\n")
+        f.write(f"Variance: {float(np.var(plotData.models[key].preds))}\n\n")
     f.close()
