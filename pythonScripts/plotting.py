@@ -55,7 +55,7 @@ class Plot:
 
     def __init__(self, save_path, lat, lon, predictand, obs, models, startDate, endDate):
         # create a folder to save the plots
-        folder = f"plots_lat{lat}_lon{lon}"
+        folder = "plots"
         try:
             os.mkdir(os.path.join(save_path, folder))
         except:
@@ -112,7 +112,7 @@ def annualSeasonPlot(plotData, startDate, endDate, title):
     plt.ylabel('Temp (Celcius)')
     plt.xlabel('Year')
     plt.legend()
-    plt.savefig(os.path.join(plotData.plot_path, f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/seasonalPlots", f"{title.replace(' ','')}.png"))
     plt.clf()
 
 
@@ -164,7 +164,7 @@ def plot_monthly_avgs(plotData):
     plt.ylabel('Temperature (Celcius)')
     plt.xlabel('Month')
     plt.legend()
-    plt.savefig(os.path.join(plotData.plot_path, 'monthly_means.png'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'monthly_means.png'))
     plt.clf()
 
 def plot_annual_avgs(plotData):
@@ -197,7 +197,7 @@ def plot_annual_avgs(plotData):
     plt.xlabel('Year')
     plt.legend()
 
-    plt.savefig(os.path.join(plotData.plot_path, 'annual_means.png'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means.png'))
     plt.clf()
 
 def autolabel(rects, ax):
@@ -257,7 +257,7 @@ def plot_annual_avgs_bar(plotData):
     fig.tight_layout()
 
     #save plot
-    plt.savefig(os.path.join(plotData.plot_path, 'annual_means_bar.png'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means_bar.png'))
     plt.clf()
 
 def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
@@ -302,7 +302,7 @@ def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
     plt.legend()
 
     #save figure
-    plt.savefig(os.path.join(plotData.plot_path, f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.png"))
     plt.clf()
 
 def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
@@ -344,8 +344,8 @@ def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
     plt.legend()
 
     #save figure
-    plt.savefig(os.path.join(plotData.plot_path, f"{title.replace(' ','')}.png"))
-    plt.clf()                  
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.png"))
+    plt.clf()
 
 def plot_hot_days(plotData):
     """
@@ -389,7 +389,7 @@ def plot_dist(plotData, data, title):
     plt.xlabel(plotData.predictand)
 
     #save figure
-    plt.savefig(os.path.join(plotData.plot_path, f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.png"))
     plt.clf()
 
 def plot_dists(plotData):
@@ -410,26 +410,26 @@ def boxplot(plotData):
     plt.boxplot(data, vert = False, whis = 0.75, labels = labels)
     plt.title("Boxplots for Observed and Modeled Data")
     plt.xlabel(plotData.predictand)
-    plt.savefig(os.path.join(plotData.plot_path, "boxplots.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.png"))
 
 def violin(plotData):
     """ creates a violin plot of obs and any model data"""
     labels = ['obs'] + list(plotData.models.keys())
     data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
     fig, ax = plt.subplots()
-    
+
     #set up x-axis
     ax.get_xaxis().set_tick_params(direction='out')
     ax.xaxis.set_ticks_position('bottom')
     ax.set_xticks(np.arange(1, len(labels) + 1))
     ax.set_xticklabels(labels)
     ax.set_xlim(0.25, len(labels) + 0.75)
-    
+
     #make plot
     plt.violinplot(data)
     plt.title("Violin Plots for Observed and Modeled Data")
     plt.ylabel(plotData.predictand)
-    plt.savefig(os.path.join(plotData.plot_path, "violinplots.png")) 
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "violinplots.png"))
 
 
 #===============================================================================
@@ -446,7 +446,10 @@ def save_stats(plotData):
         # TODO: r-squared; standard error
     """
     #open file
-    f = open(os.path.join(plotData.plot_path, "stats.txt"), "w")
+    f = open(os.path.join(plotData.plot_path, "summary.txt"), "w")
+
+    f.write("Summary Statistics\n")
+    f.write("Lat = {plotData.lat}, Lon = {plotData.lon}\n\n")
 
     #write stats for observed data
     f.write("Observations:\n")
