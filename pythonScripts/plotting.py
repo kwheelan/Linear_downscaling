@@ -449,7 +449,7 @@ def save_stats(plotData):
     f = open(os.path.join(plotData.plot_path, "summary.txt"), "w")
 
     f.write("Summary Statistics\n")
-    f.write("Lat = {plotData.lat}, Lon = {plotData.lon}\n\n")
+    f.write(f"Lat = {plotData.lat}, Lon = {plotData.lon}\n\n")
 
     #write stats for observed data
     f.write("Observations:\n")

@@ -157,6 +157,11 @@ plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'OLS': final_predictions}, startDate = settings['dateStart'],
                 endDate = settings['dateEnd'])
 
+for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
+    try:
+        os.mkdir(os.path.join(plotData.plot_path, folder))
+    except: pass
+
 plot_all_seasons(plotData)
 plot_monthly_avgs(plotData)
 if settings['predictand'] == 'tmax':
