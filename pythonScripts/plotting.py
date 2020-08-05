@@ -288,7 +288,7 @@ def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
         obsDaysCount = [sum(plotData.obs.sel(time=m)[plotData.predictand].values <= thresh)/yearCount for m in range(1,13)]
         modelDaysCount = dict()
         for model in plotData.models.keys():
-            modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values >= thresh)/yearCount for m in range(1,13)]
+            modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values <= thresh)/yearCount for m in range(1,13)]
 
     #plot data as a line plot
     plt.plot(monthsAbrev, obsDaysCount, label = 'obs')
@@ -330,7 +330,7 @@ def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
         obsDaysCount = [sum(plotData.obs.sel(time=m)[plotData.predictand].values <= thresh) for m in range(plotData.startYr, plotData.endYr + 1)]
         modelDaysCount = dict()
         for model in plotData.models.keys():
-            modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values >= thresh) for m in range(plotData.startYr, plotData.endYr + 1)]
+            modelDaysCount[model] = [sum(plotData.models[model].sel(time=m).preds.values <= thresh) for m in range(plotData.startYr, plotData.endYr + 1)]
 
     #plot data as a line plot
     plt.plot(range(plotData.startYr, plotData.endYr + 1), obsDaysCount, label = 'obs')
