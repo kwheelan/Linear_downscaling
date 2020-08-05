@@ -39,6 +39,11 @@ SDSM['preds'] = ({'time':'time'}, sdsm_preds)
 
 plotData = Plot("../plots/tmax/SDSM", lat, lon, predictand, obs = Y_all, models = {'SDSM': SDSM, 'Python': preds}, startDate = dateStart, endDate = dateEnd)
 
+for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
+    try:
+        os.mkdir(os.path.join(plotData.plot_path, folder))
+    except: pass
+
 plot_all_seasons(plotData)
 plot_monthly_avgs(plotData)
 if predictand == 'tmax':
