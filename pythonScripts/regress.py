@@ -58,7 +58,7 @@ predictand = settings['predictand']
 preds = settings['preds_surface'] + settings['preds_level']
 
 #create a folder to save data
-folderName = f"downscaling_lat{lat}_lon{lon}"
+folderName = f"{predictand}_lat{lat}_lon{lon}"
 ROOT = os.path.join(settings['save_path'],folderName)
 try:
     os.mkdir(ROOT)

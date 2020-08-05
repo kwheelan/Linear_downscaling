@@ -1,0 +1,15 @@
+Summary Statistics
+Lat = 38.125, Lon = -101.875
+
+Observations:
+Mean: 3.261350631713867
+Variance: 103.82513427734375
+
+Modeled Data (SDSM):
+Mean: 3.2614253974939458
+Variance: 98.57595332014235
+
+Modeled Data (Python):
+Mean: 3.2613484859466553
+Variance: 98.57862854003906
+
