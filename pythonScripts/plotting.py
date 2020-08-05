@@ -315,6 +315,7 @@ def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
                thresh - cutoff for days to count (inclusive)
         Output: None
     """
+
     # condition data on year
     plotData.obs['time'] = plotData.obs.timecopy.dt.year
     for key in plotData.models.keys():
