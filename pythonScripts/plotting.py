@@ -12,7 +12,7 @@ August 2020
 
 __all__ = ['Plot', 'plot_monthly_avgs', 'plot_hot_days', 'plot_all_seasons',
             'plot_annual_avgs', 'plot_annual_avgs_bar', 'save_stats', 'plot_dists',
-            'boxplot', 'violin']
+            'boxplot', 'violin', 'plot_all']
 
 #import dependencies
 import xarray as xr
@@ -462,3 +462,38 @@ def save_stats(plotData):
         f.write(f"Mean: {float(np.mean(plotData.models[key].preds))}\n")
         f.write(f"Variance: {float(np.var(plotData.models[key].preds))}\n\n")
     f.close()
+
+
+#===============================================================================
+"""Creating all possible plots"""
+#===============================================================================
+
+
+def plot_all(plotData):
+    """ Creates all available plots organized in three folders"""
+    
+    #create folders to save plots
+    for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
+        try:
+            os.mkdir(os.path.join(plotData.plot_path, folder))
+        except: pass
+
+    #seasonal plots
+    plot_all_seasons(plotData)
+
+    #time series plots
+    plot_monthly_avgs(plotData)
+    if plotData.predictand == 'tmax':
+        plot_hot_days(plotData)
+    elif plotData.predictand == 'tmin':
+        plot_cold_days(plotData)
+    plot_annual_avgs(plotData)
+    plot_annual_avgs_bar(plotData)
+    
+    #summary statistics
+    save_stats(plotData)
+    
+    #plot distributions
+    plot_dists(plotData)
+    boxplot(plotData)
+    violin(plotData)

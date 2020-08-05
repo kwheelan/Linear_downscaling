@@ -44,11 +44,4 @@ for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
         os.mkdir(os.path.join(plotData.plot_path, folder))
     except: pass
 
-plot_all_seasons(plotData)
-plot_monthly_avgs(plotData)
-if predictand == 'tmax':
-    plot_hot_days(plotData)
-elif predictand == 'tmin':
-    plot_cold_days(plotData)
-save_stats(plotData)
-plot_dists(plotData)
+plot_all(plotData)
