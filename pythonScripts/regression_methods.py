@@ -360,16 +360,17 @@ def save_preds(save_path, preds, lat, lon, predictand):
     except: pass
     preds.to_netcdf(fp)
 
-def inflate_variance(mu, sigma, preds):
+def inflate_variance(mu, variance, preds):
     """
         Adds a stochastic element by sampling from a normal distribution centered at mu with spread sigma.
         Input:
               mu, mean of sampling ditribution for white noise (float)
-              sigma, variance of sampling distribution for white noise (float)
+              variance, variance of sampling distribution for white noise (float)
               preds, the raw predictions as xarray obj
         Output:
              predictions plus the stochastic elements
     """
+    sigma = math.sqrt(variance)
     stochast = np.random.normal(mu, sigma, preds.preds.shape[0])
     preds['preds'] = preds.preds + stochast
     return preds
