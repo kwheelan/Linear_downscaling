@@ -17,7 +17,7 @@
 'train' : False,
 'stdize' : True,
 
-'inflate' : False,
+'inflate' : True,
 'inflate_mean' : 0,
 'inflate_var' : 12,
 
