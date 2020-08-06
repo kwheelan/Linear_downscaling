@@ -89,7 +89,7 @@ X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon, dateStart =
 
 if settings['transform']:
     #fourth root transformation (intended for precip)
-    Y_all[predictand] = (Y_all[predictand].values)**(1/4)
+    Y_all[predictand] = ('time', (Y_all[predictand].values)**(1/4))
 
 if settings['stdize']:
     #standardize predictors
@@ -134,8 +134,8 @@ if settings['conditional']:
     logit_betas, glm = fit_logistic(X, y, predictand)
     save_betas(settings['save_path'], logit_betas, lat, lon, predictand)
     print("Fit conditional model")
-    y = y[predictand][y[predictand].values > 0]
     X = X[y[predictand].values > 0]
+    y = y[y[predictand].values > 0]
 
 #fit a different model for each month
 if settings['method'] == 'OLS':

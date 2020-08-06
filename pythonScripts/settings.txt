@@ -3,14 +3,14 @@
 
 'lat' : 38.125,
 'lon' : -101.875,
-'predictand' : 'pr',
+'predictand' : 'prec',
 'preds_surface' : ['mslp', 'vas'],
 'preds_level' : ['Z_p500', 'RH_p500', 'RH_p700', 'Q_p850'],
 
 'dateStart' : '1980-01-01',
 'dateEnd' : '2005-12-31',
 
-'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmin.gridMET.NAM-22i.SGP.nc',
+'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/prec.gridMET.NAM-22i.SGP.nc',
 'save_path' : '/glade/scratch/kwheelan/downscaling_data',
 
 'method' : 'OLS',

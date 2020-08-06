@@ -283,7 +283,7 @@ def fit_monthly_lasso_models(X_train, Y_train, predictand):
 
     return betas_LASSO_list
 
-def fit_logistic(X, y, predictand):
+def fit_logistic(X_train, y, predictand):
     """
         Fits a logistic model for conditional regression (ie for precip)
         The default fit is L2 regulator with C = 1.0
@@ -294,9 +294,15 @@ def fit_logistic(X, y, predictand):
         Output:
             an array of betas from the regression for each month
     """
+    #getting predictor names
+    keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
+    X = np.matrix([X_train[key].values for key in keys]).transpose()
+    y_binary = y[predictand].values > 0 
+
+    #fit logistic equation
     glm = LogisticRegression(penalty = 'l2', C=1)
-    glm.fit(X, y) #fit logistic equation
-    logit_preds = [all_preds[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
+    glm.fit(X, y_binary)
+    logit_preds = [keys[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
     return pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient']), glm
 
 def save_betas(save_path, coefMatrix, lat, lon, predictand, suffix = ""):
