@@ -219,7 +219,7 @@ def fit_linear_model(X, y, keys=None):
         b[keys[i]] = betas[0,i] #assigning names to each coefficient
     return b
 
-def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand):
+def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand, conditional):
     """
         Fits a linear model for each month of training data
         Input:
@@ -232,9 +232,15 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand):
     for month in range(1, 13):
         #get obs data
         y = Y_train.sel(time = month)[predictand].values #obs values
+        if conditional:
+            #filter only days with nonzero precip
+            y =  y[y > 0]
 
         #get just subset of predictors
         x_train_subset = np.matrix([X_train.sel(time = month)[key].values for key in preds_to_keep]).transpose()
+        if conditional:
+            #filter only days with nonzero precip
+            x_train_subset = x_train_subset[Y_train.sel(time = month)[predictand].values > 0, ]
 
         #calculate coefficients for training data
         coefs = fit_linear_model(x_train_subset, y,
@@ -247,7 +253,7 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand):
     coefMatrix = coefMatrix.drop('coefficient', axis=1)
     return coefMatrix
 
-def fit_monthly_lasso_models(X_train, Y_train, predictand):
+def fit_monthly_lasso_models(X_train, Y_train, predictand, conditional):
     """
         LASSO regressor that uses BIC to optimize the alpha (L1 regulator)
         Input:
@@ -297,7 +303,7 @@ def fit_logistic(X_train, y, predictand):
     #getting predictor names
     keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
     X = np.matrix([X_train[key].values for key in keys]).transpose()
-    y_binary = y[predictand].values > 0 
+    y_binary = y[predictand].values > 0
 
     #fit logistic equation
     glm = LogisticRegression(penalty = 'l2', C=1)

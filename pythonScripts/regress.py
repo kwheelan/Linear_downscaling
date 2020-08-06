@@ -134,14 +134,12 @@ if settings['conditional']:
     logit_betas, glm = fit_logistic(X, y, predictand)
     save_betas(settings['save_path'], logit_betas, lat, lon, predictand)
     print("Fit conditional model")
-    X = X[y[predictand].values > 0]
-    y = y[y[predictand].values > 0]
 
 #fit a different model for each month
 if settings['method'] == 'OLS':
-    coefMatrix = fit_monthly_linear_models(X, y, preds_to_keep, predictand)
+    coefMatrix = fit_monthly_linear_models(X, y, preds_to_keep, predictand, settings['conditional'])
 elif settings['method'] == 'LASSO':
-    coefMatrix = fit_monthly_lasso_models(X, y, predictand)
+    coefMatrix = fit_monthly_lasso_models(X, y, predictand, settings['conditional'])
 
 print("Fit linear model.")
 
