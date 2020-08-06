@@ -153,7 +153,7 @@ print("Saved betas.")
 
 #predict for all data using betas
 if settings['conditional']:
-    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm=glm, thresh = settings['static_thresh'], )
+    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm=glm, preds_to_keep, thresh = settings['static_thresh'], )
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
