@@ -12,7 +12,8 @@ July, 2020
 __all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standardize',
             'prep_data','add_month', 'add_constant_col', 'evenOdd', 'add_month_filter',
             'fit_linear_model', 'fit_monthly_linear_models', 'fit_monthly_lasso_models',
-            'save_betas', 'predict_linear', 'save_preds', 'inflate_variance']
+            'fit_logistic', 'save_betas', 'predict_linear', 'predict_conditional',
+            'save_preds', 'inflate_variance']
 
 
 import xarray as xr
@@ -252,6 +253,7 @@ def fit_monthly_lasso_models(X_train, Y_train, predictand):
         Input:
             X_train, an xarray obj of predictors
             Y_train, an xarray obj of observed predictands
+            predictand, string with the var being predicted
         Output:
             an array of betas from the regression for each month
     """
@@ -281,7 +283,23 @@ def fit_monthly_lasso_models(X_train, Y_train, predictand):
 
     return betas_LASSO_list
 
-def save_betas(save_path, coefMatrix, lat, lon, predictand):
+def fit_logistic(X, y, predictand):
+    """
+        Fits a logistic model for conditional regression (ie for precip)
+        The default fit is L2 regulator with C = 1.0
+        Input:
+            X, an xarray obj of predictors
+            y, an xarray obj of observed predictands
+            predictand, string with the var being predicted
+        Output:
+            an array of betas from the regression for each month
+    """
+    glm = LogisticRegression(penalty = 'l2', C=1)
+    glm.fit(X, y) #fit logistic equation
+    logit_preds = [all_preds[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
+    return pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient']), glm
+
+def save_betas(save_path, coefMatrix, lat, lon, predictand, suffix = ""):
     """
         Save betas to disk
         Input:
@@ -297,7 +315,7 @@ def save_betas(save_path, coefMatrix, lat, lon, predictand):
         os.mkdir(ROOT)
     except FileExistsError:
         pass
-    fp = os.path.join(ROOT, f"betas_{predictand}_{lat}_{lon}.nc")
+    fp = os.path.join(ROOT, f"betas{suffix}_{predictand}_{lat}_{lon}.nc")
     try:
         os.remove(fp)
     except: pass
@@ -331,12 +349,42 @@ def predict_linear(X_all, betas, preds_to_keep):
         X_month["preds"]= ({'time' : 'time'}, np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]]))
         X_month['time'] = X_month['timecopy']
         if month == 1:
-            X_preds = 0
+            #X_preds = 0
             X_preds = X_month
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
 
     return X_preds.sortby('time')
+
+def predict_conditional(X_all, betas, logit_betas, predictand, glm, thresh = 0.5):
+    """
+        to do
+    """
+    # if thresh = 'stochastic':
+    #     thresh = np.random.normal(len=X_all.shape[0], mean=0.5, var=0.1)
+
+    X_all_cp = X_all
+    X_all_cp['time'] = X_all_cp['timecopy'].dt.month
+    X_all_hand = [np.matrix([X_all_cp.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in range(1,13)]
+    for month in range(1,13):
+        X_month = X_all.sel(time=month)
+        X_month["preds"] = X_month['time'] + X_month['lat']
+
+        #predict yes/no precip
+        classifier = glm.predict_proba(X_all_hand[month-1])[:,1] > thresh
+        #predict intensity
+        intensity = np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]])
+
+        X_month["preds"]= ({'time' : 'time'}, np.multiply(intensity,classifier))
+        X_month['time'] = X_month['timecopy']
+
+        if month == 1:
+            X_preds = X_month
+        else:
+            X_preds = xr.concat([X_preds, X_month], dim = "time")
+
+    return X_preds.sortby('time')
+
 
 def save_preds(save_path, preds, lat, lon, predictand):
     """

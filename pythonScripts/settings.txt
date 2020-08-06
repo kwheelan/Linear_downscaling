@@ -3,7 +3,7 @@
 
 'lat' : 38.125,
 'lon' : -101.875,
-'predictand' : 'tmin',
+'predictand' : 'pr',
 'preds_surface' : ['mslp', 'vas'],
 'preds_level' : ['Z_p500', 'RH_p500', 'RH_p700', 'Q_p850'],
 
@@ -14,14 +14,17 @@
 'save_path' : '/glade/scratch/kwheelan/downscaling_data',
 
 'method' : 'OLS',
+
 'train' : False,
 'stdize' : True,
+'transform' : True,
+
+'conditional' : True,
+'stochastic_thresh' : False,
+'static_thresh' : 0.5,
 
 'inflate' : False,
 'inflate_mean' : 0,
 'inflate_var' : 12,
-
-'plot_options' : True,
-'stat_output' : True
 
 }
