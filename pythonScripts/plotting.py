@@ -454,14 +454,14 @@ def save_stats(plotData):
 
     #write stats for observed data
     f.write("Observations:\n")
-    f.write(f"Mean: {float(np.mean(plotData.obs[plotData.predictand]))}\n")
-    f.write(f"Variance: {float(np.var(plotData.obs[plotData.predictand]))}\n\n")
+    f.write(f"Mean: {float(np.mean(plotData.obs[plotData.predictand].values))}\n")
+    f.write(f"Variance: {float(np.var(plotData.obs[plotData.predictand].values))}\n\n")
 
     #write stats for any modeled data
     for key in plotData.models.keys():
         f.write(f"Modeled Data ({key}):\n")
-        f.write(f"Mean: {float(np.mean(plotData.models[key].preds))}\n")
-        f.write(f"Variance: {float(np.var(plotData.models[key].preds))}\n\n")
+        f.write(f"Mean: {float(np.mean(plotData.models[key].preds.values))}\n")
+        f.write(f"Variance: {float(np.var(plotData.models[key].preds.values))}\n\n")
     f.close()
 
 
@@ -472,7 +472,7 @@ def save_stats(plotData):
 
 def plot_all(plotData):
     """ Creates all available plots organized in three folders"""
-    
+
     #create folders to save plots
     for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
         try:
@@ -490,10 +490,10 @@ def plot_all(plotData):
         plot_cold_days(plotData)
     plot_annual_avgs(plotData)
     plot_annual_avgs_bar(plotData)
-    
+
     #summary statistics
     save_stats(plotData)
-    
+
     #plot distributions
     plot_dists(plotData)
     boxplot(plotData)

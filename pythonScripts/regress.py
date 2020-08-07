@@ -89,7 +89,7 @@ X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon, dateStart =
 
 if settings['transform']:
     #fourth root transformation (intended for precip)
-    Y_all[predictand] = ('time', (Y_all[predictand].values)**(1/4))
+    Y_all[predictand] = Y_all[predictand]**(1/4))
 
 if settings['stdize']:
     #standardize predictors
@@ -164,7 +164,7 @@ if settings['inflate']:
 
 if settings['transform']:
     # undo transformation
-    corrected_preds['preds'] = corrected_preds.preds.values ** 4
+    corrected_preds['preds'] = corrected_preds.preds ** 4
 
 save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
 print("Saved predictions.")
