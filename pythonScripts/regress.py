@@ -153,17 +153,18 @@ print("Saved betas.")
 
 #predict for all data using betas
 if settings['conditional']:
-    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm=glm, preds_to_keep, thresh = settings['static_thresh'], )
+    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
 
 if settings['inflate']:
     # add stochasticity via "variance inflation", before undoing any data transformations
-    corrected_preds = inflate_variance(settings['inflate_mean'], settings['inflate_var'], final_predictions)
+    final_predictions = inflate_variance(settings['inflate_mean'], settings['inflate_var'], final_predictions)
 
 if settings['transform']:
     # undo transformation
+
     corrected_preds['preds'] = corrected_preds.preds ** 4
 
 save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
@@ -173,6 +174,10 @@ print("Saved predictions.")
 #==============================================================================
 """Generate plots."""
 #==============================================================================
+
+if settings['transform']:
+    #undoing fourth root transformation (intended for precip)
+    Y_all[predictand] = ('time', (Y_all[predictand].values)**4)
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'OLS': final_predictions}, startDate = settings['dateStart'],
