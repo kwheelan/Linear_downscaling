@@ -89,7 +89,9 @@ X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon, dateStart =
 
 if settings['transform']:
     #fourth root transformation (intended for precip)
-    Y_all[predictand] = Y_all[predictand]**(1/4))
+    print(f"mean: {np.mean(Y_all.prec.values)}")
+    Y_all[predictand] = Y_all[predictand]**(1/4)
+    print(f"mean: {np.mean(Y_all.prec.values)}")
 
 if settings['stdize']:
     #standardize predictors
@@ -164,8 +166,8 @@ if settings['inflate']:
 
 if settings['transform']:
     # undo transformation
-
     corrected_preds['preds'] = corrected_preds.preds ** 4
+
 
 save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
 print("Saved predictions.")
@@ -177,7 +179,9 @@ print("Saved predictions.")
 
 if settings['transform']:
     #undoing fourth root transformation (intended for precip)
-    Y_all[predictand] = ('time', (Y_all[predictand].values)**4)
+    print(f"mean pre transform: {np.mean(Y_all[predictand].values)})
+    Y_all[predictand] = Y_all[predictand]**4
+    print(f"mean post transform: {np.mean(Y_all[predictand].values)})
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'OLS': final_predictions}, startDate = settings['dateStart'],
