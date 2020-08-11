@@ -13,7 +13,7 @@ __all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standar
             'prep_data','add_month', 'add_constant_col', 'evenOdd', 'add_month_filter',
             'fit_linear_model', 'fit_monthly_linear_models', 'fit_monthly_lasso_models',
             'fit_logistic', 'save_betas', 'predict_linear', 'predict_conditional',
-            'save_preds', 'inflate_variance']
+            'save_preds', 'inflate_variance', 'inflate_variance_SDSM']
 
 
 import xarray as xr
@@ -436,7 +436,7 @@ def inflate_variance(mu, variance, preds):
     preds['preds'] = preds.preds + stochast
     return preds
 
-def SE(y, preds, predictand):
+def SE(y, preds):
     """
         Calculates standard error of the regression.
     """
@@ -444,7 +444,7 @@ def SE(y, preds, predictand):
     stdErrors = np.std(y.values - preds.preds.values)
     return stdErrors * np.sqrt((n-1)/(n-2))
 
-def inflate_variance_SDSM(y, preds, predictand, c=12):
+def inflate_variance_SDSM(y, preds, c=12):
     """
         Replicating the "variance inflation factor" from SDSM.
         input:
@@ -452,7 +452,10 @@ def inflate_variance_SDSM(y, preds, predictand, c=12):
             When set to 12, the distribution is roughly normal with
             meam = 0, variance = 1.
     """
-    Ri = sum([random() for i in range(c)])
-    vi = SE(y, preds, predictand) * (Ri -(c/2))
-    preds['preds'] = preds.preds + vi
+    stdError = SE(y, preds)
+    v = []
+    for i in range(preds.preds.shape[0]):
+        Ri = sum([random() for i in range(c)])
+        v += [stdError * (Ri -(c/2))]
+    preds['preds'] = preds.preds + v
     return preds

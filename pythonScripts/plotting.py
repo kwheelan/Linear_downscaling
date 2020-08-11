@@ -109,7 +109,7 @@ def annualSeasonPlot(plotData, startDate, endDate, title):
 
     #label and save figure
     plt.title(title)
-    if plotData.predictand in ['tmin', 'tmax']
+    if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
         plt.ylabel('Precipitation (mm)')
@@ -164,7 +164,7 @@ def plot_monthly_avgs(plotData):
 
     #label and save figure
     plt.title("Monthly Means for Observed and Modeled Data")
-    if plotData.predictand in ['tmin', 'tmax']
+    if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
         plt.ylabel('Precipitation (mm)')
@@ -199,7 +199,7 @@ def plot_annual_avgs(plotData):
 
     #label plot
     plt.title("Annual Means for Observed and Modeled Data")
-    if plotData.predictand in ['tmin', 'tmax']
+    if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
         plt.ylabel('Precipitation (mm)')
