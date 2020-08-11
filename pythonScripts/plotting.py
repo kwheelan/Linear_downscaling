@@ -396,6 +396,7 @@ def plot_dist(plotData, data, title):
     plt.title(title)
     plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
     plt.ylabel("Percent")
+    plt.xlim(-20,50)
     plt.xlabel(plotData.predictand)
 
     #save figure
@@ -417,7 +418,7 @@ def boxplot(plotData):
     """ creates a boxplot of obs and any model data"""
     labels = ['obs'] + list(plotData.models.keys())
     data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
-    plt.boxplot(data, vert = False, whis = 0.75, labels = labels)
+    plt.boxplot(data, whis = 0.75, labels = labels)
     plt.title("Boxplots for Observed and Modeled Data")
     plt.xlabel(plotData.predictand)
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.png"))
