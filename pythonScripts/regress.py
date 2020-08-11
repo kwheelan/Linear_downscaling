@@ -164,7 +164,7 @@ if settings['inflate']:
 
 if settings['transform']:
     # undo transformation
-    corrected_preds['preds'] = corrected_preds.preds ** 4
+    final_predictions['preds'] = final_predictions.preds ** 4
 
 
 save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
