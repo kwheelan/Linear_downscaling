@@ -109,7 +109,10 @@ def annualSeasonPlot(plotData, startDate, endDate, title):
 
     #label and save figure
     plt.title(title)
-    plt.ylabel('Temp (Celcius)')
+    if plotData.predictand in ['tmin', 'tmax']
+        plt.ylabel('Temperature (Celcius)')
+    if plotData.predictand == 'prec':
+        plt.ylabel('Precipitation (mm)')
     plt.xlabel('Year')
     plt.legend()
     plt.savefig(os.path.join(f"{plotData.plot_path}/seasonalPlots", f"{title.replace(' ','')}.png"))
@@ -160,8 +163,11 @@ def plot_monthly_avgs(plotData):
         plt.plot(monthsAbrev, modelAvgs[model], label=model)
 
     #label and save figure
-    plt.title("Mean Monthly Max Temperature for Observed and Modeled Data")
-    plt.ylabel('Temperature (Celcius)')
+    plt.title("Monthly Means for Observed and Modeled Data")
+    if plotData.predictand in ['tmin', 'tmax']
+        plt.ylabel('Temperature (Celcius)')
+    if plotData.predictand == 'prec':
+        plt.ylabel('Precipitation (mm)')
     plt.xlabel('Month')
     plt.legend()
     plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'monthly_means.png'))
@@ -192,8 +198,11 @@ def plot_annual_avgs(plotData):
         plt.plot(range(startYr, endYr+1), modelAvgs[model], label=model)
 
     #label plot
-    plt.title("Mean Annual Max Temperature for Observed and Modeled Data")
-    plt.ylabel('Temperature (Celcius)')
+    plt.title("Annual Means for Observed and Modeled Data")
+    if plotData.predictand in ['tmin', 'tmax']
+        plt.ylabel('Temperature (Celcius)')
+    if plotData.predictand == 'prec':
+        plt.ylabel('Precipitation (mm)')
     plt.xlabel('Year')
     plt.legend()
 

@@ -26,6 +26,7 @@ from sklearn.model_selection import ShuffleSplit, cross_val_score, GridSearchCV
 from sklearn.metrics import log_loss
 import matplotlib.pyplot as plt
 import os
+from random import random
 
 
 #Set globals
@@ -433,4 +434,25 @@ def inflate_variance(mu, variance, preds):
     sigma = math.sqrt(variance)
     stochast = np.random.normal(mu, sigma, preds.preds.shape[0])
     preds['preds'] = preds.preds + stochast
+    return preds
+
+def SE(y, preds, predictand):
+    """
+        Calculates standard error of the regression.
+    """
+    n = preds.preds.shape[0]
+    stdErrors = np.std(y.values - preds.preds.values)
+    return stdErrors * np.sqrt((n-1)/(n-2))
+
+def inflate_variance_SDSM(y, preds, predictand, c=12):
+    """
+        Replicating the "variance inflation factor" from SDSM.
+        input:
+            c (int), the "variance inflation factor" from SDSM.
+            When set to 12, the distribution is roughly normal with
+            meam = 0, variance = 1.
+    """
+    Ri = sum([random() for i in range(c)])
+    vi = SE(y, preds, predictand) * (Ri -(c/2))
+    preds['preds'] = preds.preds + vi
     return preds

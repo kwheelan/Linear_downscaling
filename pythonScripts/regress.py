@@ -89,9 +89,7 @@ X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon, dateStart =
 
 if settings['transform']:
     #fourth root transformation (intended for precip)
-    print(f"mean: {np.mean(Y_all.prec.values)}")
     Y_all[predictand] = Y_all[predictand]**(1/4)
-    print(f"mean: {np.mean(Y_all.prec.values)}")
 
 if settings['stdize']:
     #standardize predictors
@@ -162,7 +160,7 @@ print("Calculated predictions for testing and training data.")
 
 if settings['inflate']:
     # add stochasticity via "variance inflation", before undoing any data transformations
-    final_predictions = inflate_variance(settings['inflate_mean'], settings['inflate_var'], final_predictions)
+    final_predictions = inflate_variance_SDSM(settings['inflate_mean'], settings['inflate_var'], final_predictions)
 
 if settings['transform']:
     # undo transformation
@@ -179,9 +177,7 @@ print("Saved predictions.")
 
 if settings['transform']:
     #undoing fourth root transformation (intended for precip)
-    print(f"mean pre transform: {np.mean(Y_all[predictand].values)})
     Y_all[predictand] = Y_all[predictand]**4
-    print(f"mean post transform: {np.mean(Y_all[predictand].values)})
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'OLS': final_predictions}, startDate = settings['dateStart'],
