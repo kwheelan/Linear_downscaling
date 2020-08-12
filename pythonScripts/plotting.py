@@ -439,7 +439,6 @@ def violin(plotData):
     #make plot
     plt.violinplot(data)
     plt.title("Violin Plots for Observed and Modeled Data")
-    plt.ylabel(plotData.predictand)
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "violinplots.png"))
 
 
