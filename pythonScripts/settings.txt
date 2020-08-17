@@ -4,16 +4,16 @@
 'lat' : 38.125,
 'lon' : -101.875,
 'predictand' : 'tmax',
-'preds_surface' : ['mslp', 'vas'],
-'preds_level' : ['Z_p500', 'RH_p500', 'RH_p700', 'Q_p850'],
+'preds_surface' : [],
+'preds_level' : ['all'],
 
 'dateStart' : '1980-01-01',
 'dateEnd' : '2005-12-31',
 
 'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc',
-'save_path' : '/glade/scratch/kwheelan/downscaling_data/runs/run5',
+'save_path' : '/glade/scratch/kwheelan/downscaling_data/LASSO_annual',
 
-'method' : 'OLS',
+'method' : 'LASSO',
 
 'train' : False,
 'stdize' : True,
@@ -23,7 +23,7 @@
 'stochastic_thresh' : False,
 'static_thresh' : 0.5,
 
-'inflate' : True,
+'inflate' : False,
 'inflate_mean' : 0,
 'inflate_var' : 12,
 

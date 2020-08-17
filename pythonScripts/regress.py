@@ -52,8 +52,8 @@ import sys
 with open("settings.txt") as f:
     settings  = eval(f.read())
 
-lat = settings['lat']
-lon = settings['lon']
+lat = sys.argv[1] #settings['lat']
+lon = sys.argv[2] #settings['lon']
 predictand = settings['predictand']
 preds = settings['preds_surface'] + settings['preds_level']
 
