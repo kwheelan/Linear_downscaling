@@ -14,6 +14,7 @@
 'save_path' : '/glade/scratch/kwheelan/downscaling_data/runs/run5',
 
 'method' : 'OLS',
+'monthly' : False,
 
 'train' : False,
 'stdize' : True,

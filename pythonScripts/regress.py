@@ -139,7 +139,10 @@ if settings['conditional']:
 if settings['method'] == 'OLS':
     coefMatrix = fit_monthly_linear_models(X, y, preds_to_keep, predictand, settings['conditional'])
 elif settings['method'] == 'LASSO':
-    coefMatrix = fit_monthly_lasso_models(X, y, predictand, settings['conditional'])
+    if settings['monthly']:
+        coefMatrix = fit_monthly_lasso_models(X, y, predictand, settings['conditional'])
+    else:
+        coefMatrix = fit_annual_lasso_models(X, y, predictand, settings['conditional'])
 
 print("Fit linear model.")
 
