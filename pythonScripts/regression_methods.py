@@ -256,7 +256,7 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand, condi
 
 def fit_monthly_lasso_models(X_train, Y_train, predictand, conditional):
     """
-        LASSO regressor that uses BIC to optimize the alpha (L1 regulator)
+        LASSO regressor
         Input:
             X_train, an xarray obj of predictors
             Y_train, an xarray obj of observed predictands
@@ -289,6 +289,31 @@ def fit_monthly_lasso_models(X_train, Y_train, predictand, conditional):
         betas_LASSO_list[monthsFull[month-1]] = betas_LASSO.values
 
     return betas_LASSO_list
+
+def fit_annual_lasso_model(X_train, Y_train, predictand, conditional=False):
+    """ todo """
+    reg = sklearn.linear_model.Lasso(fit_intercept = False, alpha=0.5)
+
+    #getting predictor names
+    keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
+
+    #obs
+    y = Y_train.sel(time = month)[predictand].values #obs values
+
+    #creating numpy matrix
+    X_train_np = np.matrix([X_train.sel[key].values for key in keys]).transpose()
+    reg.fit(X_train_np, y)
+
+    lasso_preds = [keys[i] for i in range(len(reg.coef_)) ]
+    betas_LASSO = pd.DataFrame(index = lasso_preds,
+                        data = [coef for coef in reg.coef_ ], columns = ['January'])
+
+    betas_LASSO_list = betas_LASSO
+    for month in range(2,13):
+        betas_LASSO_list[monthsFull[month-1]] = betas_LASSO.values
+
+    return betas_LASSO_list
+
 
 def fit_logistic(X_train, y, predictand):
     """
