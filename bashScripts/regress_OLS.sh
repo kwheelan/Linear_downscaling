@@ -26,6 +26,6 @@ for LAT in $(seq 32.125 2 38.125)
 do
     for LON in $(seq -101.875 2 -93.875)
     do
-	      python regress.py $LAT $LON $OBS $LOCATION $PREDS #&
+	      python regress.py $LAT $LON
     done
 done
