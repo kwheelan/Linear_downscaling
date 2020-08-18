@@ -116,7 +116,8 @@ else:
 
 
 #just for april - september data
-X_all['time'], Y_all['time'] = X_all.time.dt.month in list(range(4, 10)), Y_all.time.dt.month in list(range(4, 10))
+X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
+Y_all['time'] = (Y_all.time >= 4) & (Y_all.time <= 9)
 X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True)
 X_all['time'], Y_all['time'] = X_all.timecopy, Y_all.timecopy
 
