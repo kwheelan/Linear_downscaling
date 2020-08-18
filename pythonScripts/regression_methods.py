@@ -12,6 +12,7 @@ July, 2020
 __all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standardize',
             'prep_data','add_month', 'add_constant_col', 'evenOdd', 'add_month_filter',
             'fit_linear_model', 'fit_monthly_linear_models', 'fit_monthly_lasso_models',
+            'fit_annual_lasso_model',
             'fit_logistic', 'save_betas', 'predict_linear', 'predict_conditional',
             'save_preds', 'inflate_variance', 'inflate_variance_SDSM']
 
@@ -298,21 +299,18 @@ def fit_annual_lasso_model(X_train, Y_train, predictand, conditional=False):
     keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
 
     #obs
-    y = Y_train.sel(time = month)[predictand].values #obs values
+    y = Y_train[predictand].values #obs values
 
     #creating numpy matrix
-    X_train_np = np.matrix([X_train.sel[key].values for key in keys]).transpose()
+    X_train_np = np.matrix([X_train[key].values for key in keys]).transpose()
     reg.fit(X_train_np, y)
 
     lasso_preds = [keys[i] for i in range(len(reg.coef_)) ]
     betas_LASSO = pd.DataFrame(index = lasso_preds,
-                        data = [coef for coef in reg.coef_ ], columns = ['January'])
+                               data = np.array([[coef for coef in reg.coef_ ]]*12).transpose(),
+                               columns = monthsFull)
 
-    betas_LASSO_list = betas_LASSO
-    for month in range(2,13):
-        betas_LASSO_list[monthsFull[month-1]] = betas_LASSO.values
-
-    return betas_LASSO_list
+    return betas_LASSO
 
 
 def fit_logistic(X_train, y, predictand):
