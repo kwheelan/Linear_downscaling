@@ -101,6 +101,7 @@ X_all, all_preds = add_constant_col(X_all)
 
 print("Loaded obs data.")
 
+
 if settings['train']:
     #separate testing and training data by even and odd years
     X_train, X_test = evenOdd(X_all)
@@ -113,10 +114,9 @@ else:
     # train on all data
     X_all, Y_all = add_month_filter(X_all), add_month_filter(Y_all)
 
-
-
 #just for april - september data
-X_all['time'], Y_all['time'] = X_all.time.dt.month in list(range(4, 10)), Y_all.time.dt.month in list(range(4, 10))
+X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
+Y_all['time'] = (Y_all.time >= 4) & (Y_all.time <= 9)
 X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True)
 X_all['time'], Y_all['time'] = X_all.timecopy, Y_all.timecopy
 
