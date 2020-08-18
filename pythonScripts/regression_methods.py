@@ -33,6 +33,7 @@ from random import random
 #Set globals
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
+month_range = range(4,10) #range(1,13)
 
 #==============================================================================
 """
@@ -231,7 +232,7 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand, condi
         Output:
             coefMatrix, an array of betas from the regression for each month
     """
-    for month in range(1, 13):
+    for month in month_range:
         #get obs data
         y = Y_train.sel(time = month)[predictand].values #obs values
         if conditional:
@@ -271,7 +272,7 @@ def fit_monthly_lasso_models(X_train, Y_train, predictand, conditional):
     keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
 
     #running LASSO for each month
-    for month in range(1, 13):
+    for month in month_range:
 
         #get obs data
         y = Y_train.sel(time = month)[predictand].values #obs values
@@ -378,8 +379,8 @@ def predict_linear(X_all, betas, preds_to_keep):
     """
     X_all_cp = X_all
     X_all_cp['time'] = X_all_cp['timecopy'].dt.month
-    X_all_hand = [np.matrix([X_all_cp.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in range(1,13)]
-    for month in range(1,13):
+    X_all_hand = [np.matrix([X_all_cp.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in month_range]
+    for month in month_range:
         X_month = X_all.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
         X_month["preds"]= ({'time' : 'time'}, np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]]))
@@ -401,8 +402,8 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
 
     X_all_cp = X_all
     X_all_cp['time'] = X_all_cp['timecopy'].dt.month
-    X_all_hand = [np.matrix([X_all_cp.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in range(1,13)]
-    for month in range(1,13):
+    X_all_hand = [np.matrix([X_all_cp.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in month_range]
+    for month in month_range:
         X_month = X_all.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
 
