@@ -98,6 +98,12 @@ if settings['stdize']:
 #add necessary columns
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)
+
+
+#just for april - september data
+X_all['time'], Y_all['time'] = X_all.time.dt.month in list(range(4, 10)), Y_all.time.dt.month in list(range(4, 10))
+X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True) 
+
 print("Loaded obs data.")
 
 if settings['train']:
