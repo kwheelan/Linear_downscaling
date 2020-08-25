@@ -125,7 +125,7 @@ def standardize(predictors):
 def stdz_subset(predictors, month_range=month_range):
     """standardizes data for a subset of the year"""
     for col in predictors.keys():
-        subset = predictors[col].sel(time=time.dt.month.isin(list(month_range))).data
+        subset = predictors.sel(time = predictors.time.dt.month.isin(list(month_range)))[col].data
         zscores = (predictors[col] - np.mean(subset)) / np.std(subset)
         predictors[col] = (('time'), zscores)
     return predictors
