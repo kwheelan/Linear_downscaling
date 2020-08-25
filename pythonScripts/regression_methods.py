@@ -320,9 +320,29 @@ def fit_annual_lasso_model(X_train, Y_train, predictand, conditional=False):
     betas_LASSO = pd.DataFrame(index = lasso_preds,
                                data = np.array([[coef for coef in reg.coef_ ]]*len(month_range)).transpose(),
                                columns = [monthsFull[i-1] for i in month_range])
-
     return betas_LASSO
 
+def fit_annual_OLS(X_train, Y_train, preds_to_keep, predictand, conditional):
+    y = Y_train[predictand].values #obs values
+    if conditional:
+        #filter only days with nonzero precip
+        y =  y[y > 0]
+
+    #get just subset of predictors
+    x_train_subset = np.matrix([X_train[key].values for key in preds_to_keep]).transpose()
+    if conditional:
+        #filter only days with nonzero precip
+        x_train_subset = x_train_subset[Y_train[predictand].values > 0, ]
+
+    #calculate coefficients for training data
+    coefs = fit_linear_model(x_train_subset, y,
+                keys=preds_to_keep).rename(index = {0: 'coefficient'}).transpose()
+    #store betas
+    coefMatrix = coefs
+    for month in range(len(list(month_range)):
+        coefMatrix[monthsFull[month-1]] = coefs.values
+        coefMatrix = coefMatrix.drop('coefficient', axis=1)
+    return coefMatrix
 
 def fit_logistic(X_train, y, predictand):
     """
