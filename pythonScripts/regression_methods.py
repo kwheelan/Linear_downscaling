@@ -10,6 +10,7 @@ July, 2020
 
 
 __all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standardize',
+            'stdz_subset',
             'prep_data','add_month', 'add_constant_col', 'evenOdd', 'add_month_filter',
             'fit_linear_model', 'fit_monthly_linear_models', 'fit_monthly_lasso_models',
             'fit_annual_lasso_model',
@@ -120,6 +121,15 @@ def standardize(predictors):
         #standardize each predictor
         predictors[col] = (('time'), zscore(predictors[col].data))
     return predictors
+
+def stdz_subset(predictors, month_range=month_range):
+    """standardizes data for a subset of the year"""
+    for col in predictors.keys():
+        subset = predictors[col].sel(time=time.dt.month.isin(list(month_range))).data
+        zscores = (predictors[col] - np.mean(subset)) / np.std(subset)
+        predictors[col] = (('time'), zscores)
+    return predictors
+
 
 def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
     """
