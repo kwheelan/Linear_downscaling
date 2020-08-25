@@ -308,8 +308,8 @@ def fit_annual_lasso_model(X_train, Y_train, predictand, conditional=False):
 
     lasso_preds = [keys[i] for i in range(len(reg.coef_)) ]
     betas_LASSO = pd.DataFrame(index = lasso_preds,
-                               data = np.array([[coef for coef in reg.coef_ ]]*12).transpose(),
-                               columns = monthsFull)
+                               data = np.array([[coef for coef in reg.coef_ ]]*len(month_range)).transpose(),
+                               columns = [monthsFull[i-1] for i in month_range])
 
     return betas_LASSO
 
@@ -383,10 +383,9 @@ def predict_linear(X_all, betas, preds_to_keep):
     for month in month_range:
         X_month = X_all.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
-        X_month["preds"]= ({'time' : 'time'}, np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]]))
+        X_month["preds"]= ({'time' : 'time'}, np.matmul(X_all_hand[month-list(month_range)[0]], betas[monthsFull[month-1]]))
         X_month['time'] = X_month['timecopy']
-        if month == 1:
-            #X_preds = 0
+        if month == list(month_range)[0]:
             X_preds = X_month
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")

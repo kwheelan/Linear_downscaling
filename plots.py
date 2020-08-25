@@ -123,4 +123,4 @@ means = [np.mean(data[i]) for i in range(12)]
 plt.plot(list(range(1,13)), means, marker = "o")
 plt.xlabel("Month")
 plt.ylabel("MSLP (Pa)")
-plt.savefig("mslp_violinplots.png")
+#plt.savefig("mslp_violinplots.png")

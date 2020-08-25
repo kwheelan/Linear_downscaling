@@ -11,7 +11,7 @@
 'dateEnd' : '2005-12-31',
 
 'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc',
-'save_path' : '/glade/scratch/kwheelan/downscaling_data/LASSO_annual',
+'save_path' : '/glade/scratch/kwheelan/downscaling_data/LASSO_seasonal',
 
 'method' : 'LASSO',
 'monthly' : False,
