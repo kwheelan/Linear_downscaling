@@ -13,7 +13,7 @@ __all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standar
             'stdz_subset',
             'prep_data','add_month', 'add_constant_col', 'evenOdd', 'add_month_filter',
             'fit_linear_model', 'fit_monthly_linear_models', 'fit_monthly_lasso_models',
-            'fit_annual_lasso_model',
+            'fit_annual_lasso_model', 'fit_annual_OLS',
             'fit_logistic', 'save_betas', 'predict_linear', 'predict_conditional',
             'save_preds', 'inflate_variance', 'inflate_variance_SDSM']
 
@@ -336,13 +336,12 @@ def fit_annual_OLS(X_train, Y_train, preds_to_keep, predictand, conditional):
 
     #calculate coefficients for training data
     coefs = fit_linear_model(x_train_subset, y,
-                keys=preds_to_keep).rename(index = {0: 'coefficient'}).transpose()
+                keys=preds_to_keep)
     #store betas
-    coefMatrix = coefs
-    for month in range(len(list(month_range)):
-        coefMatrix[monthsFull[month-1]] = coefs.values
-        coefMatrix = coefMatrix.drop('coefficient', axis=1)
-    return coefMatrix
+    return pd.DataFrame(index = preds_to_keep,
+                               data = np.array(list(coefs.values)*len(month_range)).transpose(),
+                               columns = [monthsFull[i-1] for i in month_range])
+
 
 def fit_logistic(X_train, y, predictand):
     """
