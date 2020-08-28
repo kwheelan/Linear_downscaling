@@ -472,6 +472,7 @@ def save_stats(plotData):
         # TODO: r-squared; standard error
     """
     #open file
+    print(os.path.join(plotData.plot_path, "summary.txt"))
     f = open(os.path.join(plotData.plot_path, "summary.txt"), "w")
 
     f.write("Summary Statistics\n")
