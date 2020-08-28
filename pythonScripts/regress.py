@@ -161,6 +161,7 @@ print("Fit linear model.")
 #saves the betas
 save_betas(settings['save_path'], coefMatrix, lat, lon, predictand)
 print("Saved betas.")
+k = len([i for i in coefMatrix[0,] if i != 0])
 
 #==============================================================================
 """Generating predictions"""
@@ -197,7 +198,7 @@ if settings['transform']:
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'OLS': final_predictions}, startDate = settings['dateStart'],
-                endDate = settings['dateEnd'])
+                endDate = settings['dateEnd'], k = k)
 
 for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
     try:
@@ -205,6 +206,7 @@ for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
     except: pass
 
 #plot_all(plotData)
+save_stats(plotData)
 
 print("Generated plots.")
 

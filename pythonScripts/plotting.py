@@ -53,7 +53,7 @@ class Plot:
 
     __slots__ = ['plot_path', 'lat', 'lon', 'predictand', 'obs', 'models', 'startYr','endYr']
 
-    def __init__(self, save_path, lat, lon, predictand, obs, models, startDate, endDate):
+    def __init__(self, save_path, lat, lon, predictand, obs, models, startDate, endDate, k):
         # create a folder to save the plots
         folder = "plots"
         try:
@@ -67,6 +67,7 @@ class Plot:
         self.obs = obs
         self.models = models #a dict of xarray objs; must have preds as a var
         self.startYr, self.endYr = int(startDate[:4]), int(endDate[:4])
+        self.k = k
 
 
 #===============================================================================
@@ -448,6 +449,21 @@ Saving summary statistics.
 """
 #===============================================================================
 
+def RMSE(preds, obs):
+    """Input: numpy matrix of predictions, numpy matrix of true values (for both, each row is a day)
+       Output: Root mean squared error, as a float"""
+    return np.sqrt(np.square(preds - obs.reshape(obs.shape[0],1)).mean())
+
+def AIC(preds, obs, k):
+    """Input: numpy matrix of predictions,
+              numpy matrix of true values (for both, each row is a day)
+              k (integer), the number of predictors
+       Output: Akaike's Information Criterion, as a float"""
+    n = preds.shape[0] #length of time series (number of points)
+    SSE = np.square(preds - obs.reshape(obs.shape[0],1)).sum() #Sum of squared errors
+    print("n: {}, SSE: {}, k: {}".format(n, SSE, k))
+    return (2*k) + (n * np.log(SSE/n))
+
 def save_stats(plotData):
     """
         Saving a txt file with data on the modeled predictions
@@ -470,7 +486,10 @@ def save_stats(plotData):
     for key in plotData.models.keys():
         f.write(f"Modeled Data ({key}):\n")
         f.write(f"Mean: {float(np.mean(plotData.models[key].preds.values))}\n")
-        f.write(f"Variance: {float(np.var(plotData.models[key].preds.values))}\n\n")
+        f.write(f"Variance: {float(np.var(plotData.models[key].preds.values))}\n")
+        f.write(f"RMSE: {RSME(plotData.models[key].preds.values, plotData.obs[plotData.predictand].values)}\n")
+        # todo fix k for multiple models
+        f.write(f"AIC: {AIC(plotData.models[key].preds.values, plotData.obs[plotData.predictand].values, plotData.k)}\n\n")
     f.close()
 
 
