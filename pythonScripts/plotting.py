@@ -174,7 +174,35 @@ def plot_monthly_avgs(plotData):
     plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'monthly_means.png'))
     plt.clf()
 
+def plot_daily_avgs(plotData):
+    """
+        Saving a plot of daily averages for predictand.
+        Input: plotData object
+        Output: None
+    """
+    #condition on month and create time series
+    modelAvgs = dict()
+    for model in plotData.models.keys():
+        data = plotData.models[model]
+        modelAvgs[model] = [float(data.sel(time = (data.time.dt.month == m) & (data.time.dt.day == d)).mean(dim = 'time')['preds']) for m,d in data.time.dt.month[366:(366+365)], data.time.dt.day[366:(366+365)]]
+    obsAvgs = [float(obs.sel(time = (obs.time.dt.month == m) & (obs.time.dt.day == d)).mean(dim = 'time')['preds']) for m,d in obs.time.dt.month[366:(366+365)], obs.time.dt.day[366:(366+365)]]
 
+    #plot lines
+    days = [f"{m}-{d}" for m,d in obs.time.dt.month[366:(366+365)], obs.time.dt.day[366:(366+365)]]
+    plt.plot(days, obsAvgs, label = 'obs')
+    for model in plotData.models.keys():
+        plt.plot(days, modelAvgs[model], label=model)
+
+    #label and save figure
+    plt.title("Daily Means for Observed and Modeled Data")
+    if plotData.predictand in ['tmin', 'tmax']:
+        plt.ylabel('Temperature (Celcius)')
+    if plotData.predictand == 'prec':
+        plt.ylabel('Precipitation (mm)')
+    plt.xlabel('Day')
+    plt.legend()
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'daily_means.png'))
+    plt.clf()
 
 
 def plot_annual_avgs(plotData):

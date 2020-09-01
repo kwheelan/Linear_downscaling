@@ -205,7 +205,7 @@ for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
         os.mkdir(os.path.join(plotData.plot_path, folder))
     except: pass
 
-#plot_all(plotData)
+plot_all(plotData)
 save_stats(plotData)
 
 print("Generated plots.")
