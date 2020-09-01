@@ -51,7 +51,7 @@ class Plot:
             endYr : last year of data (int)
     """
 
-    __slots__ = ['plot_path', 'lat', 'lon', 'predictand', 'obs', 'models', 'startYr','endYr']
+    __slots__ = ['plot_path', 'lat', 'lon', 'predictand', 'obs', 'models', 'startYr','endYr', 'k']
 
     def __init__(self, save_path, lat, lon, predictand, obs, models, startDate, endDate, k):
         # create a folder to save the plots
@@ -173,6 +173,9 @@ def plot_monthly_avgs(plotData):
     plt.legend()
     plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'monthly_means.png'))
     plt.clf()
+
+
+
 
 def plot_annual_avgs(plotData):
     """
@@ -452,7 +455,7 @@ Saving summary statistics.
 def RMSE(preds, obs):
     """Input: numpy matrix of predictions, numpy matrix of true values (for both, each row is a day)
        Output: Root mean squared error, as a float"""
-    return np.sqrt(np.square(preds - obs.reshape(obs.shape[0],1)).mean())
+    return np.sqrt(np.square(preds.flatten() - obs.flatten()).mean())
 
 def AIC(preds, obs, k):
     """Input: numpy matrix of predictions,
@@ -460,9 +463,21 @@ def AIC(preds, obs, k):
               k (integer), the number of predictors
        Output: Akaike's Information Criterion, as a float"""
     n = preds.shape[0] #length of time series (number of points)
-    SSE = np.square(preds - obs.reshape(obs.shape[0],1)).sum() #Sum of squared errors
-    print("n: {}, SSE: {}, k: {}".format(n, SSE, k))
+    SSE = np.square(preds.flatten() - obs.flatten()).sum() #Sum of squared errors
     return (2*k) + (n * np.log(SSE/n))
+
+def Rsq(preds, obs):
+    """to do"""
+    #SSE = np.square(preds.flatten() - obs.flatten()).sum() #Sum of squared errors
+    ybar = float(obs.flatten().mean())
+    SSR = np.square(preds.flatten() - ybar).sum()
+    SST = np.square(obs.flatten() - ybar).sum() #Sum of squares total
+    return (SSR / SST)
+
+def adjustedRsq(preds, obs, k):
+    """adjusted R squared"""
+    n = preds.shape[0] #length of time series (number of points)
+    return 1 - ( (1-Rsq(preds, obs)) * (n-1) ) / (n-k-1)
 
 def save_stats(plotData):
     """
@@ -488,9 +503,11 @@ def save_stats(plotData):
         f.write(f"Modeled Data ({key}):\n")
         f.write(f"Mean: {float(np.mean(plotData.models[key].preds.values))}\n")
         f.write(f"Variance: {float(np.var(plotData.models[key].preds.values))}\n")
-        f.write(f"RMSE: {RSME(plotData.models[key].preds.values, plotData.obs[plotData.predictand].values)}\n")
+        f.write(f"RMSE: {RMSE(plotData.models[key].preds.values, plotData.obs[plotData.predictand].values)}\n")
         # todo fix k for multiple models
-        f.write(f"AIC: {AIC(plotData.models[key].preds.values, plotData.obs[plotData.predictand].values, plotData.k)}\n\n")
+        f.write(f"AIC: {AIC(plotData.models[key].preds.values, plotData.obs[plotData.predictand].values, plotData.k)}\n")
+        f.write(f"R-squared: {Rsq(plotData.models[key].preds.values, plotData.obs[plotData.predictand].values)}\n")
+        f.write(f"Adjusted R-squared: {adjustedRsq(plotData.models[key].preds.values, plotData.obs[plotData.predictand].values, plotData.k)}\n\n")
     f.close()
 
 

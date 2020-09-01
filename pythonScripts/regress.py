@@ -93,8 +93,8 @@ if settings['transform']:
 
 if settings['stdize']:
     #standardize predictors
-    X_all = stdz_subset(X_all) #for apr-sep subset
-#    X_all = standardize(X_all)
+#    X_all = stdz_subset(X_all) #for apr-sep subset
+    X_all = standardize(X_all)
 
 #add necessary columns
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
@@ -116,11 +116,11 @@ else:
     X_all, Y_all = add_month_filter(X_all), add_month_filter(Y_all)
 
 #just for april - september data
-X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
+"""X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
 Y_all['time'] = (Y_all.time >= 4) & (Y_all.time <= 9)
 X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True)
 X_all['time'], Y_all['time'] = X_all.timecopy, Y_all.timecopy
-
+"""
 print("Prepped data for regression")
 
 
@@ -161,7 +161,7 @@ print("Fit linear model.")
 #saves the betas
 save_betas(settings['save_path'], coefMatrix, lat, lon, predictand)
 print("Saved betas.")
-k = len([i for i in coefMatrix[0,] if i != 0])
+k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 
 #==============================================================================
 """Generating predictions"""
