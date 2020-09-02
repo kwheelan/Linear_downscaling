@@ -94,7 +94,8 @@ if settings['transform']:
 if settings['stdize']:
     #standardize predictors
 #    X_all = stdz_subset(X_all) #for apr-sep subset
-    X_all = standardize(X_all)
+    #X_all = standardize(X_all)
+    X_all = stdz_month(X_all)
 
 #add necessary columns
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
@@ -206,7 +207,6 @@ for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
     except: pass
 
 plot_all(plotData)
-save_stats(plotData)
 
 print("Generated plots.")
 

@@ -10,7 +10,7 @@ July, 2020
 
 
 __all__ = ['load_all_predictors', 'load_selected_predictors', 'zscore', 'standardize',
-            'stdz_subset',
+            'stdz_subset', 'stdz_month',
             'prep_data','add_month', 'add_constant_col', 'evenOdd', 'add_month_filter',
             'fit_linear_model', 'fit_monthly_linear_models', 'fit_monthly_lasso_models',
             'fit_annual_lasso_model', 'fit_annual_OLS',
@@ -34,7 +34,7 @@ from random import random
 #Set globals
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
-month_range = range(1,13) #range(4,10) 
+month_range = range(1,13) #range(4,10)
 
 #==============================================================================
 """
@@ -129,6 +129,18 @@ def stdz_subset(predictors, month_range=month_range):
         zscores = (predictors[col] - np.mean(subset)) / np.std(subset)
         predictors[col] = (('time'), zscores)
     return predictors
+
+def stdz_month(predictors):
+    """standardizes by month"""
+    for month in month_range:
+        X_month = predictors.sel(time=predictors.time.dt.month = month)
+        for col in predictors.keys():
+            X_month[col] = ( ('time'), zscore(X_mmonth[col].data) )
+        if month == list(month_range)[0]:
+            X_preds = X_month
+        else:
+            X_preds = xr.concat([X_preds, X_month], dim = "time")
+    return X_month
 
 
 def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
