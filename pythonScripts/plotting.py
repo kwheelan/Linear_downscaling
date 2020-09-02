@@ -184,11 +184,14 @@ def plot_daily_avgs(plotData):
     modelAvgs = dict()
     for model in plotData.models.keys():
         data = plotData.models[model]
-        modelAvgs[model] = [float(data.sel(time = (data.time.dt.month == m) & (data.time.dt.day == d)).mean(dim = 'time')['preds']) for m,d in data.time.dt.month[366:(366+365)], data.time.dt.day[366:(366+365)]]
-    obsAvgs = [float(obs.sel(time = (obs.time.dt.month == m) & (obs.time.dt.day == d)).mean(dim = 'time')['preds']) for m,d in obs.time.dt.month[366:(366+365)], obs.time.dt.day[366:(366+365)]]
+        data['time'] = data.timecopy
+        modelAvgs[model] = [float(data.sel(time = (data.time.dt.month == m) & (data.time.dt.day == d)).mean(dim = 'time')['preds']) for m,d in zip(data.time.dt.month[366:(366+365)], data.time.dt.day[366:(366+365)])]
+    obs = plotData.obs
+    obs['time'] = obs.timecopy
+    obsAvgs = [float(obs.sel(time = (obs.time.dt.month == m) & (obs.time.dt.day == d)).mean(dim = 'time')[plotData.predictand]) for m,d in zip(obs.time.dt.month[366:(366+365)], obs.time.dt.day[366:(366+365)])]
 
     #plot lines
-    days = [f"{m}-{d}" for m,d in obs.time.dt.month[366:(366+365)], obs.time.dt.day[366:(366+365)]]
+    days = [f"{m}-{d}" for m,d in zip(obs.time.dt.month[366:(366+365)], obs.time.dt.day[366:(366+365)])]
     plt.plot(days, obsAvgs, label = 'obs')
     for model in plotData.models.keys():
         plt.plot(days, modelAvgs[model], label=model)
@@ -500,6 +503,8 @@ def Rsq(preds, obs):
     ybar = float(obs.flatten().mean())
     SSR = np.square(preds.flatten() - ybar).sum()
     SST = np.square(obs.flatten() - ybar).sum() #Sum of squares total
+    #from sklearn.metrics import r2_score
+    #return r2_score(obs, preds)
     return (SSR / SST)
 
 def adjustedRsq(preds, obs, k):
@@ -564,6 +569,7 @@ def plot_all(plotData):
         plot_cold_days(plotData)
     plot_annual_avgs(plotData)
     plot_annual_avgs_bar(plotData)
+    plot_daily_avgs(plotData)
 
     #summary statistics
     save_stats(plotData)
