@@ -16,16 +16,17 @@
 'method' : 'OLS',
 'monthly' : True,
 
+
 'train' : True,
-'stdize' : True,
 'transform' : False,
+'stdize' : True,
+'stdize_y': False,
 
 'conditional' : False,
 'stochastic_thresh' : False,
 'static_thresh' : 0.5,
 
 'inflate' : False,
-'inflate_mean' : 0,
 'inflate_var' : 12,
 
 }

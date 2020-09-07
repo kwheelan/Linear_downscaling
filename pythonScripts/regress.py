@@ -97,6 +97,9 @@ if settings['stdize']:
      X_all = standardize(X_all)
 #    X_all = stdz_month(X_all)
 
+if settings['stdize_y']:
+    Y_all = stdz_month(Y_all)
+
 #add necessary columns
 X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)

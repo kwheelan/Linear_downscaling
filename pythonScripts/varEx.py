@@ -2,7 +2,8 @@ from regression_methods import *
 x = load_all_predictors().sel(time = slice('1980-01-01','2005-12-31'))
 import xarray as xr
 
-obs_file = "/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc"
+predictand = 'tmin'
+obs_file = f"/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/{predictand}.gridMET.NAM-22i.SGP.nc"
 obs = xr.open_dataset(obs_file).sel(time = slice('1980-01-01','2005-12-31'))
 
 import numpy as np
@@ -20,20 +21,20 @@ all_preds = [key for key in x.keys()] #the names of the predictors
 def var_ex(x, y_full):
     for month in range(1, 13):
         #get obs data
-        y = y_full.sel(time = y_full.time.dt.month == month)['tmax'].values
+        y = y_full.sel(time = y_full.time.dt.month == month)[predictand].values
         matrix = pd.DataFrame([x.sel(time = x.time.dt.month == month)[key].values.flatten() for key in all_preds] + [y.flatten()])
         corrs = matrix.transpose().corr()[len(all_preds)][0:-1]
-    
+
         if month == 1:
             #create dataframe
             exVar = pd.DataFrame(index = range(1))
             for i in range(len(all_preds)):
                 exVar[all_preds[i]] = corrs[i] #assigning names to each coefficient
-            exVar = exVar.rename(index = {0: 'January'}).transpose() 
+            exVar = exVar.rename(index = {0: 'January'}).transpose()
         else:
             #otherwise, add the data as a column
             exVar[monthsFull[month-1]] = corrs.values
-        
+
     exVar = round(exVar**2, 3) #square to get R^2 and round to look nicer
     return exVar
 
