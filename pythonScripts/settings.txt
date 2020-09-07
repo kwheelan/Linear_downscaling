@@ -5,7 +5,7 @@
 'lon' : -101.875,
 'predictand' : 'tmax',
 'preds_surface' : ['mslp', 'vas'],
-'preds_level' : ['RH_p500', 'RH_p700', 'Z_p500', 'Q_p850'],
+'preds_level' : ['RH_p500', 'U_p850', 'Q_p850', 'Vort_p500', 'RH_p850', 'Z_p500'],
 
 'dateStart' : '1980-01-01',
 'dateEnd' : '2005-12-31',
@@ -16,7 +16,7 @@
 'method' : 'OLS',
 'monthly' : True,
 
-'train' : False,
+'train' : True,
 'stdize' : True,
 'transform' : False,
 

@@ -133,14 +133,14 @@ def stdz_subset(predictors, month_range=month_range):
 def stdz_month(predictors):
     """standardizes by month"""
     for month in month_range:
-        X_month = predictors.sel(time=predictors.time.dt.month = month)
+        X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
-            X_month[col] = ( ('time'), zscore(X_mmonth[col].data) )
+            X_month[col] = ( ('time'), zscore(X_month[col].data) )
         if month == list(month_range)[0]:
             X_preds = X_month
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
-    return X_month
+    return X_preds
 
 
 def prep_data(obsPath, predictors, lat, lon, dateStart = '1980-01-01', dateEnd = '2014-12-31'):
