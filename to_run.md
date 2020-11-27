@@ -6,7 +6,7 @@
 
 ## Instructions to run the scripts:
 
-The bash script to run on the supercomputer is *bashScript/regress_OLS.sh*.
+The bash script to run on the supercomputer is *bashScripts/regress_OLS.sh*.
 In the script, you can edit the USER, the filepath for the observations (OBS),
 the save location (LOCATION), and the lat-lon points for the calculations. 
 Make sure that the fifth line of code that starts with "cd" navigates to the 
