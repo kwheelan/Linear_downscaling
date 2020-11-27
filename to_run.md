@@ -8,7 +8,9 @@
 
 The bash script to run on the supercomputer is *bashScript/regress_OLS.sh*.
 In the script, you can edit the USER, the filepath for the observations (OBS),
-the save location (LOCATION), and the lat-lon points for the calculations.
+the save location (LOCATION), and the lat-lon points for the calculations. 
+Make sure that the fifth line of code that starts with "cd" navigates to the 
+filepath where the *regress.py* script is located.
 
 
 *pythonScripts/regress.py* is the Python script that runs the actual code. It calls on two modules
