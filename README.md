@@ -1,7 +1,7 @@
 ## Linear_downscaling
 
 #### Katrina Wheelan
-#### July 31, 2020
+#### Updated November, 2020
 #### NCAR
 
 (IN PROGRESS)
@@ -21,7 +21,7 @@ This repository contains custom Jupyter notebooks, Python scripts, and batch scr
     * *regression_tools.py* - A module of functions to perform the necessary steps for downscaling
     * *plotting.py* - A module of plotting functions for the modeled data
     * *SDSM_process.py* - A short script I wrote to plot SDSM data.
-    * *settings.txt* - Currently does nothing; I want to edit regress.py to read in settings from this file
+    * *settings.txt* - Settings for regress.py
 
  * *bashScripts/* - Contains batch scripts for submission to the NCAR supercomputer
 

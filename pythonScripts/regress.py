@@ -22,13 +22,6 @@ Updated 7.28.2020, K. Wheelan
 
 Usage: regress.py <lat> <lon> <obs filepath> <location to save data> <any pred file paths>+
 
-TODO:
-add a switch for conditional regression (precip)
-add a switch for monthly models
-add a switch for testing/train
-allow predictand to be something other than tmax
-allow options saved in separate file
-"""
 #==============================================================================
 
 #import functions from other files
