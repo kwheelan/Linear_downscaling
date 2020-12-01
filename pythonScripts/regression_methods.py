@@ -393,7 +393,7 @@ def save_betas(save_path, coefMatrix, lat, lon, predictand, suffix = ""):
         os.mkdir(ROOT)
     except FileExistsError:
         pass
-    fp = os.path.join(ROOT, f"betas{suffix}_{predictand}_{lat}_{lon}.nc")
+    fp = os.path.join(ROOT, f"betas{suffix}_{predictand}_{lat}_{lon}.txt")
     try:
         os.remove(fp)
     except: pass

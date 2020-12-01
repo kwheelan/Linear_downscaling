@@ -11,16 +11,16 @@
 'dateEnd' : '2005-12-31',
 
 'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc',
-'save_path' : '/glade/scratch/kwheelan/downscaling_data/metrics',
+'save_path' : '/glade/scratch/kwheelan/downscaling_data/std_trials',
 
 'method' : 'OLS',
 'monthly' : True,
-'apr_sep': False,
 
-'train' : True,
+
+'train' : False,
 'transform' : False,
 'stdize' : True,
-'stdize_y': False,
+'stdize_y': True,
 
 'conditional' : False,
 'stochastic_thresh' : False,

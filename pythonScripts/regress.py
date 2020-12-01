@@ -21,7 +21,7 @@ Options:
 Updated 7.28.2020, K. Wheelan
 
 Usage: regress.py <lat> <lon> <obs filepath> <location to save data> <any pred file paths>+
-
+"""
 #==============================================================================
 
 #import functions from other files
@@ -71,7 +71,7 @@ print("Loaded predictor files")
 
 #==============================================================================
 """
-Clean up and prep the data for analysis.
+#Clean up and prep the data for analysis.
 """
 #==============================================================================
 
@@ -86,9 +86,15 @@ if settings['transform']:
 
 if settings['stdize']:
     #standardize predictors
-#    X_all = stdz_subset(X_all) #for apr-sep subset
-     X_all = standardize(X_all)
-#    X_all = stdz_month(X_all)
+    if settings['monthly']:
+        #standardize data by month
+        X_all = stdz_month(X_all)
+    elif settings['apr_sep']:
+        #standardize all data from apr-sep together
+        X_all = stdz_subset(X_all)  
+    else:
+        X_all = standardize(X_all)
+
 
 if settings['stdize_y']:
     Y_all = stdz_month(Y_all)
@@ -113,11 +119,11 @@ else:
     X_all, Y_all = add_month_filter(X_all), add_month_filter(Y_all)
 
 #just for april - september data
-"""X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
-Y_all['time'] = (Y_all.time >= 4) & (Y_all.time <= 9)
-X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True)
-X_all['time'], Y_all['time'] = X_all.timecopy, Y_all.timecopy
-"""
+#X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
+#Y_all['time'] = (Y_all.time >= 4) & (Y_all.time <= 9)
+#X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True)
+#X_all['time'], Y_all['time'] = X_all.timecopy, Y_all.timecopy
+
 print("Prepped data for regression")
 
 
