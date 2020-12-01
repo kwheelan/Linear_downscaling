@@ -1,8 +1,6 @@
 
 {
 
-'lat' : 38.125,
-'lon' : -101.875,
 'predictand' : 'tmax',
 'preds_surface' : ['mslp', 'vas'],
 'preds_level' : ['RH_p500', 'U_p850', 'Q_p850', 'Vort_p500', 'RH_p850', 'Z_p500'],
