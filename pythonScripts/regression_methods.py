@@ -35,6 +35,7 @@ from random import random
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
 month_range = range(1,13) #range(4,10)
+#todo: fix this for apr-sept
 
 #==============================================================================
 """

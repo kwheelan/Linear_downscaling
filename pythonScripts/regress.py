@@ -118,11 +118,12 @@ else:
     # train on all data
     X_all, Y_all = add_month_filter(X_all), add_month_filter(Y_all)
 
-#just for april - september data
-#X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
-#Y_all['time'] = (Y_all.time >= 4) & (Y_all.time <= 9)
-#X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True)
-#X_all['time'], Y_all['time'] = X_all.timecopy, Y_all.timecopy
+if settings['apr_sep']:
+    #just for april - september data
+    X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
+    Y_all['time'] = (Y_all.time >= 4) & (Y_all.time <= 9)
+    X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True)
+    X_all['time'], Y_all['time'] = X_all.timecopy, Y_all.timecopy
 
 print("Prepped data for regression")
 
