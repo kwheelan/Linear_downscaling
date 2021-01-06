@@ -97,7 +97,6 @@ if settings['conditional']:
     final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
-print("Calculated predictions for testing and training data.")
 
 if settings['inflate']:
     # add stochasticity via "variance inflation", before undoing any data transformations
