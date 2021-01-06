@@ -91,7 +91,7 @@ if settings['stdize']:
         X_all = stdz_month(X_all)
     elif settings['apr_sep']:
         #standardize all data from apr-sep together
-        X_all = stdz_subset(X_all)  
+        X_all = stdz_subset(X_all)
     else:
         X_all = standardize(X_all)
 
@@ -180,7 +180,7 @@ print("Calculated predictions for testing and training data.")
 if settings['inflate']:
     # add stochasticity via "variance inflation", before undoing any data transformations
 #    final_predictions = inflate_variance_SDSM(settings['inflate_mean'], settings['inflate_var'], final_predictions)
-    final_predictions = inflate_variance_SDSM(y[predictand], final_predictions, c=12)
+    final_predictions = inflate_variance_SDSM(y[predictand], final_predictions, c=settings['inflate_var'])
 
 if settings['transform']:
     # undo transformation
