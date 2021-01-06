@@ -58,7 +58,7 @@ else:
 
 
 #standardize data, trim dates, add month and constant cols
-X_all, _ = prep_data(settings['obs_path'], predictors, lat, lon, dateStart = settings['dateStart'], dateEnd = settings['dateEnd'])
+X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon, dateStart = settings['dateStart'], dateEnd = settings['dateEnd'])
 
 #match standardization of original model
 if settings['stdize']:
