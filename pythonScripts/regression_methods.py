@@ -120,7 +120,6 @@ def zscore(variable, mu = None, sd = None):
         mu = np.mean(variable)
     if not sd:
         sd = np.std(variable)
-    return (variable - np.mean(variable)) / np.std(variable)
     return (variable - mu) / sd
 
 
@@ -149,8 +148,8 @@ def stdz_month(predictors):
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
             subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
-            mu = np.mean(subset[col].data)
-            sd = np.std(subset[col].data)
+            #mu = np.mean(subset[col].data)
+            #sd = np.std(subset[col].data)
             X_month[col] = ( ('time'), zscore(X_month[col].data), mu, sd)
         if month == list(month_range)[0]:
             X_preds = X_month
