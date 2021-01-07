@@ -152,7 +152,7 @@ def stdz_month(predictors):
             sd = float(np.std(subset[col].data))
             print(mu)
             print(sd)
-            X_month[col] = ( ('time'), zscore(X_month[col].data), mu, sd)
+            X_month[col] = ( ('time'), zscore(X_month[col].data), mu = 0, sd=1)
         if month == list(month_range)[0]:
             X_preds = X_month
         else:
