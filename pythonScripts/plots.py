@@ -12,7 +12,8 @@ SDSMdata += [obs]
 
 labels = list(range(1,6)) + ['obs']
 
-pythonData = [ xr.open_dataset(f"/glade/scratch/kwheelan/downscaling_data/runs/run{n}/tmax_lat38.125_lon-101.875/preds/finalPreds_tmax_38.125_-101.875.nc").preds.values for n in range(1,6) ]
+pythonData = [xr.open_dataset("")]
+#[ xr.open_dataset(f"/glade/scratch/kwheelan/downscaling_data/runs/run{n}/tmax_lat38.125_lon-101.875/preds/finalPreds_tmax_38.125_-101.875.nc").preds.values for n in range(1,6) ]
 pythonData += [obs]
 
 def histogram(data, title, fp):

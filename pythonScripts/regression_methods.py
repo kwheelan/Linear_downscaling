@@ -147,7 +147,9 @@ def stdz_month(predictors):
     for month in month_range:
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
-            subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
+            # standardize using data from 1979 through 2005
+            # todo: save values for future runs
+            subset = X_month.sel(time = slice('1979-01-01', '2005-12-31'))
             mu = float(np.mean(subset[col].data))
             sd = float(np.std(subset[col].data))
             X_month[col] = ( ('time'), zscore(X_month[col].data, mu, sd))

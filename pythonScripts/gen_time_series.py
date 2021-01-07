@@ -13,6 +13,10 @@ Usage: gen_time_series.py <lat> <lon> <location to save data> <beta location>
 """
 #==============================================================================
 
+#todo: split settings from metadata
+# save std values somewhere
+
+
 #import functions from other files
 from regression_methods import *
 from plotting import *
@@ -58,7 +62,9 @@ else:
 
 
 #standardize data, trim dates, add month and constant cols
-X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon, dateStart = settings['dateStart'], dateEnd = settings['dateEnd'])
+X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon,
+                        dateStart = settings['dateStart'],
+                        dateEnd = settings['dateEnd'])
 
 #match standardization of original model
 if settings['stdize']:
@@ -76,11 +82,6 @@ if settings['stdize']:
 X_all, _, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)
 X_all = add_month_filter(X_all)
-
-#just for april - september data
-#X_all['time'] = (X_all.time >= 4) & (X_all.time <= 9)
-#X_all, Y_all = X_all.sel(time = True), Y_all.sel(time=True)
-#X_all['time'] = X_all.timecopy
 
 preds_to_drop = ["month", "lat", "lon"]
 preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
