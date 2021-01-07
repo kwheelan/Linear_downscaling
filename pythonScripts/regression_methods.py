@@ -120,6 +120,7 @@ def zscore(variable, mu = None, sd = None):
         mu = np.mean(variable)
     if not sd:
         sd = np.std(variable)
+    return (variable - np.mean(variable)) / np.std(variable)
     return (variable - mu) / sd
 
 
