@@ -78,7 +78,9 @@ print("Loaded predictor files")
 
 #standardize data, trim dates, add month and constant cols
 
-X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon, dateStart = settings['dateStart'], dateEnd = settings['dateEnd'])
+X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon,
+                        dateStart = settings['dateStart'],
+                        dateEnd = settings['dateEnd'])
 
 if settings['transform']:
     #fourth root transformation (intended for precip)

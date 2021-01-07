@@ -92,6 +92,7 @@ preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 #read in betas
 coefMatrix = pd.read_csv(beta_location)
 print(coefMatrix)
+print(X_all)
 
 #predict for all data using betas
 if settings['conditional']:

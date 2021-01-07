@@ -110,13 +110,17 @@ Functions for prepping data for regression.
 """
 #==============================================================================
 
-def zscore(variable):
+def zscore(variable, mu = None, sd = None):
     """
         Standardizing a variable (converting to z-scores)
         Input: an Xarray dataset
         Output: a standardized Xarray object
     """
-    return (variable - np.mean(variable)) / np.std(variable)
+    if not mu:
+        mu = np.mean(variable)
+    if not sd:
+        sd = np.std(variable)
+    return (variable - mu) / sd
 
 
 def standardize(predictors):
@@ -143,9 +147,12 @@ def stdz_month(predictors):
     for month in month_range:
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
-            X_month[col] = ( ('time'), zscore(X_month[col].data) )
+            subset = X_month.sel(time = slice('1979-01-01', '2005-12-31'))
+            mu = np.mean(subset[col].data)
+            sd = np.std(subset[col].data)
+            X_month[col] = ( ('time'), zscore(X_month[col].data), mu, sd)
         if month == list(month_range)[0]:
-            X_preds = X_month
+            X_preds = X_months
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
     return X_preds
