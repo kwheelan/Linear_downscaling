@@ -150,7 +150,7 @@ def stdz_month(predictors):
             subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
             #mu = np.mean(subset[col].data)
             #sd = np.std(subset[col].data)
-            X_month[col] = ( ('time'), zscore(X_month[col].data), mu, sd)
+            X_month[col] = ( ('time'), zscore(X_month[col].data))#, mu, sd)
         if month == list(month_range)[0]:
             X_preds = X_month
         else:
