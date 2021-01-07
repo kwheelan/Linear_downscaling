@@ -144,11 +144,10 @@ def stdz_subset(predictors, month_range=month_range):
 
 def stdz_month(predictors):
     """standardizes by month"""
-    print("here")
     for month in month_range:
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
-            subset = X_month.sel(time = slice('1979-01-01', '2005-12-31'))
+            subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
             mu = np.mean(subset[col].data)
             sd = np.std(subset[col].data)
             X_month[col] = ( ('time'), zscore(X_month[col].data), mu, sd)
