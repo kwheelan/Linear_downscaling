@@ -44,7 +44,7 @@ Functions for loading files.
 #===============================================================================
 
 
-def load_selected_predictors(preds, predictors = None, ROOT=None, EXT=None, SERIES=None):
+def load_selected_predictors(preds,  ROOT=None, EXT=None, SERIES=None):
     """
         Reading in selected predictors (netCDF files) as xarray objects
         Input:
@@ -54,15 +54,10 @@ def load_selected_predictors(preds, predictors = None, ROOT=None, EXT=None, SERI
         Output:
             merged predictors as an xarray object
     """
-    if predictors =='ERA-I' or not ROOT: #default to ERA-I predictors
+    if not ROOT: #default to ERA-I predictors
         ROOT = '/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/ERA-I/mpigrid/' #where the files are saved
         EXT = '_19790101-20181231_dayavg_mpigrid.nc' #date range at the end of the file
         SERIES = 'ERAI_NAmerica'
-
-    if predictors == 'GCM' :
-        ROOT = '/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/MPI-ESM-LR/mpigrid/historical/'
-        EXT = '19500101-20051231_dayavg_mpigrid.nc'
-        SERIES = 'MPI-ESM-LR_historical_r1i1p1_NAmerica'
 
     #The variables to use
     surface_predictors = ['mslp', 'uas', 'vas'] #, 'ps']
