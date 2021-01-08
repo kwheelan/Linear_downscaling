@@ -3,7 +3,7 @@
 """
 A file to generate time series from existing betas.
 
-Updated 1.6.2021, K. Wheelan
+Updated 1.8.2021, K. Wheelan
 
 settings.txt should match the settings used to generate the betas
 (to match explanatory vars, standardization, transformations, etc)
@@ -109,3 +109,20 @@ if settings['transform']:
 
 
 save_preds(save_location, final_predictions, lat, lon, predictand)
+
+#=================================================================
+""" Make plots for future and historical GCM runs """
+#=================================================================
+
+
+
+plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
+                models = {'OLS': final_predictions}, startDate = settings['dateStart'],
+                endDate = settings['dateEnd'], k = k)
+
+for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
+    try:
+        os.mkdir(os.path.join(plotData.plot_path, folder))
+    except: pass
+
+plot_all(plotData)

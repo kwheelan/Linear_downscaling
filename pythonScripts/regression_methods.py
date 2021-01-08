@@ -44,7 +44,7 @@ Functions for loading files.
 #===============================================================================
 
 
-def load_selected_predictors(preds, predictors = 'ERA-I', ROOT=None, EXT=None, SERIES=None):
+def load_selected_predictors(preds, predictors = None, ROOT=None, EXT=None, SERIES=None):
     """
         Reading in selected predictors (netCDF files) as xarray objects
         Input:
@@ -60,7 +60,7 @@ def load_selected_predictors(preds, predictors = 'ERA-I', ROOT=None, EXT=None, S
         SERIES = 'ERAI_NAmerica'
 
     if predictors == 'GCM' :
-        ROOT = '/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/MPI-ESM-LR/mpigrid/'
+        ROOT = '/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/MPI-ESM-LR/mpigrid/historical/'
         EXT = '19500101-20051231_dayavg_mpigrid.nc'
         SERIES = 'MPI-ESM-LR_historical_r1i1p1_NAmerica'
 
