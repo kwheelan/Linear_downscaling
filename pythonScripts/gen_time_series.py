@@ -79,7 +79,7 @@ if settings['stdize']:
         X_all = standardize(X_all)
 
 #add necessary columns
-X_all, _, all_preds = add_month(X_all, Y_all)
+X_all, Y_all, all_preds = add_month(X_all, Y_all)
 X_all, all_preds = add_constant_col(X_all)
 X_all = add_month_filter(X_all)
 
