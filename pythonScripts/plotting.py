@@ -204,7 +204,8 @@ def plot_daily_avgs(plotData):
     if plotData.predictand == 'prec':
         plt.ylabel('Precipitation (mm)')
     plt.xlabel('Day')
-    x = np.arrange(3)
+    x = np.arange(10)
+    
     plt.xticks(x, "")
     plt.legend()
     plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'daily_means.png'))
