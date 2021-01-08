@@ -119,7 +119,7 @@ k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 Y_all['timecopy'] = Y_all['time']
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
-                models = {'GCM historical': final_predictions.sel(time= slice('1980-01-01', endDate))},
+                models = {'GCM historical': final_predictions.sel(time= slice('1980-01-01', settings['dateEnd']))},
                 startDate = '1980-01-01',
                 endDate = settings['dateEnd'], k = k)
 
