@@ -115,6 +115,7 @@ save_preds(save_location, final_predictions, lat, lon, predictand)
 #=================================================================
 
 k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
+Y_all['timecopy'] = Y_all['time']
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'OLS': final_predictions}, startDate = settings['dateStart'],
