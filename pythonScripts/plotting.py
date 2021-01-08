@@ -53,7 +53,8 @@ class Plot:
 
     __slots__ = ['plot_path', 'lat', 'lon', 'predictand', 'obs', 'models', 'startYr','endYr', 'k']
 
-    def __init__(self, save_path, lat, lon, predictand, obs, models, startDate, endDate, k):
+    def __init__(self, save_path, lat, lon, predictand, obs, models,
+                 startDate, endDate, k):
         # create a folder to save the plots
         folder = "plots"
         try:
@@ -398,8 +399,8 @@ def plot_hot_days(plotData):
        Input: plotData, a Plot object with necessary data
        Output: None
     """
-    plot_cond_days(plotData, title="Number of Days at least 35 Degrees Celcius by Month", comp="greater", thresh=35)
-    plot_cond_days_by_year(plotData, title="Number of Days at least 35 Degrees Celcius by Year", comp="greater", thresh=35)
+    plot_cond_days(plotData, title="Number of Days at Least 35 Degrees Celcius by Month", comp="greater", thresh=35)
+    plot_cond_days_by_year(plotData, title="Number of Days at Least 35 Degrees Celcius by Year", comp="greater", thresh=35)
 
 def plot_cold_days(plotData):
     """ todo """

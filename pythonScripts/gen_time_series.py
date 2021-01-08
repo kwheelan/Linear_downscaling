@@ -62,8 +62,9 @@ else:
 
 
 #standardize data, trim dates, add month and constant cols
+# obs start in 1980
 X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon,
-                        dateStart = settings['dateStart'],
+                        dateStart = '1980-01-01',
                         dateEnd = settings['dateEnd'])
 
 #match standardization of original model
@@ -116,11 +117,10 @@ save_preds(save_location, final_predictions, lat, lon, predictand)
 
 k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 Y_all['timecopy'] = Y_all['time']
-print(min(Y_all.time.dt.year))
-
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
-                models = {'GCM historical': final_predictions}, startDate = settings['dateStart'],
+                models = {'GCM historical': final_predictions.sel(time >= '1980-01-01')},
+                startDate = '1980-01-01',
                 endDate = settings['dateEnd'], k = k)
 
 for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
