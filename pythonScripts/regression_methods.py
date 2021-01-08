@@ -137,22 +137,28 @@ def stdz_subset(predictors, month_range=month_range):
         predictors[col] = (('time'), zscores)
     return predictors
 
-def stdz_month(predictors):
-    """standardizes by month"""
+def stdz_month(predictors, base_values = None):
+    """standardizes by month
+        base_values are a set of means and sds for calculating anomalies"""
+    base_values_new = []
     for month in month_range:
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
-            # standardize using data from 1979 through 2005
+            # standardize using data from 1980 through 2005
             # todo: save values for future runs
-            subset = X_month.sel(time = slice('1979-01-01', '2005-12-31'))
-            mu = float(np.mean(subset[col].data))
-            sd = float(np.std(subset[col].data))
+            if not base_values: #then calculate them
+                subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
+                mu = float(np.mean(subset[col].data))
+                sd = float(np.std(subset[col].data))
+                base_values_new[month-min(month_range)] = (mu, sd)
+            else:
+                mu, sd = base_values[month - min(month_range)]
             X_month[col] = ( ('time'), zscore(X_month[col].data, mu, sd))
         if month == list(month_range)[0]:
             X_preds = X_month
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
-    return X_preds
+    return X_preds, base_values_new
 
 
 def prep_data(obsPath, predictors, lat, lon, dateStart, dateEnd):
