@@ -5,7 +5,7 @@
 'preds_surface' : ['mslp', 'vas'],
 'preds_level' : ['RH_p500', 'U_p850', 'Q_p850', 'Vort_p500', 'RH_p850', 'Z_p500'],
 
-'dateStart' : '1980-01-01',
+'dateStart' : '1976-01-01',
 'dateEnd' : '2005-12-31',
 
 'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc',
