@@ -21,8 +21,8 @@ cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
 export LAT=32.125
 export LON=-101.875
 export BETAS=/glade/scratch/kwheelan/downscaling_data/metrics/tmax_lat32.125_lon-101.875/betas/betas_tmax_32.125_-101.875.txt
-export ROOT=/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/MPI-ESM-LR/mpigrid/historical
-export EXT=19500101-20051231_dayavg_mpigrid.nc
+export ROOT=/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/MPI-ESM-LR/mpigrid/historical/
+export EXT=_19500101-20051231_dayavg_mpigrid.nc
 export SERIES=MPI-ESM-LR_historical_r1i1p1_NAmerica
 
 python gen_time_series.py $LAT $LON $TMPDIR $BETAS $ROOT $EXT $SERIES
