@@ -150,7 +150,7 @@ def stdz_month(predictors, base_values = None):
                 subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
                 mu = float(np.mean(subset[col].data))
                 sd = float(np.std(subset[col].data))
-                base_values_new[month-min(month_range)] = (mu, sd)
+                base_values_new += [(mu, sd)]
             else:
                 mu, sd = base_values[month - min(month_range)]
             X_month[col] = ( ('time'), zscore(X_month[col].data, mu, sd))
