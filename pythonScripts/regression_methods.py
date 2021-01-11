@@ -137,10 +137,13 @@ def stdz_subset(predictors, month_range=month_range):
         predictors[col] = (('time'), zscores)
     return predictors
 
-def stdz_month(predictors, base_values = None):
+def stdz_month(predictors, base_values = None, anomSavePath = None):
     """standardizes by month
         base_values are a set of means and sds for calculating anomalies"""
     base_values_new = []
+    if base_values:
+        #read into list from filepath
+        #base_values = [(mu, sd) for mu, sd in pd.read_csv(base_values)]
     for month in month_range:
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
@@ -158,7 +161,9 @@ def stdz_month(predictors, base_values = None):
             X_preds = X_month
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
-    return X_preds, base_values_new
+        if (not base_values) and anomSavePath:
+            base_values.to_csv(anomSavePath)
+    return X_preds
 
 
 def prep_data(obsPath, predictors, lat, lon, dateStart, dateEnd):
