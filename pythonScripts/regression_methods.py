@@ -140,15 +140,12 @@ def stdz_subset(predictors, month_range=month_range):
 def stdz_month(predictors, base_values = None, anomSavePath = None):
     """standardizes by month
         base_values are a set of means and sds for calculating anomalies"""
-    mu_new = []
-    sd_new = []
+    base_values_new = pd.DataFrame(index = predictors.keys(), columns = monthsFull)
     if base_values:
         pass
         #read into list from filepath
         #base_values = [(mu, sd) for mu, sd in pd.read_csv(base_values)]
     for month in month_range:
-        mu_new += []
-        sd_new += []
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
             # standardize using data from 1980 through 2005
@@ -157,17 +154,16 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
                 subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
                 mu = float(np.mean(subset[col].data))
                 sd = float(np.std(subset[col].data))
-                mu_new[month-1] += mu
-                sd_new[month-1] += sd
+                base_values_new[monthsFull[month-1]][col] = mu, sd
             else:
-                mu, sd = base_values[month - min(month_range)]
+                mu, sd = base_values[monthsFull[month-1]][col]
             X_month[col] = ( ('time'), zscore(X_month[col].data, mu, sd))
         if month == list(month_range)[0]:
             X_preds = X_month
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
         if (not base_values) and anomSavePath:
-            mu_new.to_csv(pd.DataFrame(anomSavePath))
+            base_values_new.to_csv(anomSavePath)
     return X_preds
 
 
