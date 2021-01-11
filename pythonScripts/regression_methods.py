@@ -163,7 +163,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
         if (not base_values) and anomSavePath:
-            base_values_new.to_csv(anomSavePath)
+            pd.DataFrame(data = base_values_new).to_csv(anomSavePath)
     return X_preds
 
 
