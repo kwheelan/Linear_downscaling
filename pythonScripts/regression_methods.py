@@ -149,7 +149,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
         for col in predictors.keys():
             # standardize using data from 1980 through 2005
             # todo: save values for future runs
-            if not base_values: #then calculate them
+            if base_values is None: #then calculate them
                 subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
                 mu = float(np.mean(subset[col].data))
                 sd = float(np.std(subset[col].data))
@@ -161,7 +161,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
             X_preds = X_month
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
-        if (not base_values) and anomSavePath:
+        if not (base_values is None) and anomSavePath:
             base_values_new.to_csv(anomSavePath)
     return X_predsb
 
