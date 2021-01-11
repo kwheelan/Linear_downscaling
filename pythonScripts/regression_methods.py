@@ -142,9 +142,8 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
         base_values are a set of means and sds for calculating anomalies"""
     base_values_new = pd.DataFrame(index = predictors.keys(), columns = monthsFull)
     if base_values:
-        pass
         #read into list from filepath
-        #base_values = [(mu, sd) for mu, sd in pd.read_csv(base_values)]
+        base_values = pd.read_csv(base_values, index_col=0)
     for month in month_range:
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
@@ -164,7 +163,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
             X_preds = xr.concat([X_preds, X_month], dim = "time")
         if (not base_values) and anomSavePath:
             base_values_new.to_csv(anomSavePath)
-    return X_preds
+    return X_predsb
 
 
 def prep_data(obsPath, predictors, lat, lon, dateStart, dateEnd):
