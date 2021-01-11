@@ -155,7 +155,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
                 subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
                 mu = float(np.mean(subset[col].data))
                 sd = float(np.std(subset[col].data))
-                mu_new[col, month], sd_new[col, month] = mu, sd
+                mu_new[col, month-1], sd_new[col, month-1] = mu, sd
             else:
                 mu, sd = base_values[month - min(month_range)]
             X_month[col] = ( ('time'), zscore(X_month[col].data, mu, sd))
@@ -376,8 +376,8 @@ def fit_annual_OLS(X_train, Y_train, preds_to_keep, predictand, conditional):
                 keys=preds_to_keep)
     #store betas
     return pd.DataFrame(index = preds_to_keep,
-                               data = np.array(list(coefs.values)*len(month_range)).transpose(),
-                               columns = [monthsFull[i-1] for i in month_range])
+                        data = np.array(list(coefs.values)*len(month_range)).transpose(),
+                        columns = [monthsFull[i-1] for i in month_range])
 
 
 def fit_logistic(X_train, y, predictand):
