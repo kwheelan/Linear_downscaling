@@ -166,6 +166,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
         #save file if necessary
         if anomSavePath:
             base_values_new.to_csv(anomSavePath)
+            print("saving anoms")
     return X_preds
 
 

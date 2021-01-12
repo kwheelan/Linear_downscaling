@@ -153,7 +153,7 @@ if not future:
                 models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', end_date))},
                 startDate = '1980-01-01',
                 endDate = end_date, k = k)
-    plot_all(plotData)
+    #plot_all(plotData)
 
 else:
     pass
