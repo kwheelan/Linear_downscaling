@@ -429,7 +429,7 @@ def save_betas(settings, coefMatrix, lat, lon, predictand, suffix = ""):
     except: pass
     coefMatrix.to_csv(fp)
     # write settings to metadata
-    f = open(metafp)
+    f = open(metafp, "w")
     f.write(repr(settings))
     f.close()
 
