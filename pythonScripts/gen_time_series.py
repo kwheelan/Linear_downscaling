@@ -89,7 +89,7 @@ if settings['stdize']:
     #standardize predictors
     if settings['monthly']:
         #standardize data by month
-        path = f"{ROOT}/anom.txt".replace('rcp85', 'historical')
+        path = f"{ROOT}/anoms.txt".replace('rcp85', 'historical')
         if not future:
             X_all = stdz_month(X_all, anomSavePath = path)
         else:
