@@ -68,6 +68,8 @@ class Plot:
         self.obs = obs
         self.models = models #a dict of xarray objs; must have preds as a var
         self.startYr, self.endYr = int(startDate[:4]), int(endDate[:4])
+        #to match obs
+        self.startYr = max(self.startYr, 1980)
         self.k = k
 
 
@@ -244,6 +246,7 @@ def plot_annual_avgs(plotData):
     plt.xlabel('Year')
     plt.legend()
 
+    #save
     plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means.png'))
     plt.clf()
 
