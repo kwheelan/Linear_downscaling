@@ -133,15 +133,22 @@ save_preds(save_location, final_predictions, lat, lon, predictand)
 k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 Y_all['timecopy'] = Y_all['time']
 
-#slice after 1980?
-plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
-                models = {'downscaled GCM': final_predictions},
-                startDate = '1980-01-01',
-                endDate = end_date, k = k)
-
 for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
     try:
         os.mkdir(os.path.join(plotData.plot_path, folder))
     except: pass
 
-plot_all(plotData)
+
+if int(start_date[0:4]) < 2020:
+    #historical
+    #plot against obs 1980-2005
+    plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
+                models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', end_date))},
+                startDate = '1980-01-01',
+                endDate = end_date, k = k)
+    plot_all(plotData)
+
+else:
+    #future projections
+    #set years equal to plot
+    Y_all.time = final_predictions.time
