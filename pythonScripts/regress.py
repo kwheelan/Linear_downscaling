@@ -43,7 +43,7 @@ import os
 import sys
 
 with open("settings.txt") as f:
-    settings  = eval(f.read())
+    settings = eval(f.read())
 
 lat = sys.argv[1] #settings['lat']
 lon = sys.argv[2] #settings['lon']

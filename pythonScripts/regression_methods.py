@@ -404,7 +404,7 @@ def fit_logistic(X_train, y, predictand):
     logit_preds = [keys[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
     return pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient']), glm
 
-def save_betas(save_path, coefMatrix, lat, lon, predictand, suffix = ""):
+def save_betas(settings, coefMatrix, lat, lon, predictand, suffix = ""):
     """
         Save betas to disk
         Input:
