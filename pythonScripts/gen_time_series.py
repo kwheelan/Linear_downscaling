@@ -97,6 +97,10 @@ preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 #read in betas
 coefMatrix = pd.read_csv(f"{beta_location}/betas.txt", index_col=0)
 
+print(coefMatrix)
+print(X_all)
+print(preds_to_keep)
+
 #predict for all data using betas
 if settings['conditional']:
     final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
