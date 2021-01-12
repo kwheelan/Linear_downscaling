@@ -164,7 +164,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
         #save file if necessary
-        if base_values is None and anomSavePath:
+        if anomSavePath:
             base_values_new.to_csv(anomSavePath)
     return X_preds
 
