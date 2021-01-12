@@ -151,4 +151,3 @@ if int(start_date[0:4]) < 2020:
 else:
     #future projections
     #set years equal to plot
-    Y_all.time = final_predictions.time

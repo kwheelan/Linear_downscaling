@@ -15,18 +15,18 @@ ncar_pylib
 #where the script is located
 cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
 
-export TMPDIR=/glade/scratch/$USER/downscaling_data/predictions
+# export TIME=historical
+# export START=1976-01-01
+# export END=2005-12-31
+# export EXT=_19500101-20051231_dayavg_mpigrid.nc
+
+export TIME=rcp85
+export START=2070-01-01
+export END=2099-12-31
+export EXT=_20060101-21001231_dayavg_mpigrid.nc
+
+export TMPDIR=/glade/work/$USER/Linear_downscaling/GCM_downscaled/$TIME
 mkdir -p $TMPDIR
-
-export TIME=historical
-export START=1976-01-01
-export END=2005-12-31
-export EXT=_19500101-20051231_dayavg_mpigrid.nc
-
-# export TIME=rcp85
-# export START=2070-01-01
-# export END=2099-12-31
-# export EXT=_20060101-21001231_dayavg_mpigrid.nc
 
 export LAT=32.125
 export LON=-101.875
