@@ -31,19 +31,22 @@ import numpy as np
 import os
 import sys
 
-save_location = sys.argv[1]
-beta_location = sys.argv[2]
-pred_root = sys.argv[3]
-pred_ext = sys.argv[4]
-pred_series = sys.argv[5]
-start_date = sys.argv[6]
-end_date = sys.argv[7]
+lat = sys.argv[1]
+lon = sys.argv[2]
+save_location = sys.argv[3]
+beta_location = sys.argv[4]
+pred_root = sys.argv[5]
+pred_ext = sys.argv[6]
+pred_series = sys.argv[7]
+start_date = sys.argv[8]
+end_date = sys.argv[9]
 
 with open(f"{beta_location}/metadata.txt") as f:
     settings  = eval(f.read())
 
 predictand = settings['predictand']
 preds = settings['preds_surface'] + settings['preds_level']
+
 
 #import predictors
 if preds == ['all']:

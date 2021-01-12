@@ -9,15 +9,17 @@
 
 #A script to downscale linearly using all passed predictors
 
-export TMPDIR=/glade/scratch/$USER/downscaling_data/predictions
-mkdir -p $TMPDIR
-
 module load python
 ncar_pylib
 
 #where the script is located
 cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
 
+export TMPDIR=/glade/scratch/$USER/downscaling_data/predictions
+mkdir -p $TMPDIR
+
+export LAT=32.125
+export LON=-101.875
 export BETAS=/glade/scratch/kwheelan/downscaling_data/metrics/tmax_lat32.125_lon-101.875/betas
 export ROOT=/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/MPI-ESM-LR/mpigrid/historical/
 export EXT=_19500101-20051231_dayavg_mpigrid.nc
@@ -25,4 +27,4 @@ export SERIES=MPI-ESM-LR_historical_r1i1p1_NAmerica
 export START=2070-01-01
 export END=2099-12-31
 
-python gen_time_series.py $TMPDIR $BETAS $ROOT $EXT $SERIES $START $END
+python gen_time_series.py $LAT $LON $TMPDIR $BETAS $ROOT $EXT $SERIES $START $END
