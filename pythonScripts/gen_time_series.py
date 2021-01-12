@@ -47,6 +47,9 @@ with open(f"{beta_location}/metadata.txt") as f:
 predictand = settings['predictand']
 preds = settings['preds_surface'] + settings['preds_level']
 
+# if True, this is a future climate projection
+future = int(start_date[0:4]) > 2020
+
 folderName = f"{predictand}_lat{lat}_lon{lon}"
 ROOT = os.path.join(save_location, folderName)
 try:
@@ -60,7 +63,7 @@ save_location = ROOT
 if preds == ['all']:
     predictors = load_all_predictors()
 else:
-    if int(start_date[0:4]) > 2020:
+    if future:
         surf_ext = ''
     else: surf_ext = '_surf'
     predictors = load_selected_predictors(preds,
@@ -86,7 +89,11 @@ if settings['stdize']:
     #standardize predictors
     if settings['monthly']:
         #standardize data by month
-        X_all = stdz_month(X_all, base_values = '/glade/scratch/kwheelan/anom.txt')
+        path = os.path.join(ROOT, 'anom.txt').replace('rcp85', 'historical')
+        if not future:
+            X_all = stdz_month(X_all, anomSavePath = path)
+        else:
+            X_all = stdz_month(X_all, base_values = path)
 
     elif settings['apr_sep']:
         #standardize all data from apr-sep together
@@ -139,7 +146,7 @@ for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
     except: pass
 
 
-if int(start_date[0:4]) < 2020:
+if not future:
     #historical
     #plot against obs 1980-2005
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,

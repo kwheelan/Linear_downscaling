@@ -20,7 +20,7 @@ cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
 
 OBS=/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc
 export LOCATION=$TMPDIR
-export PREDS=mslp
+# export PREDS=mslp
 
 for LAT in $(seq 32.125 2 38.125)
 do
