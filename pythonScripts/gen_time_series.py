@@ -66,11 +66,8 @@ else:
 
 #standardize data, trim dates, add month and constant cols
 # obs start in 1980
-print(predictors.time.values)
 X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon,
                         start_date, end_date)
-print(X_all.time.values)
-
 
 #match standardization of original model
 if settings['stdize']:
@@ -102,7 +99,6 @@ preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 #read in betas
 coefMatrix = pd.read_csv(f"{beta_location}/betas.txt", index_col=0)
 
-print(X_all.time.values)
 
 #predict for all data using betas
 if settings['conditional']:
@@ -130,7 +126,7 @@ Y_all['timecopy'] = Y_all['time']
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'downscaled GCM': final_predictions.sel(time= slice('1980-01-01', settings['dateEnd']))},
-                startDate = start_date,
+                startDate = '1980-01-01',
                 endDate = end_date, k = k)
 
 
