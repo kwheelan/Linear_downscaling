@@ -44,7 +44,7 @@ Functions for loading files.
 #===============================================================================
 
 
-def load_selected_predictors(preds,  ROOT=None, EXT=None, SERIES=None):
+def load_selected_predictors(preds, ROOT=None, EXT=None, SERIES=None, surf_ext = '_surf'):
     """
         Reading in selected predictors (netCDF files) as xarray objects
         Input:
@@ -61,7 +61,7 @@ def load_selected_predictors(preds,  ROOT=None, EXT=None, SERIES=None):
 
     #The variables to use
     surface_predictors = ['mslp', 'uas', 'vas'] #, 'ps']
-    surface_predictors = [f"{v}_{SERIES}_surf" for v in preds if v in surface_predictors]
+    surface_predictors = [f"{v}_{SERIES}{surf_ext}" for v in preds if v in surface_predictors]
     #Each of these predictors is taken at each pressure level below
     other_predictors = ['Q', 'RH', 'U', 'V', 'Z', 'Vort', 'Div']
     levels = [500, 700, 850] #pressure levels

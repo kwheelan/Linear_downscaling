@@ -52,10 +52,14 @@ preds = settings['preds_surface'] + settings['preds_level']
 if preds == ['all']:
     predictors = load_all_predictors()
 else:
+    if int(start_date[0:4]) > 2020:
+        surf_ext = ''
+    else: surf_ext = '_surf'
     predictors = load_selected_predictors(preds,
                                           ROOT = pred_root,
                                           EXT = pred_ext,
-                                          SERIES = pred_series)
+                                          SERIES = pred_series,
+                                          surf_ext = surf_ext)
 
 #==============================================================================
 """
@@ -74,9 +78,7 @@ if settings['stdize']:
     #standardize predictors
     if settings['monthly']:
         #standardize data by month
-        print(X_all.time.values)
         X_all = stdz_month(X_all, base_values = '/glade/scratch/kwheelan/anom.txt')
-        print(X_all.time.values)
 
     elif settings['apr_sep']:
         #standardize all data from apr-sep together
