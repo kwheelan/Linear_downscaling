@@ -149,5 +149,6 @@ if int(start_date[0:4]) < 2020:
     plot_all(plotData)
 
 else:
+    pass
     #future projections
     #set years equal to plot
