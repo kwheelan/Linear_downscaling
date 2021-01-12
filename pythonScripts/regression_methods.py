@@ -511,7 +511,7 @@ def save_preds(save_path, preds, lat, lon, predictand):
         Output:
             None
     """
-    ROOT = os.path.join(save_path,'preds')
+    ROOT = os.path.join(save_path,'timeseries')
     try:
         os.mkdir(ROOT)
     except FileExistsError:

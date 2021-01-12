@@ -47,6 +47,14 @@ with open(f"{beta_location}/metadata.txt") as f:
 predictand = settings['predictand']
 preds = settings['preds_surface'] + settings['preds_level']
 
+folderName = f"{predictand}_lat{lat}_lon{lon}"
+ROOT = os.path.join(save_location, folderName)
+try:
+    os.mkdir(ROOT)
+except FileExistsError:
+    pass
+save_location = ROOT
+
 
 #import predictors
 if preds == ['all']:
@@ -101,7 +109,6 @@ preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 #read in betas
 coefMatrix = pd.read_csv(f"{beta_location}/betas.txt", index_col=0)
 
-
 #predict for all data using betas
 if settings['conditional']:
     final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
@@ -126,11 +133,11 @@ save_preds(save_location, final_predictions, lat, lon, predictand)
 k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 Y_all['timecopy'] = Y_all['time']
 
-plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
-                models = {'downscaled GCM': final_predictions.sel(time= slice('1980-01-01', settings['dateEnd']))},
+#slice after 1980?
+plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
+                models = {'downscaled GCM': final_predictions},
                 startDate = '1980-01-01',
                 endDate = end_date, k = k)
-
 
 for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
     try:
