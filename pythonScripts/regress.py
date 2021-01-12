@@ -165,7 +165,7 @@ elif settings['method'] == 'LASSO':
 print("Fit linear model.")
 
 #saves the betas
-save_betas(settings['save_path'], coefMatrix, lat, lon, predictand)
+save_betas(settings, coefMatrix, lat, lon, predictand)
 print("Saved betas.")
 k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 
@@ -173,46 +173,47 @@ k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 """Generating predictions"""
 #==============================================================================
 
-#predict for all data using betas
-if settings['conditional']:
-    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
-else:
-    final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
-print("Calculated predictions for testing and training data.")
+if False:
+    #predict for all data using betas
+    if settings['conditional']:
+        final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
+    else:
+        final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
+    print("Calculated predictions for testing and training data.")
 
-if settings['inflate']:
-    # add stochasticity via "variance inflation", before undoing any data transformations
-#    final_predictions = inflate_variance_SDSM(settings['inflate_mean'], settings['inflate_var'], final_predictions)
-    final_predictions = inflate_variance_SDSM(y[predictand], final_predictions, c=settings['inflate_var'])
+    if settings['inflate']:
+        # add stochasticity via "variance inflation", before undoing any data transformations
+    #    final_predictions = inflate_variance_SDSM(settings['inflate_mean'], settings['inflate_var'], final_predictions)
+        final_predictions = inflate_variance_SDSM(y[predictand], final_predictions, c=settings['inflate_var'])
 
-if settings['transform']:
-    # undo transformation
-    final_predictions['preds'] = final_predictions.preds ** 4
-
-
-save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
-print("Saved predictions.")
+    if settings['transform']:
+        # undo transformation
+        final_predictions['preds'] = final_predictions.preds ** 4
 
 
-#==============================================================================
-"""Generate plots."""
-#==============================================================================
+    save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
+    print("Saved predictions.")
 
-if settings['transform']:
-    #undoing fourth root transformation (intended for precip)
-    Y_all[predictand] = Y_all[predictand]**4
 
-plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
-                models = {'OLS': final_predictions}, startDate = settings['dateStart'],
-                endDate = settings['dateEnd'], k = k)
+    #==============================================================================
+    """Generate plots."""
+    #==============================================================================
 
-for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
-    try:
-        os.mkdir(os.path.join(plotData.plot_path, folder))
-    except: pass
+    if settings['transform']:
+        #undoing fourth root transformation (intended for precip)
+        Y_all[predictand] = Y_all[predictand]**4
 
-plot_all(plotData)
+    plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
+                    models = {'OLS': final_predictions}, startDate = settings['dateStart'],
+                    endDate = settings['dateEnd'], k = k)
 
-print("Generated plots.")
+    for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
+        try:
+            os.mkdir(os.path.join(plotData.plot_path, folder))
+        except: pass
 
-print("Done.")
+    plot_all(plotData)
+
+    print("Generated plots.")
+
+    print("Done.")

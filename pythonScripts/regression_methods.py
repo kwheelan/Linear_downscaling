@@ -148,19 +148,21 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
         X_month = predictors.sel(time=predictors.time.dt.month == month)
         for col in predictors.keys():
             # standardize using data from 1980 through 2005
-            # todo: save values for future runs
             if base_values is None: #then calculate them
                 subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
                 mu = float(np.mean(subset[col].data))
                 sd = float(np.std(subset[col].data))
                 base_values_new[monthsFull[month-1]][col] = mu, sd
             else:
-                mu, sd = base_values[monthsFull[month-1]][col]
+                #get from file
+                mu, sd = eval(base_values[monthsFull[month-1]][col])
             X_month[col] = ( ('time'), zscore(X_month[col].data, mu, sd))
+        # concatenate months back together
         if month == list(month_range)[0]:
             X_preds = X_month
         else:
             X_preds = xr.concat([X_preds, X_month], dim = "time")
+        #save file if necessary
         if not (base_values is None) and anomSavePath:
             base_values_new.to_csv(anomSavePath)
     return X_predsb
@@ -180,9 +182,11 @@ def prep_data(obsPath, predictors, lat, lon, dateStart, dateEnd):
             X_all, an xarray object of predictors
             Y_all, an xarray object of obs
     """
-    obs = xr.open_dataset(obsPath).sel(time = slice(dateStart, dateEnd))
+    obs = xr.open_dataset(obsPath).sel(lat = lat, lon = lon, method = 'nearest')
     X_all = predictors.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
-    Y_all = obs.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
+    try:
+        Y_all = obs.sel(time = slice(dateStart, dateEnd))
+    except: pass
     return X_all, Y_all
 
 def add_month(X_all, Y_all):
@@ -411,16 +415,25 @@ def save_betas(save_path, coefMatrix, lat, lon, predictand, suffix = ""):
         Output:
             None
     """
+    save_path = settings['save_path']
     ROOT = os.path.join(save_path,'betas')
     try:
         os.mkdir(ROOT)
     except FileExistsError:
         pass
     fp = os.path.join(ROOT, f"betas{suffix}_{predictand}_{lat}_{lon}.txt")
+    metafp = os.path.join(ROOT, "metadata.txt")
     try:
         os.remove(fp)
+        os.remove(metafp)
     except: pass
     coefMatrix.to_csv(fp)
+    # write settings to metadata
+    f = open(metafp)
+    f.write(repr(settings))
+    f.close()
+
+
 
 
 

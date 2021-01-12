@@ -31,16 +31,16 @@ import numpy as np
 import os
 import sys
 
-with open("settings.txt") as f:
-    settings  = eval(f.read())
+save_location = sys.argv[1]
+beta_location = sys.argv[2]
+pred_root = sys.argv[3]
+pred_ext = sys.argv[4]
+pred_series = sys.argv[5]
+start_date = sys.argv[6]
+end_date = sys.argv[7]
 
-lat = sys.argv[1] #settings['lat']
-lon = sys.argv[2] #settings['lon']
-save_location = sys.argv[3]
-beta_location = sys.argv[4]
-pred_root = sys.argv[5]
-pred_ext = sys.argv[6]
-pred_series = sys.argv[7]
+with open(f"{beta_location}/metadata.txt") as f:
+    settings  = eval(f.read())
 
 predictand = settings['predictand']
 preds = settings['preds_surface'] + settings['preds_level']
@@ -64,8 +64,7 @@ else:
 #standardize data, trim dates, add month and constant cols
 # obs start in 1980
 X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon,
-                        dateStart = '1980-01-01',
-                        dateEnd = settings['dateEnd'])
+                        start_date, end_date)
 
 #match standardization of original model
 if settings['stdize']:
@@ -93,7 +92,7 @@ preds_to_keep = [x for x in all_preds if not x in preds_to_drop]
 #==============================================================================
 
 #read in betas
-coefMatrix = pd.read_csv(beta_location)
+coefMatrix = pd.read_csv(f"{beta_location}/betas*")
 
 #predict for all data using betas
 if settings['conditional']:
@@ -121,8 +120,8 @@ Y_all['timecopy'] = Y_all['time']
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'downscaled GCM': final_predictions.sel(time= slice('1980-01-01', settings['dateEnd']))},
-                startDate = '1980-01-01',
-                endDate = settings['dateEnd'], k = k)
+                startDate = start_date,
+                endDate = end_date, k = k)
 
 
 for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
