@@ -152,7 +152,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
                 subset = X_month.sel(time = slice('1980-01-01', '2005-12-31'))
                 mu = float(np.mean(subset[col].data))
                 sd = float(np.std(subset[col].data))
-                base_values_new[monthsFull[month-1]][col] = mu, sd
+                base_values_new[monthsFull[month-1]][col] = (mu, sd)
             else:
                 #get from file
                 mu, sd = eval(base_values[monthsFull[month-1]][col])
