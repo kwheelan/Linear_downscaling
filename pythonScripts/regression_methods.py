@@ -165,7 +165,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
         #save file if necessary
         if not (base_values is None) and anomSavePath:
             base_values_new.to_csv(anomSavePath)
-    return X_predsb
+    return X_preds
 
 
 def prep_data(obsPath, predictors, lat, lon, dateStart, dateEnd):
