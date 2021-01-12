@@ -1,0 +1,15 @@
+Summary Statistics
+Lat = 32.125, Lon = -101.875
+
+Observations:
+Mean: 25.504636764526367
+Variance: 78.91983795166016
+
+Modeled Data (downscaled GCM):
+Mean: 25.475296436170847
+Variance: 74.22583078550372
+RMSE: 6.315414302629976
+AIC: 35023.81587542664
+R-squared: 0.9405327596525397
+Adjusted R-squared: 0.9404763450680422
+
