@@ -146,6 +146,7 @@ def stdz_month(predictors, base_values = None, anomSavePath = None):
         base_values = pd.read_csv(base_values, index_col=0)
     for month in month_range:
         X_month = predictors.sel(time=predictors.time.dt.month == month)
+        X_month.load()
         for col in predictors.keys():
             # standardize using data from 1980 through 2005
             if base_values is None: #then calculate them

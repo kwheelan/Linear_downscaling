@@ -74,7 +74,7 @@ if settings['stdize']:
     #standardize predictors
     if settings['monthly']:
         #standardize data by month
-        X_all = stdz_month(X_all)#, base_values = '/glade/scratch/kwheelan/anom.txt')
+        X_all = stdz_month(X_all), base_values = '/glade/scratch/kwheelan/anom.txt')
 
     elif settings['apr_sep']:
         #standardize all data from apr-sep together
