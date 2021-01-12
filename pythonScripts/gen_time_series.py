@@ -67,9 +67,10 @@ else:
 #standardize data, trim dates, add month and constant cols
 # obs start in 1980
 print(predictors.time.values)
-print(X_all.time.values)
 X_all, Y_all = prep_data(settings['obs_path'], predictors, lat, lon,
                         start_date, end_date)
+print(X_all.time.values)
+
 
 #match standardization of original model
 if settings['stdize']:
