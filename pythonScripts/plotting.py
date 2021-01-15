@@ -125,7 +125,7 @@ def annualSeasonPlot(plotData, startDate, endDate, title):
         plt.ylabel('Precipitation (mm)')
     plt.xlabel('Year')
     plt.legend()
-    plt.savefig(os.path.join(f"{plotData.plot_path}/seasonalPlots", f"{title.replace(' ','')}.ps"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/seasonalPlots", f"{title.replace(' ','')}.pdf"))
     plt.clf()
 
 
@@ -163,7 +163,7 @@ def plot_monthly_avgs(plotData):
     plotData.obs['time'] = plotData.obs['month']
     modelAvgs = dict()
     for model in plotData.models.keys():
-        plotData.models[model]['time'] = plotData.models[model]['month']
+        plotData.models[model]['time'] = plotData.models[model].time.datetime.month
         modelAvgs[model] = [float(plotData.models[model].sel(time = m).mean(dim = 'time')['preds']) for m in range(1,13)]
     obsAvgs = [float(plotData.obs.sel(time = m).mean(dim = 'time')[plotData.predictand]) for m in range(1,13)]
 
@@ -181,7 +181,7 @@ def plot_monthly_avgs(plotData):
         plt.ylabel('Precipitation (mm)')
     plt.xlabel('Month')
     plt.legend()
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'monthly_means.ps'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'monthly_means.pdf'))
     plt.clf()
 
 def plot_daily_avgs(plotData):
@@ -217,7 +217,7 @@ def plot_daily_avgs(plotData):
     x = np.arange(1)
     plt.xticks(x, "")
     plt.legend()
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'daily_means.ps'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'daily_means.pdf'))
     plt.clf()
 
 
@@ -256,7 +256,7 @@ def plot_annual_avgs(plotData):
     plt.legend()
 
     #save
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means.ps'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means.pdf'))
     plt.clf()
 
 def autolabel(rects, ax):
@@ -316,7 +316,7 @@ def plot_annual_avgs_bar(plotData):
     fig.tight_layout()
 
     #save plot
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means_bar.ps'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means_bar.pdf'))
     plt.clf()
 
 def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
@@ -362,7 +362,7 @@ def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
     plt.legend()
 
     #save figure
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.ps"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.pdf"))
     plt.clf()
 
 def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
@@ -406,7 +406,7 @@ def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
     plt.legend()
 
     #save figure
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.ps"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.pdf"))
     plt.clf()
 
 def plot_hot_days(plotData):
@@ -453,7 +453,7 @@ def plot_dist(plotData, data, title):
     plt.xlabel(plotData.predictand)
 
     #save figure
-    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.ps"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.pdf"))
     plt.clf()
 
 def plot_dists(plotData):
@@ -475,7 +475,7 @@ def boxplot(plotData):
     plt.suptitle("Boxplots for Observed and Modeled Data")
     plt.title(titleDict[plotData.predictand])
     plt.xlabel(plotData.predictand)
-    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.ps"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.pdf"))
 
 def violin(plotData):
     """ creates a violin plot of obs and any model data"""
@@ -494,7 +494,7 @@ def violin(plotData):
     plt.violinplot(data)
     plt.suptitle("Violin Plots for Observed and Modeled Data")
     plt.title(titleDict[plotData.predictand])
-    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "violinplots.ps"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "violinplots.pdf"))
 
 
 
