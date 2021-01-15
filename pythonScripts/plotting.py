@@ -118,7 +118,7 @@ def annualSeasonPlot(plotData, startDate, endDate, title):
 
     #label and save figure
     plt.suptitle(title)
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
@@ -174,7 +174,7 @@ def plot_monthly_avgs(plotData):
 
     #label and save figure
     plt.suptitle("Monthly Means for Observed and Modeled Data")
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
@@ -208,7 +208,7 @@ def plot_daily_avgs(plotData):
 
     #label and save figure
     plt.suptitle("Daily Means for Observed and Modeled Data")
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
@@ -247,7 +247,7 @@ def plot_annual_avgs(plotData):
 
     #label plot
     plt.suptitle("Annual Means for Observed and Modeled Data")
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
@@ -356,7 +356,7 @@ def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
 
     # label plot
     plt.suptitle(title)
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     plt.ylabel('Number of Days')
     plt.xlabel('Month')
     plt.legend()
@@ -400,7 +400,7 @@ def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
 
     # label plot
     plt.suptitle(title)
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     plt.ylabel('Number of Days')
     plt.xlabel('Year')
     plt.legend()
@@ -446,7 +446,7 @@ def plot_dist(plotData, data, title):
 
     #label plot
     plt.suptitle(title)
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
     plt.ylabel("Percent")
     plt.xlim(-20,50)
@@ -473,7 +473,7 @@ def boxplot(plotData):
     data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
     plt.boxplot(data, whis = 0.75, labels = labels)
     plt.suptitle("Boxplots for Observed and Modeled Data")
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     plt.xlabel(plotData.predictand)
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.ps"))
 
@@ -493,8 +493,9 @@ def violin(plotData):
     #make plot
     plt.violinplot(data)
     plt.suptitle("Violin Plots for Observed and Modeled Data")
-    plt.title(titleDict[plotData['predictand']])
+    plt.title(titleDict[plotData.predictand])
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "violinplots.ps"))
+
 
 
 #===============================================================================
