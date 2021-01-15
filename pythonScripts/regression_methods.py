@@ -185,7 +185,7 @@ def prep_data(obsPath, predictors, lat, lon, dateStart, dateEnd):
     """
     obs = xr.open_dataset(obsPath).sel(lat = lat, lon = lon, method = 'nearest')
     X_all = predictors.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
-    if int(dateStart[1:4]) < 2020:
+    if int(dateStart[:4]) < 2020:
         Y_all = obs.sel(time = slice(dateStart, dateEnd))
     return X_all, Y_all
 
