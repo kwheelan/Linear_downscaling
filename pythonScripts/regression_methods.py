@@ -187,6 +187,8 @@ def prep_data(obsPath, predictors, lat, lon, dateStart, dateEnd):
     X_all = predictors.sel(lat = lat, lon = lon, method = 'nearest').sel(time = slice(dateStart, dateEnd))
     if int(dateStart[:4]) < 2020:
         Y_all = obs.sel(time = slice(dateStart, dateEnd))
+    else:
+        Y_all = obs
     return X_all, Y_all
 
 def add_month(X_all, Y_all):
