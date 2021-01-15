@@ -29,6 +29,11 @@ import os
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 monthsFull = ['January','February', 'March','April','May','June','July','August','September','October','November','December']
 
+titleDict = {'tmax': 'Daily Maximum Temperature',
+             'tmin': 'Daily Minimum Temperature',
+             'pr': 'Daily Precipitation',
+             'prec': 'Daily Precipitation'}
+
 #==============================================================================
 """Creating a Plot class to minimize data-passing"""
 #==============================================================================
@@ -112,14 +117,15 @@ def annualSeasonPlot(plotData, startDate, endDate, title):
     plt.plot(range(startYr+2, endYr-1), movingAvg, '-k', label = "5-yr moving average")
 
     #label and save figure
-    plt.title(title)
+    plt.suptitle(title)
+    plt.title(titleDict[plotData['predictand']])
     if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
         plt.ylabel('Precipitation (mm)')
     plt.xlabel('Year')
     plt.legend()
-    plt.savefig(os.path.join(f"{plotData.plot_path}/seasonalPlots", f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/seasonalPlots", f"{title.replace(' ','')}.ps"))
     plt.clf()
 
 
@@ -167,14 +173,15 @@ def plot_monthly_avgs(plotData):
         plt.plot(monthsAbrev, modelAvgs[model], label=model)
 
     #label and save figure
-    plt.title("Monthly Means for Observed and Modeled Data")
+    plt.suptitle("Monthly Means for Observed and Modeled Data")
+    plt.title(titleDict[plotData['predictand']])
     if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
         plt.ylabel('Precipitation (mm)')
     plt.xlabel('Month')
     plt.legend()
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'monthly_means.png'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'monthly_means.ps'))
     plt.clf()
 
 def plot_daily_avgs(plotData):
@@ -200,7 +207,8 @@ def plot_daily_avgs(plotData):
         plt.plot(days, modelAvgs[model], label=model)
 
     #label and save figure
-    plt.title("Daily Means for Observed and Modeled Data")
+    plt.suptitle("Daily Means for Observed and Modeled Data")
+    plt.title(titleDict[plotData['predictand']])
     if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
@@ -209,7 +217,7 @@ def plot_daily_avgs(plotData):
     x = np.arange(1)
     plt.xticks(x, "")
     plt.legend()
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'daily_means.png'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'daily_means.ps'))
     plt.clf()
 
 
@@ -238,7 +246,8 @@ def plot_annual_avgs(plotData):
         plt.plot(range(startYr, endYr+1), modelAvgs[model], label=model)
 
     #label plot
-    plt.title("Annual Means for Observed and Modeled Data")
+    plt.suptitle("Annual Means for Observed and Modeled Data")
+    plt.title(titleDict[plotData['predictand']])
     if plotData.predictand in ['tmin', 'tmax']:
         plt.ylabel('Temperature (Celcius)')
     if plotData.predictand == 'prec':
@@ -247,7 +256,7 @@ def plot_annual_avgs(plotData):
     plt.legend()
 
     #save
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means.png'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means.ps'))
     plt.clf()
 
 def autolabel(rects, ax):
@@ -307,7 +316,7 @@ def plot_annual_avgs_bar(plotData):
     fig.tight_layout()
 
     #save plot
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means_bar.png'))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", 'annual_means_bar.ps'))
     plt.clf()
 
 def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
@@ -346,13 +355,14 @@ def plot_cond_days(plotData, title, comp = "greater", thresh = 35):
         plt.plot(monthsAbrev, modelDaysCount[model], label=model)
 
     # label plot
-    plt.title(title)
+    plt.suptitle(title)
+    plt.title(titleDict[plotData['predictand']])
     plt.ylabel('Number of Days')
     plt.xlabel('Month')
     plt.legend()
 
     #save figure
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.ps"))
     plt.clf()
 
 def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
@@ -389,13 +399,14 @@ def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
         plt.plot(range(plotData.startYr, plotData.endYr + 1), modelDaysCount[model], label=model)
 
     # label plot
-    plt.title(title)
+    plt.suptitle(title)
+    plt.title(titleDict[plotData['predictand']])
     plt.ylabel('Number of Days')
     plt.xlabel('Year')
     plt.legend()
 
     #save figure
-    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.ps"))
     plt.clf()
 
 def plot_hot_days(plotData):
@@ -434,14 +445,15 @@ def plot_dist(plotData, data, title):
     plt.hist(eval(data), bins = 25, weights = np.ones(len(eval(data).values)) / (len(eval(data).values)))
 
     #label plot
-    plt.title(title)
+    plt.suptitle(title)
+    plt.title(titleDict[plotData['predictand']])
     plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
     plt.ylabel("Percent")
     plt.xlim(-20,50)
     plt.xlabel(plotData.predictand)
 
     #save figure
-    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.ps"))
     plt.clf()
 
 def plot_dists(plotData):
@@ -460,9 +472,10 @@ def boxplot(plotData):
     labels = ['obs'] + list(plotData.models.keys())
     data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
     plt.boxplot(data, whis = 0.75, labels = labels)
-    plt.title("Boxplots for Observed and Modeled Data")
+    plt.suptitle("Boxplots for Observed and Modeled Data")
+    plt.title(titleDict[plotData['predictand']])
     plt.xlabel(plotData.predictand)
-    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.png"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.ps"))
 
 def violin(plotData):
     """ creates a violin plot of obs and any model data"""
@@ -479,8 +492,9 @@ def violin(plotData):
 
     #make plot
     plt.violinplot(data)
-    plt.title("Violin Plots for Observed and Modeled Data")
-    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "violinplots.png"))
+    plt.suptitle("Violin Plots for Observed and Modeled Data")
+    plt.title(titleDict[plotData['predictand']])
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "violinplots.ps"))
 
 
 #===============================================================================

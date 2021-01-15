@@ -153,9 +153,14 @@ if not future:
                 models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', end_date))},
                 startDate = '1980-01-01',
                 endDate = end_date, k = k)
-    #plot_all(plotData)
+    plot_all(plotData)
 
 else:
-    pass
     #future projections
     #set years equal to plot
+    final_predictions['time'] = (final_predictions.time[0] - obs.time[0]) + final_predictions.time
+    plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
+                models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', end_date))},
+                startDate = '1980-01-01',
+                endDate = end_date, k = k)
+    plot_all(plotData)
