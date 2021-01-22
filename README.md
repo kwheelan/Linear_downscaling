@@ -1,29 +1,27 @@
 ## Linear_downscaling
 
 #### Katrina Wheelan
-#### Updated November, 2020
+#### Updated January, 2021
 #### NCAR
 
 (IN PROGRESS)
 
-This repository contains custom Jupyter notebooks, Python scripts, and batch scripts for linearly downscaling climate data.
+This repository contains custom Python scripts, plots, and batch scripts for linearly downscaling climate data.
 
 **Directories**:
- * *notebooks/* - Jupyter notebooks for interactive/customizable downscaling (these need to be updated)
-   * *Precip_DownScaling.ipynb* - A Jupyter notebook that linearly downscales precipitation data using large scale predictors. The notebook employs a logistic model to predict yes/no precip and then a linear model to predict intensity. It has an optional stochastic component to correct the distribution.
-
-   * *Temp_Downscaling_MonthlyModel.ipynb* - similarly downscales maximum temperature data using large scale predictors. The model controls by month, employing 3 linear methods: (1) manual linear regression, using the same predictors but different coefficients for each month; (2) LASSO linear regress using a single model; (3) LASSO regression conditioned on month. The chosen model also includes an optional stochastic component (an approximation of the "variance inflation" for SDSM).
-
-   * *Graphs.ipynb* - Shows various metrics to compare different models
-
+  
  * *pythonScripts* - A folder to store scripts called by bash scripts
+    * *gen_time_series.py* - A Python file to downscale date using existing betas
     * *regress.py* - Optimizable Python file to do regression for downscaling
-    * *regression_tools.py* - A module of functions to perform the necessary steps for downscaling
+    * *regression_methods.py* - A module of functions to perform the necessary steps for downscaling
     * *plotting.py* - A module of plotting functions for the modeled data
-    * *SDSM_process.py* - A short script I wrote to plot SDSM data.
     * *settings.txt* - Settings for regress.py
+    * *helperScripts/* - A folder of other non-essential scripts
+    * *txt_files* - a folder csv files
 
  * *bashScripts/* - Contains batch scripts for submission to the NCAR supercomputer
+    * *gen_time_series.sh* -- A script to generate time series from existing betas
+    * *regress_OLS.sh* -- A script to run regression, save betas, save predictions, and generate plots
 
  * *SDSM_p1/* - Plots and raw data from running SDSM for daily maximum temperature on p1 (lat = 38.125, lon = -101.875) with variance inflation = 1
     * *plots/*
