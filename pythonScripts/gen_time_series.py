@@ -164,4 +164,4 @@ else:
                 models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', '2005-12-31'))},
                 startDate = '1980-01-01',
                 endDate = '2005-12-31', k = k)
-    plot_all(plotData)
+    plot_all_future(plotData)
