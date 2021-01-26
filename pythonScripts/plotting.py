@@ -476,7 +476,6 @@ def boxplot(plotData):
     plt.boxplot(data, whis = 0.75, labels = labels)
     plt.suptitle("Boxplots for Observed and Modeled Data")
     plt.title(titleDict[plotData.predictand])
-    plt.xlabel(plotData.predictand)
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.pdf"))
 
 def violin(plotData):

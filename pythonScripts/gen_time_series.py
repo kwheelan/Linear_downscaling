@@ -166,7 +166,9 @@ else:
 
     #compare
     future = final_predictions
-    historical = xr.open_dataset('/glade/work/kwheelan/Linear_downscaling/GCM_downscaled/historical/tmax_lat32.125_lon-101.875/timeseries/finalPreds_tmax_32.125_-101.875.nc')
+    ROOT = os.path.join(save_location,'timeseries')
+    fp = os.path.join(ROOT, f"finalPreds_{predictand}_{lat}_{lon}.nc")
+    historical = xr.open_dataset(fp)
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
                 models = {'MPI future': future.sel(time=slice('1980-01-01', '2005-12-31')),
                           'MPI historical': historical.sel(time=slice('1980-01-01', '2005-12-31'))},
