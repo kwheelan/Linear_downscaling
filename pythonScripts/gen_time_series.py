@@ -160,7 +160,7 @@ else:
     #set years equal to plot
     final_predictions['time'] = int(final_predictions.time[0]) - int(Y_all.time[0]) + final_predictions.time
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
-                models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', end_date))},
+                models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', '2005-12-31'))},
                 startDate = '1980-01-01',
-                endDate = end_date, k = k)
+                endDate = '2005-12-31', k = k)
     plot_all(plotData)
