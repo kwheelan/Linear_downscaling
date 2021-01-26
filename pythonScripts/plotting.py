@@ -579,7 +579,7 @@ def plot_all(plotData):
         except: pass
 
     #seasonal plots
-#    plot_all_seasons(plotData)
+    plot_all_seasons(plotData)
 
     #time series plots
     plot_monthly_avgs(plotData)
