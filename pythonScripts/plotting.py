@@ -409,19 +409,21 @@ def plot_cond_days_by_year(plotData, title, comp = "greater", thresh = 35):
     plt.savefig(os.path.join(f"{plotData.plot_path}/timeSeriesPlots", f"{title.replace(' ','')}.pdf"))
     plt.clf()
 
-def plot_hot_days(plotData):
+def plot_hot_days(plotData, future = False):
     """
        Saving a plot of days over 35 degrees C
        Input: plotData, a Plot object with necessary data
        Output: None
     """
     plot_cond_days(plotData, title="Number of Days at Least 35 Degrees Celcius by Month", comp="greater", thresh=35)
-    plot_cond_days_by_year(plotData, title="Number of Days at Least 35 Degrees Celcius by Year", comp="greater", thresh=35)
+    if not future:
+        plot_cond_days_by_year(plotData, title="Number of Days at Least 35 Degrees Celcius by Year", comp="greater", thresh=35)
 
-def plot_cold_days(plotData):
+def plot_cold_days(plotData, future = False):
     """ todo """
     plot_cond_days(plotData, title="Number of Freezing Days by Month", comp="less", thresh = 0)
-    plot_cond_days_by_year(plotData, title="Number of Freezing Days by Year", comp="less", thresh = 0)
+    if not future:
+        plot_cond_days_by_year(plotData, title="Number of Freezing Days by Year", comp="less", thresh = 0)
 
 #==============================================================================
 """Plotting distributions:
@@ -593,6 +595,32 @@ def plot_all(plotData):
 
     #summary statistics
     save_stats(plotData)
+
+    #plot distributions
+    plot_dists(plotData)
+    boxplot(plotData)
+    violin(plotData)
+
+
+def plot_all_future(plotData):
+    """ Creates all possible plots for future data organized in three folders"""
+
+    #create folders to save plots
+    for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
+        try:
+            os.mkdir(os.path.join(plotData.plot_path, folder))
+        except: pass
+
+    #seasonal plots
+    plot_all_seasons(plotData)
+
+    #time series plots
+    plot_monthly_avgs(plotData)
+    if plotData.predictand == 'tmax':
+        plot_hot_days(plotData, True)
+    elif plotData.predictand == 'tmin':
+        plot_cold_days(plotData, True)
+    plot_daily_avgs(plotData)
 
     #plot distributions
     plot_dists(plotData)
