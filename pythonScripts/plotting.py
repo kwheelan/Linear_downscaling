@@ -12,7 +12,7 @@ August 2020
 
 __all__ = ['Plot', 'plot_monthly_avgs', 'plot_hot_days', 'plot_cold_days', 'plot_all_seasons',
             'plot_annual_avgs', 'plot_annual_avgs_bar', 'save_stats', 'plot_dists',
-            'boxplot', 'violin', 'plot_all']
+            'boxplot', 'violin', 'plot_all', 'plot_all_future']
 
 #import dependencies
 import xarray as xr
