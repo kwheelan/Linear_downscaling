@@ -150,7 +150,7 @@ if not future:
     #historical
     #plot against obs 1980-2005
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
-                models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', end_date))},
+                models = {'MPI historical': final_predictions.sel(time=slice('1980-01-01', end_date))},
                 startDate = '1980-01-01',
                 endDate = end_date, k = k)
     plot_all(plotData)
@@ -159,8 +159,17 @@ else:
     #future projections
     #set years equal to plot
     final_predictions['time'] =  int(Y_all.time[0]) - int(final_predictions.time[0]) + final_predictions.time
+    #plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
+    #            models = {'MPI future': final_predictions.sel(time=slice('1980-01-01', '2005-12-31'))},
+    #            startDate = '1980-01-01',
+    #            endDate = '2005-12-31', k = k)
+
+    #compare
+    future = final_predictions
+    historical = xr.open_dataset('/glade/work/kwheelan/Linear_downscaling/GCM_downscaled/historical/tmax_lat32.125_lon-101.875/timeseries/finalPreds_tmax_32.125_-101.875.nc')
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
-                models = {'downscaled GCM': final_predictions.sel(time=slice('1980-01-01', '2005-12-31'))},
+                models = {'MPI future': future.sel(time=slice('1980-01-01', '2005-12-31')),
+                          'MPI historical': historical.sel(time=slice('1980-01-01', '2005-12-31'))},
                 startDate = '1980-01-01',
-                endDate = '2005-12-31', k = k)
+                endDate = '2005-12-31', k = 5)
     plot_all_future(plotData)

@@ -611,9 +611,6 @@ def plot_all_future(plotData):
             os.mkdir(os.path.join(plotData.plot_path, folder))
         except: pass
 
-    #seasonal plots
-    plot_all_seasons(plotData)
-
     #time series plots
     plot_monthly_avgs(plotData)
     if plotData.predictand == 'tmax':
