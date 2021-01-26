@@ -163,8 +163,6 @@ def plot_monthly_avgs(plotData):
     plotData.obs['time'] = plotData.obs['month']
     modelAvgs = dict()
     for model in plotData.models.keys():
-        print(plotData.models[model])
-        
         plotData.models[model]['time'] = plotData.models[model].time.dt.month
         modelAvgs[model] = [float(plotData.models[model].sel(time = m).mean(dim = 'time')['preds']) for m in range(1,13)]
     obsAvgs = [float(plotData.obs.sel(time = m).mean(dim = 'time')[plotData.predictand]) for m in range(1,13)]
@@ -581,7 +579,7 @@ def plot_all(plotData):
         except: pass
 
     #seasonal plots
-    plot_all_seasons(plotData)
+#    plot_all_seasons(plotData)
 
     #time series plots
     plot_monthly_avgs(plotData)
