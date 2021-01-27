@@ -59,6 +59,11 @@ def load_selected_predictors(preds, ROOT=None, EXT=None, SERIES=None, surf_ext =
         EXT = '_19790101-20181231_dayavg_mpigrid.nc' #date range at the end of the file
         SERIES = 'ERAI_NAmerica'
 
+    if 'MPI-ESM-LR' in SERIES:
+        surf_ext = ''
+    else:
+        surf_ext = '_surf'
+
     #The variables to use
     surface_predictors = ['mslp', 'uas', 'vas'] #, 'ps']
     surface_predictors = [f"{v}_{SERIES}{surf_ext}" for v in preds if v in surface_predictors]
