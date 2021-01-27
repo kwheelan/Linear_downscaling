@@ -486,6 +486,7 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
         X_month["preds"] = X_month['time'] + X_month['lat']
 
         #predict yes/no precip
+        #thresh = rand
         classifier = glm.predict_proba(X_all_hand[month-1])[:,1] > thresh
         #predict intensity
         intensity = np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]])
