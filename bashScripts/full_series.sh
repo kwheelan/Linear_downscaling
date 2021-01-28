@@ -17,7 +17,7 @@ cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
 
 export PREDICTAND=tmax
 
-export OBS=/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc
+export OBS=/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/$PREDICTAND.gridMET.NAM-22i.SGP.nc
 
 for LAT in $(seq 32.125 2 34.125)
 do

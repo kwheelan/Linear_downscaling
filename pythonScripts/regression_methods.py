@@ -75,12 +75,6 @@ def load_selected_predictors(preds, ROOT=None, EXT=None, SERIES=None, surf_ext =
     # filter specfied predictors
     level_preds = [f"{v.split('_')[0]}_{SERIES}_{v.split('_')[1]}" for v in preds if v in full]
 
-    # todo: get rid  of this temporary fix
-    for i in range(len(surface_predictors)):
-        if ('mslp' in surface_predictors[i]) and ('GFDL' in SERIES):
-            surface_predictors[i] = "mslp_GFDL-ESM2M_rcp85_r1i1p1_Namerica_surf"
-
-
     preds_long = surface_predictors + level_preds
 
     #Surface predictors
@@ -487,8 +481,8 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
     """
         to do
     """
-    # if thresh = 'stochastic':
-    #     thresh = np.random.normal(len=X_all.shape[0], mean=0.5, var=0.1)
+    if thresh = 'stochastic':
+         thresh = np.random.uniform(len=X_all.shape[0], low=0, high=1)
 
     X_all_cp = X_all
     X_all_cp['time'] = X_all_cp['timecopy'].dt.month
@@ -498,7 +492,6 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
         X_month["preds"] = X_month['time'] + X_month['lat']
 
         #predict yes/no precip
-        #thresh = rand
         classifier = glm.predict_proba(X_all_hand[month-1])[:,1] > thresh
         #predict intensity
         intensity = np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]])

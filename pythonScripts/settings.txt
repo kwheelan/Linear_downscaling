@@ -1,9 +1,9 @@
 
 {
 
-'predictand' : 'tmax',
-'preds_surface' : ['mslp', 'vas'],
-'preds_level' : ['RH_p500', 'U_p850', 'Q_p850', 'Vort_p500', 'RH_p850', 'Z_p500'],
+'predictand' : 'pr',
+'preds_surface' : [],
+'preds_level' : ['RH_p700', 'U_p850', 'Q_p500', 'V_p700'],
 
 'dateStart' : '1976-01-01',
 'dateEnd' : '2005-12-31',
@@ -15,13 +15,13 @@
 'monthly' : True,
 'apr_sep': False,
 
-'train' : True,
+'train' : False,
 'transform' : False,
 'stdize' : True,
 'stdize_y': False,
 
-'conditional' : False,
-'stochastic_thresh' : False,
+'conditional' : True,
+'stochastic_thresh' : True,
 'static_thresh' : 0.5,
 
 'inflate' : False,
