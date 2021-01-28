@@ -74,6 +74,13 @@ def load_selected_predictors(preds, ROOT=None, EXT=None, SERIES=None, surf_ext =
     full = [f"{v}_p{level}" for v in other_predictors for level in levels ]
     # filter specfied predictors
     level_preds = [f"{v.split('_')[0]}_{SERIES}_{v.split('_')[1]}" for v in preds if v in full]
+
+    # todo: get rid  of this temporary fix
+    for i in range(length(surface_predictors)):
+        if 'mslp' in surface_predictors[i]:
+            surface_predictors[i] = "mslp_GFDL-ESM2M_rcp85_r1i1p1_Namerica_surf"
+
+
     preds_long = surface_predictors + level_preds
 
     #Surface predictors
