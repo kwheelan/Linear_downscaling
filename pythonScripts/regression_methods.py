@@ -481,7 +481,7 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
     """
         to do
     """
-    if thresh = 'stochastic':
+    if thresh == 'stochastic':
          thresh = np.random.uniform(len=X_all.shape[0], low=0, high=1)
 
     X_all_cp = X_all
