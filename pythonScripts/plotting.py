@@ -438,29 +438,16 @@ def plot_dist(plotData, data, label):
         Input:
             plotData, a Plot object with necessary data
             data, a str of what will be plotted, ie. "plotData.obs[plotData.predictand]"
-            title, a string to appear on plot
+            label, a string to appear on plot
         Output:
             none
     """
-    # plot histogram; weight by proportion of points
-    #from matplotlib.ticker import FuncFormatter, PercentFormatter
     plt.hist(eval(data),
              alpha = 0.5, #make translucent
              bins = 25,
              label = label,
              weights = np.ones(len(eval(data).values)) / (len(eval(data).values)))
 
-    #label plot
-    # plt.suptitle(title)
-    # plt.title(titleDict[plotData.predictand])
-    # plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
-    # plt.ylabel("Percent")
-    # #plt.xlim(-20,50)
-    # plt.xlabel(plotData.predictand)
-    #
-    # #save figure
-    # plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.pdf"))
-    # plt.clf()
 
 def plot_dists(plotData):
     """
