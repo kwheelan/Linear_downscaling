@@ -432,7 +432,7 @@ def plot_cold_days(plotData, future = False):
         -violin plots"""
 #==============================================================================
 
-def plot_dist(plotData, data, title):
+def plot_dist(plotData, data):
     """
         Generates and saves a plot of the distribution of given data
         Input:
