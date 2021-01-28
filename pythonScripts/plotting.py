@@ -443,6 +443,28 @@ def plot_dist(plotData, data, title):
             none
     """
     # plot histogram; weight by proportion of points
+    #from matplotlib.ticker import FuncFormatter, PercentFormatter
+    plt.hist(eval(data),
+             alpha = 0.5, #make translucent
+             bins = 25,
+             weights = np.ones(len(eval(data).values)) / (len(eval(data).values)))
+
+    #label plot
+    # plt.suptitle(title)
+    # plt.title(titleDict[plotData.predictand])
+    # plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
+    # plt.ylabel("Percent")
+    # #plt.xlim(-20,50)
+    # plt.xlabel(plotData.predictand)
+    #
+    # #save figure
+    # plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.pdf"))
+    # plt.clf()
+
+def plot_dists(plotData):
+    """
+        Plots obs and model histograms
+    """
     from matplotlib.ticker import FuncFormatter, PercentFormatter
     plt.hist(eval(data), bins = 25, weights = np.ones(len(eval(data).values)) / (len(eval(data).values)))
 
@@ -451,22 +473,18 @@ def plot_dist(plotData, data, title):
     plt.title(titleDict[plotData.predictand])
     plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
     plt.ylabel("Percent")
-    plt.xlim(-20,50)
+    #plt.xlim(-20,50)
     plt.xlabel(plotData.predictand)
 
-    #save figure
-    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.pdf"))
-    plt.clf()
-
-def plot_dists(plotData):
-    """
-        Plots obs and model distribution.
-    """
     #plot observed distribution
     plot_dist(plotData, "plotData.obs[plotData.predictand]", "Distribution of Observed Data")
     # plot any model distributions
     for model in plotData.models.keys():
         plot_dist(plotData, f"plotData.models['{model}'].preds", f"Distribution of {model} Predictions")
+
+    #save figure
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.pdf"))
+    plt.clf()
 
 
 def boxplot(plotData):
@@ -476,6 +494,13 @@ def boxplot(plotData):
     plt.boxplot(data, whis = 0.75, labels = labels)
     plt.suptitle("Boxplots for Observed and Modeled Data")
     plt.title(titleDict[plotData.predictand])
+
+    #y axis label
+    if plotData.predictand in ['tmin', 'tmax']:
+        plt.ylabel('Degrees Celcius')
+    else:
+        plt.ylabel('mm')
+
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "boxplots.pdf"))
 
 def violin(plotData):
@@ -495,6 +520,13 @@ def violin(plotData):
     plt.violinplot(data)
     plt.suptitle("Violin Plots for Observed and Modeled Data")
     plt.title(titleDict[plotData.predictand])
+
+    #y axis label
+    if plotData.predictand in ['tmin', 'tmax']:
+        plt.ylabel('Degrees Celcius')
+    else:
+        plt.ylabel('mm')
+
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "violinplots.pdf"))
 
 
