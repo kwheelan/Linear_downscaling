@@ -487,7 +487,7 @@ def plot_dists(plotData):
                 label = model)
 
     #make a legend
-    plt.legend(loc='upper right')
+    plt.legend(loc='upper left')
 
     #save figure
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "histograms.pdf"))

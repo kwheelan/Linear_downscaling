@@ -42,7 +42,7 @@ export START=2070-01-01
 export END=2099-12-31
 export EXT=_20060101-21001231_dayavg_mpigrid.nc
 
-export TMPDIR=/glade/work/$USER/Linear_downscaling/GCM_downscaled_test/$TIME
+export TMPDIR=/glade/work/$USER/Linear_downscaling/GCM_downscaled/$TIME
 mkdir -p $TMPDIR
 
 export BETAS=$TMPDIR/betas
