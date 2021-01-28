@@ -5,7 +5,7 @@ Observations:
 Mean: 25.504636764526367
 Variance: 78.91983795166016
 
-Modeled Data (downscaled GCM):
+Modeled Data (MPI historical):
 Mean: 25.475296436170847
 Variance: 74.22583078550372
 RMSE: 6.315414302629976
