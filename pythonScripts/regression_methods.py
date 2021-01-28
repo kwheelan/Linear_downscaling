@@ -404,6 +404,7 @@ def fit_logistic(X_train, y, predictand):
     #getting predictor names
     keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
     X = np.matrix([X_train[key].values for key in keys]).transpose()
+    print(y)
     y_binary = y[predictand].values > 0
 
     #fit logistic equation
