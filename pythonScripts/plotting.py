@@ -466,9 +466,9 @@ def plot_dists(plotData):
         Plots obs and model histograms
     """
     from matplotlib.ticker import FuncFormatter, PercentFormatter
-    
+
     #label plot
-    plt.suptitle(title)
+    plt.suptitle(f"Distributions of Observations and Predictions")
     plt.title(titleDict[plotData.predictand])
     plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
     plt.ylabel("Percent")
@@ -476,13 +476,13 @@ def plot_dists(plotData):
     plt.xlabel(plotData.predictand)
 
     #plot observed distribution
-    plot_dist(plotData, "plotData.obs[plotData.predictand]", "Distribution of Observed Data")
+    plot_dist(plotData, "plotData.obs[plotData.predictand]")
     # plot any model distributions
     for model in plotData.models.keys():
-        plot_dist(plotData, f"plotData.models['{model}'].preds", f"Distribution of {model} Predictions")
+        plot_dist(plotData, f"plotData.models['{model}'].preds")
 
     #save figure
-    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", f"{title.replace(' ','')}.pdf"))
+    plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "histograms.pdf"))
     plt.clf()
 
 
