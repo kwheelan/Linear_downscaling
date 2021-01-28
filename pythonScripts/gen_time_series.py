@@ -166,7 +166,7 @@ else:
 
     #compare
     future = final_predictions
-    fp = os.path.join(ROOT, f"finalPreds_{predictand}_{lat}_{lon}.nc")
+    fp = os.path.join(ROOT, f"timeseries/finalPreds_{predictand}_{lat}_{lon}.nc")
     fp = fp.replace('rcp85','historical')
     historical = xr.open_dataset(fp)
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
