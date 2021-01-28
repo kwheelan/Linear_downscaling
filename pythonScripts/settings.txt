@@ -1,7 +1,7 @@
 
 {
 
-'predictand' : 'pr',
+'predictand' : 'prec',
 'preds_surface' : [],
 'preds_level' : ['RH_p700', 'U_p850', 'Q_p500', 'V_p700'],
 
