@@ -432,7 +432,7 @@ def plot_cold_days(plotData, future = False):
         -violin plots"""
 #==============================================================================
 
-def plot_dist(plotData, data):
+def plot_dist(plotData, data, label):
     """
         Generates and saves a plot of the distribution of given data
         Input:
@@ -447,6 +447,7 @@ def plot_dist(plotData, data):
     plt.hist(eval(data),
              alpha = 0.5, #make translucent
              bins = 25,
+             label = label,
              weights = np.ones(len(eval(data).values)) / (len(eval(data).values)))
 
     #label plot
@@ -476,10 +477,14 @@ def plot_dists(plotData):
     plt.xlabel(plotData.predictand)
 
     #plot observed distribution
-    plot_dist(plotData, "plotData.obs[plotData.predictand]")
+    plot_dist(plotData,
+            "plotData.obs[plotData.predictand]",
+            label = "Observations")
     # plot any model distributions
     for model in plotData.models.keys():
-        plot_dist(plotData, f"plotData.models['{model}'].preds")
+        plot_dist(plotData,
+                f"plotData.models['{model}'].preds",
+                label = model)
 
     #make a legend
     plt.legend(loc='upper right')
