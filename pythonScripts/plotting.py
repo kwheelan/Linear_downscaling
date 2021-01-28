@@ -481,6 +481,9 @@ def plot_dists(plotData):
     for model in plotData.models.keys():
         plot_dist(plotData, f"plotData.models['{model}'].preds")
 
+    #make a legend
+    plt.legend(loc='upper right')
+
     #save figure
     plt.savefig(os.path.join(f"{plotData.plot_path}/distributionPlots", "histograms.pdf"))
     plt.clf()
