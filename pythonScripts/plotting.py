@@ -466,8 +466,7 @@ def plot_dists(plotData):
         Plots obs and model histograms
     """
     from matplotlib.ticker import FuncFormatter, PercentFormatter
-    plt.hist(eval(data), bins = 25, weights = np.ones(len(eval(data).values)) / (len(eval(data).values)))
-
+    
     #label plot
     plt.suptitle(title)
     plt.title(titleDict[plotData.predictand])
