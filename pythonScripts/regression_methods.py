@@ -77,7 +77,7 @@ def load_selected_predictors(preds, ROOT=None, EXT=None, SERIES=None, surf_ext =
 
     # todo: get rid  of this temporary fix
     for i in range(len(surface_predictors)):
-        if 'mslp' in surface_predictors[i]:
+        if ('mslp' in surface_predictors[i]) and ('GFDL' in SERIES):
             surface_predictors[i] = "mslp_GFDL-ESM2M_rcp85_r1i1p1_Namerica_surf"
 
 
