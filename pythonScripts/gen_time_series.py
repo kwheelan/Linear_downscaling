@@ -172,8 +172,8 @@ else:
     fp = f"/glade/work/kwheelan/Linear_downscaling/GCM_downscaled/historical/tmax_lat{lat}_lon{lon}/timeseries/finalPreds_tmax_{lat}_{lon}.nc"
     historical = xr.open_dataset(fp)
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
-                models = {'MPI future': future.sel(time=slice('1980-01-01', '2005-12-31')),
-                          'MPI historical': historical.sel(time=slice('1980-01-01', '2005-12-31'))},
+                models = {'MPI historical': historical.sel(time=slice('1980-01-01', '2005-12-31')),
+                          'MPI future': future.sel(time=slice('1980-01-01', '2005-12-31'))},
                 startDate = '1980-01-01',
-                endDate = '2005-12-31', k = 5)
-    #plot_all_future(plotData)
+                endDate = '2005-12-31', k = k)
+    plot_all_future(plotData)
