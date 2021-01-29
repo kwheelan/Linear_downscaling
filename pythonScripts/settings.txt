@@ -1,14 +1,14 @@
 
 {
 
-'predictand' : 'tmax',
+'predictand' : 'tmin',
 'preds_surface' : ['mslp'],
-'preds_level' : ['RH_p850', 'Z_p500', 'Q_p850', 'V_p850'],
+'preds_level' : ['U_p850', 'Z_p500', 'Q_p850', 'V_p850'],
 
 'dateStart' : '1976-01-01',
 'dateEnd' : '2005-12-31',
 
-'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmax.gridMET.NAM-22i.SGP.nc',
+'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/tmin.gridMET.NAM-22i.SGP.nc',
 'save_path' : '/glade/work/kwheelan/Linear_downscaling/GCM_downscaled/historical',
 
 'method' : 'OLS',
