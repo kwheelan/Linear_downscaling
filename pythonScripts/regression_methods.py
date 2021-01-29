@@ -501,7 +501,7 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
         classifier = glm.predict_proba(X_all_hand[month-1])[:,1] > thresh
         print(logit_betas)
         print(X_all_hand[month-1])
-        manual =  np.matmul(X_all_hand[month-1], logit_betas)
+        manual =  np.matmul(X_all_hand[month-1], np.array(logit_betas[:,1]))
         manual = 1 / (1 + math.exp(manual))
         print(classifier == manual)
         print(classifier)
