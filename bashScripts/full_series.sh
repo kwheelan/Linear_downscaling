@@ -17,11 +17,12 @@ cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
 
 export PREDICTAND=tmax
 
+
 export OBS=/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/$PREDICTAND.gridMET.NAM-22i.SGP.nc
 
-for LAT in $(seq 32.125 2 34.125)
+for LAT in $(seq 32.125 2 38.125)
 do
-    for LON in $(seq -101.875 2 -99.875)
+    for LON in $(seq -101.875 2 -93.875)
     do
 
       export TIME=historical
