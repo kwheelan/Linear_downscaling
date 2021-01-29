@@ -147,7 +147,7 @@ else:
 
 if settings['conditional']:
     logit_betas, glm = fit_logistic(X, y, predictand)
-    save_betas(settings, logit_betas, lat, lon, predictand)
+    save_betas(settings, logit_betas, lat, lon, predictand, logistic = True)
     print("Fit conditional model")
 
 #fit a different model for each month

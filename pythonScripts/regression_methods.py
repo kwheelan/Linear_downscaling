@@ -404,16 +404,16 @@ def fit_logistic(X_train, y, predictand):
     #getting predictor names
     keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
     X = np.matrix([X_train[key].values for key in keys]).transpose()
-    print(y)
     y_binary = y[predictand].values > 0
 
     #fit logistic equation
     glm = LogisticRegression(penalty = 'l2', C=1)
     glm.fit(X, y_binary)
+
     logit_preds = [keys[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
     return pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient']), glm
 
-def save_betas(settings, coefMatrix, lat, lon, predictand, suffix = ""):
+def save_betas(settings, coefMatrix, lat, lon, predictand, suffix = "", logistic = False):
     """
         Save betas to disk
         Input:
@@ -430,7 +430,10 @@ def save_betas(settings, coefMatrix, lat, lon, predictand, suffix = ""):
         os.mkdir(ROOT)
     except FileExistsError:
         pass
-    fp = os.path.join(ROOT, f"betas.txt")
+    if logistic:
+        fp = os.path.join(ROOT, "logistic_betas.txt")
+    else:
+        fp = os.path.join(ROOT, "betas.txt")
     metafp = os.path.join(ROOT, "metadata.txt")
     try:
         os.remove(fp)
@@ -480,7 +483,9 @@ def predict_linear(X_all, betas, preds_to_keep):
 
 def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_keep, thresh = 0.5):
     """
-        to do
+        todo:
+        are logit_betas necessary?
+        maybe better to do math directly with them instead of pickled glm
     """
     if thresh == 'stochastic':
          thresh = np.random.uniform(len=X_all.shape[0], low=0, high=1)
@@ -494,6 +499,11 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
 
         #predict yes/no precip
         classifier = glm.predict_proba(X_all_hand[month-1])[:,1] > thresh
+        manual =  np.matmul(X_all_hand[month-1], logit_betas[monthsFull[month-1]])
+        manual = 1 / (1 + math.exp(manual))
+        print(classifier == manual)
+        print(classifier)
+        print(manual)
         #predict intensity
         intensity = np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]])
 
