@@ -501,6 +501,7 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
         classifier = glm.predict_proba(X_all_hand[month-1])[:,1]
         manual =  np.matmul(X_all_hand[month-1], logit_betas['coefficient'])
         manual = 1 / (1 + np.exp(manual))
+        manual = sigmoid(manual)
         print(classifier == manual)
         print(classifier)
         print(manual)
