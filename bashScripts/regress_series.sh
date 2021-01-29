@@ -15,7 +15,7 @@ ncar_pylib
 #where the script is located
 cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
 
-export PREDICTAND=tmax
+export PREDICTAND=tmin
 
 
 export OBS=/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/$PREDICTAND.gridMET.NAM-22i.SGP.nc
