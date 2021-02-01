@@ -172,32 +172,32 @@ k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 #==============================================================================
 """Generating predictions"""
 #==============================================================================
+
+#predict for all data using betas
+if settings['conditional']:
+    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
+else:
+    final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
+print("Calculated predictions for testing and training data.")
+
+if settings['inflate']:
+    # add stochasticity via "variance inflation", before undoing any data transformations
+#    final_predictions = inflate_variance_SDSM(settings['inflate_mean'], settings['inflate_var'], final_predictions)
+    final_predictions = inflate_variance_SDSM(y[predictand], final_predictions, c=settings['inflate_var'])
+
+if settings['transform']:
+    # undo transformation
+    final_predictions['preds'] = final_predictions.preds ** 4
+
+
+save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
+print("Saved predictions.")
+
+
+#==============================================================================
+"""Generate plots."""
+#==============================================================================
 if False:
-    #predict for all data using betas
-    if settings['conditional']:
-        final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
-    else:
-        final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
-    print("Calculated predictions for testing and training data.")
-
-    if settings['inflate']:
-        # add stochasticity via "variance inflation", before undoing any data transformations
-    #    final_predictions = inflate_variance_SDSM(settings['inflate_mean'], settings['inflate_var'], final_predictions)
-        final_predictions = inflate_variance_SDSM(y[predictand], final_predictions, c=settings['inflate_var'])
-
-    if settings['transform']:
-        # undo transformation
-        final_predictions['preds'] = final_predictions.preds ** 4
-
-
-    save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
-    print("Saved predictions.")
-
-
-    #==============================================================================
-    """Generate plots."""
-    #==============================================================================
-
     if settings['transform']:
         #undoing fourth root transformation (intended for precip)
         Y_all[predictand] = Y_all[predictand]**4
