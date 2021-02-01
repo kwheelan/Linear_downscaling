@@ -16,7 +16,7 @@
 'apr_sep': False,
 
 'train' : True,
-'transform' : False,
+'transform' : True,
 'stdize' : True,
 'stdize_y': False,
 
