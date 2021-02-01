@@ -407,11 +407,10 @@ def fit_logistic(X_train, y, predictand):
     y_binary = y[predictand].values > 0
 
     #fit logistic equation
-    glm = LogisticRegression(penalty = 'l2', C=1)
+    glm = LogisticRegression(penalty = 'l2', C=1, fit_intercept = False)
     glm.fit(X, y_binary)
 
     logit_preds = [keys[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
-    logit_preds[-1] += glm.intercept_
     return pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient']), glm
 
 def save_betas(settings, coefMatrix, lat, lon, predictand, suffix = "", logistic = False):
