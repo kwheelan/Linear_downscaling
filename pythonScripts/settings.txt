@@ -5,7 +5,7 @@
 'preds_surface' : [],
 'preds_level' : ['RH_p700', 'U_p850', 'Q_p500', 'V_p700'],
 
-'dateStart' : '1976-01-01',
+'dateStart' : '1980-01-01',
 'dateEnd' : '2005-12-31',
 
 'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/prec.gridMET.NAM-22i.SGP.nc',
