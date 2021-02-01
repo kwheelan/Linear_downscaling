@@ -2,8 +2,8 @@
 {
 
 'predictand' : 'prec',
-'preds_surface' : ['mslp'],
-'preds_level' : ['U_p850', 'Z_p500', 'Q_p850', 'V_p850'],
+'preds_surface' : [],
+'preds_level' : ['RH_p700', 'U_p850', 'Q_p500', 'V_p700'],
 
 'dateStart' : '1976-01-01',
 'dateEnd' : '2005-12-31',
@@ -16,7 +16,7 @@
 'apr_sep': False,
 
 'train' : True,
-'transform' : True,
+'transform' : False,
 'stdize' : True,
 'stdize_y': False,
 
