@@ -504,11 +504,12 @@ def predict_conditional(X_all, betas, logit_betas, preds_to_keep, stoch = False,
         #predict yes/no precip
         manual =  np.matmul(X_all_hand[month-1], logit_betas['coefficient'])
         classifier = np.exp(manual) / (1 + np.exp(manual))
-        classifier = classifier > thresh
+        
         if stoch:
             #stochastic threshold samples from a random uniform distribution
             # ie. rains randomly with probabiliy p from logistic regression
             thresh = np.random.uniform(size=classifier.shape[0], low=0, high=1)
+        classifier = classifier > thresh
 
         #predict intensity
         intensity = np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]])
