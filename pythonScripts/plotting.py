@@ -488,6 +488,7 @@ def boxplot(plotData):
     """ creates a boxplot of obs and any model data"""
     labels = ['obs'] + list(plotData.models.keys())
     data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
+    #filter just nonzero values for precip
     if plotData.predictand in ['pr', 'prec']:
         for i in range(len(data)):
             data[i] = data[i][data[i].values > 0]
@@ -507,6 +508,11 @@ def violin(plotData):
     """ creates a violin plot of obs and any model data"""
     labels = ['obs'] + list(plotData.models.keys())
     data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
+    #filter just nonzero values for precip
+    if plotData.predictand in ['pr', 'prec']:
+        for i in range(len(data)):
+            data[i] = data[i][data[i].values > 0]
+
     fig, ax = plt.subplots()
 
     #set up x-axis
