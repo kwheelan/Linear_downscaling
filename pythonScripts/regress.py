@@ -204,7 +204,7 @@ if settings['transform']:
     Y_all[predictand] = Y_all[predictand]**4
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
-                models = {'OLS': final_predictions}, startDate = settings['dateStart'],
+                models = {'ERA-I': final_predictions}, startDate = settings['dateStart'],
                 endDate = settings['dateEnd'], k = k)
 
 for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:

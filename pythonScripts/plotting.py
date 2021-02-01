@@ -10,7 +10,8 @@ August 2020
 """
 #==============================================================================
 
-__all__ = ['Plot', 'plot_monthly_avgs', 'plot_hot_days', 'plot_cold_days', 'plot_all_seasons',
+__all__ = ['Plot', 'plot_monthly_avgs', 'plot_hot_days', 'plot_cold_days',
+            'plot_wet_days', 'plot_all_seasons',
             'plot_annual_avgs', 'plot_annual_avgs_bar', 'save_stats', 'plot_dists',
             'boxplot', 'violin', 'plot_all', 'plot_all_future']
 
@@ -427,6 +428,13 @@ def plot_cold_days(plotData, future = False):
     if not future:
         plot_cond_days_by_year(plotData, title="Number of Freezing Days by Year", comp="less", thresh = 0)
 
+def plot_wet_days(plotData, future=False):
+    """todo"""
+    plot_cond_days(plotData, title="Number of Wet Days by Month", comp="more", thresh = 0)
+    if not future:
+        plot_cond_days_by_year(plotData, title="Number of Wet Days by Year", comp="more", thresh = 0)
+
+
 #==============================================================================
 """Plotting distributions:
         -histograms,
@@ -626,6 +634,8 @@ def plot_all(plotData):
         plot_hot_days(plotData)
     elif plotData.predictand == 'tmin':
         plot_cold_days(plotData)
+    elif plotData.predictand in ['pr', 'prec']:
+        plot_wet_days(plotData)
     plot_annual_avgs(plotData)
     #plot_annual_avgs_bar(plotData)
     plot_daily_avgs(plotData)
@@ -654,6 +664,8 @@ def plot_all_future(plotData):
         plot_hot_days(plotData, True)
     elif plotData.predictand == 'tmin':
         plot_cold_days(plotData, True)
+    elif plotData.predictand in ['pr', 'prec']:
+        plot_wet_days(plotData, True)
     plot_daily_avgs(plotData)
 
     #plot distributions
