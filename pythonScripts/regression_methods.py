@@ -294,7 +294,7 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand, condi
         y = Y_train.sel(time = month)[predictand].values #obs values
         if conditional:
             #filter only days with nonzero precip
-            y =  y[y > 0]
+            y =  y[y > 0.01]
 
         #get just subset of predictors
         x_train_subset = np.matrix([X_train.sel(time = month)[key].values for key in preds_to_keep]).transpose()
