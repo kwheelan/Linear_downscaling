@@ -203,10 +203,15 @@ if settings['transform']:
     #undoing fourth root transformation (intended for precip)
     Y_all[predictand] = Y_all[predictand]**4
 
+fourth = final_predictions
+fourth.preds = fourth.preds ** 4
+quarter = final_predictions
+quarter.preds = quarter.preds ** (0.25)
+
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'ERA-I': final_predictions,
-                'ERA-I ^ 4': final_predictions ** 4,
-                'ERA-I ^ 0.25': final_predictions ** (1/4)},
+                'ERA-I ^ 4': fourth ,
+                'ERA-I ^ 0.25': quarter},
                 startDate = settings['dateStart'],
                 endDate = settings['dateEnd'], k = k)
 
