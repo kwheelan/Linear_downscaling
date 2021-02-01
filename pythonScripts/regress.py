@@ -184,14 +184,16 @@ else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
 
+
+if settings['transform']:
+    # undo transformation
+    final_predictions['preds'] = final_predictions.preds ** 4
+
 if settings['inflate']:
     # add stochasticity via "variance inflation", before undoing any data transformations
 #    final_predictions = inflate_variance_SDSM(settings['inflate_mean'], settings['inflate_var'], final_predictions)
     final_predictions = inflate_variance_SDSM(Y_all[predictand], final_predictions, c=settings['inflate_var'])
 
-if settings['transform']:
-    # undo transformation
-    final_predictions['preds'] = final_predictions.preds ** 4
 
 
 save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
