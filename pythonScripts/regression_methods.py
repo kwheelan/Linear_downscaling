@@ -415,7 +415,7 @@ def fit_logistic(X_train, Y_train, predictand):
         glm = LogisticRegression(penalty = 'l2', C=1, fit_intercept = False)
         glm.fit(X, y_binary)
 
-        logit_betas = pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient'])
+        logit_betas = pd.DataFrame(index = keys, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient'])
 
         #set up beta matrix
         if month == 1:
