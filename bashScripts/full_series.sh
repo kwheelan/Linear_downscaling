@@ -36,12 +36,16 @@ do
       export END=2005-12-31
       export EXT=_19500101-20051231_dayavg_mpigrid.nc
 
-      export TMPDIR=/glade/work/$USER/Linear_downscaling/output/$GCM/$TIME
+      export TMPDIR=/glade/work/$USER/Linear_downscaling/output/ERA-I
       mkdir -p $TMPDIR
 
       python regress.py $LAT $LON
 
       export BETAS=$TMPDIR/$PREDICTAND\_lat$LAT\_lon$LON/betas
+
+      export TMPDIR=/glade/work/$USER/Linear_downscaling/output/$GCM/$TIME
+      mkdir -p $TMPDIR
+
       export ROOT=/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/MPI-ESM-LR/mpigrid/$TIME/
       export SERIES=MPI-ESM-LR_$TIME\_r1i1p1_NAmerica
 

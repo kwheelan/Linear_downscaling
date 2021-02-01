@@ -198,22 +198,22 @@ print("Saved predictions.")
 #==============================================================================
 """Generate plots."""
 #==============================================================================
-if False:
-    if settings['transform']:
-        #undoing fourth root transformation (intended for precip)
-        Y_all[predictand] = Y_all[predictand]**4
 
-    plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
-                    models = {'OLS': final_predictions}, startDate = settings['dateStart'],
-                    endDate = settings['dateEnd'], k = k)
+if settings['transform']:
+    #undoing fourth root transformation (intended for precip)
+    Y_all[predictand] = Y_all[predictand]**4
 
-    for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
-        try:
-            os.mkdir(os.path.join(plotData.plot_path, folder))
-        except: pass
+plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
+                models = {'OLS': final_predictions}, startDate = settings['dateStart'],
+                endDate = settings['dateEnd'], k = k)
 
-    #plot_all(plotData)
+for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
+    try:
+        os.mkdir(os.path.join(plotData.plot_path, folder))
+    except: pass
 
-    print("Generated plots.")
+plot_all(plotData)
+
+print("Generated plots.")
 
 print("Done.")
