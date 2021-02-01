@@ -390,7 +390,7 @@ def fit_annual_OLS(X_train, Y_train, preds_to_keep, predictand, conditional):
                         columns = [monthsFull[i-1] for i in month_range])
 
 
-def fit_logistic(X_train, y, predictand):
+def fit_logistic(X_train, Y_train, predictand):
     """
         Fits a logistic model for conditional regression (ie for precip)
         The default fit is L2 regulator with C = 1.0
