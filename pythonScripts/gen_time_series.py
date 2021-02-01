@@ -134,6 +134,8 @@ if settings['transform']:
 
 save_preds(save_location, final_predictions, lat, lon, predictand)
 
+print("Generated time series for downscaled GCM")
+
 #=================================================================
 """ Make plots for future and historical GCM runs """
 #=================================================================
@@ -176,3 +178,5 @@ else:
                 startDate = '1980-01-01',
                 endDate = '2005-12-31', k = k)
     plot_all_future(plotData)
+
+print("Generated plots for downscaled GCM")
