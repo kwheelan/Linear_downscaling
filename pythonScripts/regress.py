@@ -202,6 +202,7 @@ print("Saved predictions.")
 if settings['transform']:
     #undoing fourth root transformation (intended for precip)
     #Y_all[predictand] = Y_all[predictand]**4
+    pass
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'ERA-I': final_predictions},
