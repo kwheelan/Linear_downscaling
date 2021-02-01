@@ -24,6 +24,8 @@ from sklearn.model_selection import ShuffleSplit, cross_val_score, GridSearchCV
 from sklearn.metrics import log_loss
 import matplotlib.pyplot as plt
 import os
+from matplotlib.ticker import FuncFormatter, PercentFormatter
+
 
 #Set globals
 monthsAbrev = ['Jan','Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -442,7 +444,10 @@ def plot_dist(plotData, data, label):
         Output:
             none
     """
-    plt.hist(eval(data),
+    data = eval(data)
+    if plotData.predictand in ['pr', 'prec']:
+        data = data[data > 0]
+    plt.hist(data,
              alpha = 0.5, #make translucent
              bins = 25,
              label = label,
@@ -453,8 +458,6 @@ def plot_dists(plotData):
     """
         Plots obs and model histograms
     """
-    from matplotlib.ticker import FuncFormatter, PercentFormatter
-
     #label plot
     plt.suptitle(f"Distributions of Observations and Predictions")
     plt.title(titleDict[plotData.predictand])
