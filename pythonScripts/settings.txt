@@ -1,7 +1,7 @@
 
 {
 
-'predictand' : 'tmin',
+'predictand' : 'prec',
 'preds_surface' : ['mslp'],
 'preds_level' : ['U_p850', 'Z_p500', 'Q_p850', 'V_p850'],
 
@@ -16,11 +16,11 @@
 'apr_sep': False,
 
 'train' : True,
-'transform' : False,
+'transform' : True,
 'stdize' : True,
 'stdize_y': False,
 
-'conditional' : False,
+'conditional' : True,
 'stochastic_thresh' : True,
 'static_thresh' : 0.5,
 
