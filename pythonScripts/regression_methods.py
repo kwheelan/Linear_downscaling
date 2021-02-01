@@ -405,7 +405,7 @@ def fit_logistic(X_train, Y_train, predictand):
     for month in month_range:
         #get obs data
         y = Y_train.sel(time = month)[predictand].values #obs values
-        y_binary = y[predictand].values > 0
+        y_binary = y > 0
 
         #get just subset of predictors
         keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
