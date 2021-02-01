@@ -13,9 +13,12 @@ module load python
 ncar_pylib
 
 #where the script is located
-cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
+export HOME=/glade/work/kwheelan/Linear_downscaling/pythonScripts
+cd $HOME
 
+#set regression settings
 export PREDICTAND=prec
+export SETTINGS=$HOME/settings.txt
 
 #Set GCM
 export GCM=MPI-ESM-LR
@@ -39,7 +42,7 @@ do
       export TMPDIR=/glade/work/$USER/Linear_downscaling/output/ERA-I
       mkdir -p $TMPDIR
 
-      python regress.py $LAT $LON
+      python regress.py $LAT $LON $SETTINGS
 
       export BETAS=$TMPDIR/$PREDICTAND\_lat$LAT\_lon$LON/betas
 

@@ -42,11 +42,14 @@ import matplotlib.pyplot as plt
 import os
 import sys
 
-with open("settings.txt") as f:
+
+lat = sys.argv[1]
+lon = sys.argv[2]
+settings_fp = sys.argv[3]
+
+with open(settings_fp) as f:
     settings = eval(f.read())
 
-lat = sys.argv[1] #settings['lat']
-lon = sys.argv[2] #settings['lon']
 predictand = settings['predictand']
 preds = settings['preds_surface'] + settings['preds_level']
 
@@ -201,8 +204,7 @@ print("Saved predictions.")
 
 if settings['transform']:
     #undoing fourth root transformation (intended for precip)
-    #Y_all[predictand] = Y_all[predictand]**4
-    pass
+    Y_all[predictand] = Y_all[predictand]**4
 
 plotData = Plot(settings['save_path'], lat, lon, predictand, obs = Y_all,
                 models = {'ERA-I': final_predictions},
