@@ -411,6 +411,7 @@ def fit_logistic(X_train, y, predictand):
     glm.fit(X, y_binary)
 
     logit_preds = [keys[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
+    logit_preds[-1] += glm.intercept_
     return pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient']), glm
 
 def save_betas(settings, coefMatrix, lat, lon, predictand, suffix = "", logistic = False):
@@ -493,6 +494,9 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
     X_all_cp = X_all
     X_all_cp['time'] = X_all_cp['timecopy'].dt.month
     X_all_hand = [np.matrix([X_all_cp.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in month_range]
+
+    print(logit_betas)
+
     for month in month_range:
         X_month = X_all.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
@@ -501,9 +505,9 @@ def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_kee
         classifier = glm.predict_proba(X_all_hand[month-1])[:,1]
         manual =  np.matmul(X_all_hand[month-1], logit_betas['coefficient'])
         manual = np.exp(manual) / (1 + np.exp(manual))
-        print(classifier == manual)
-        print(classifier)
-        print(manual)
+        #print(classifier == manual)
+        #print(classifier)
+        #print(manual)
         classifier = classifier > thresh
         #predict intensity
         intensity = np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]])
