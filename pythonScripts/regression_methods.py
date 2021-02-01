@@ -481,33 +481,35 @@ def predict_linear(X_all, betas, preds_to_keep):
 
     return X_preds.sortby('time')
 
-def predict_conditional(X_all, betas, logit_betas, predictand, glm, preds_to_keep, thresh = 0.5):
+def predict_conditional(X_all, betas, logit_betas, preds_to_keep, stoch = False, thresh = 0.5):
     """
-        todo:
-        are logit_betas necessary?
-        maybe better to do math directly with them instead of pickled glm
+        Uses logit_betas and betas to classify yes/no precip and then predict intensity.
+        Inputs:
+             X_all: xarray object with predictors
+             betas: regression betas for intensity
+             logit_betas: betas from logit regression for y/n classification
+             preds_to_keep: predictors for logit and regression
+             stoch: bool for whether to use stochastic threshold
+             thresh: static threshold if necessary (default = 0.5)
     """
-    if thresh == 'stochastic':
-         thresh = np.random.uniform(len=X_all.shape[0], low=0, high=1)
 
     X_all_cp = X_all
     X_all_cp['time'] = X_all_cp['timecopy'].dt.month
     X_all_hand = [np.matrix([X_all_cp.sel(time = month)[key].values for key in preds_to_keep]).transpose() for month in month_range]
-
-    print(logit_betas)
 
     for month in month_range:
         X_month = X_all.sel(time=month)
         X_month["preds"] = X_month['time'] + X_month['lat']
 
         #predict yes/no precip
-        classifier = glm.predict_proba(X_all_hand[month-1])[:,1]
         manual =  np.matmul(X_all_hand[month-1], logit_betas['coefficient'])
-        manual = np.exp(manual) / (1 + np.exp(manual))
-        #print(classifier == manual)
-        #print(classifier)
-        #print(manual)
+        classifier = np.exp(manual) / (1 + np.exp(manual))
         classifier = classifier > thresh
+        if stoch:
+            #stochastic threshold samples from a random uniform distribution
+            # ie. rains randomly with probabiliy p from logistic regression
+            thresh = np.random.uniform(size=classifier.shape[0], low=0, high=1)
+
         #predict intensity
         intensity = np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]])
 
