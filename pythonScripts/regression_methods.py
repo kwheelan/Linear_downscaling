@@ -526,7 +526,7 @@ def predict_conditional(X_all, betas, logit_betas, preds_to_keep, stoch = False,
         X_month["preds"] = X_month['time'] + X_month['lat']
 
         #predict yes/no precip
-        manual =  np.matmul(X_all_hand[month-1], logit_betas['coefficient'])
+        manual =  np.matmul(X_all_hand[month-1], logit_betas[monthsFull[month-1]])
         classifier = np.exp(manual) / (1 + np.exp(manual))
 
         if stoch:
