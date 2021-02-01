@@ -446,7 +446,7 @@ def plot_dist(plotData, data, label):
     """
     data = eval(data)
     if plotData.predictand in ['pr', 'prec']:
-        data = data[data > 0]
+        data = data[[plotData.predictand].values > 0]
     plt.hist(data,
              alpha = 0.5, #make translucent
              bins = 25,
@@ -488,6 +488,9 @@ def boxplot(plotData):
     """ creates a boxplot of obs and any model data"""
     labels = ['obs'] + list(plotData.models.keys())
     data = [plotData.obs[plotData.predictand]] + [m.preds for m in plotData.models.values()]
+    if plotData.predictand in ['pr', 'prec']:
+        for i in range(len(data)):
+            data[i] = data[i][data[i].values > 0]
     plt.boxplot(data, whis = 0.75, labels = labels)
     plt.suptitle("Boxplots for Observed and Modeled Data")
     plt.title(titleDict[plotData.predictand])
