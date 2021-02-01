@@ -451,7 +451,7 @@ def plot_dist(plotData, data, label):
              alpha = 0.5, #make translucent
              bins = 25,
              label = label,
-             weights = np.ones(len(eval(data).values)) / (len(eval(data).values)))
+             weights = np.ones(len(data.values)) / (len(data.values)))
 
 
 def plot_dists(plotData):
