@@ -294,7 +294,7 @@ def fit_monthly_linear_models(X_train, Y_train, preds_to_keep, predictand, condi
         y = Y_train.sel(time = month)[predictand].values #obs values
         if conditional:
             #filter only days with nonzero precip
-            y =  y[y > 0.01]
+            y =  y[y > 0]
 
         #get just subset of predictors
         x_train_subset = np.matrix([X_train.sel(time = month)[key].values for key in preds_to_keep]).transpose()
@@ -401,17 +401,41 @@ def fit_logistic(X_train, y, predictand):
         Output:
             an array of betas from the regression for each month
     """
-    #getting predictor names
-    keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
-    X = np.matrix([X_train[key].values for key in keys]).transpose()
-    y_binary = y[predictand].values > 0
 
-    #fit logistic equation
-    glm = LogisticRegression(penalty = 'l2', C=1, fit_intercept = False)
-    glm.fit(X, y_binary)
+    for month in month_range:
+        #get obs data
+        y = Y_train.sel(time = month)[predictand].values #obs values
+        y_binary = y[predictand].values > 0
 
-    logit_preds = [keys[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
-    return pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient']), glm
+        #get just subset of predictors
+        keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
+        X = np.matrix([X_train.sel(time = month)[key].values for key in keys]).transpose()
+
+        #calculate coefficients for training data
+        glm = LogisticRegression(penalty = 'l2', C=1, fit_intercept = False)
+        glm.fit(X, y_binary)
+
+        logit_betas = pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient'])
+
+        #set up beta matrix
+        if month == 1:
+            coefMatrix = logit_betas
+        #store betas
+        coefMatrix[monthsFull[month-1]] = logit_betas.values
+    coefMatrix = coefMatrix.drop('coefficient', axis=1)
+    return coefMatrix
+
+    # #getting predictor names
+    # keys = [key for key in X_train.drop(['month', 'timecopy']).keys()]
+    # X = np.matrix([X_train[key].values for key in keys]).transpose()
+    # y_binary = y[predictand].values > 0
+    #
+    # #fit logistic equation
+    # glm = LogisticRegression(penalty = 'l2', C=1, fit_intercept = False)
+    # glm.fit(X, y_binary)
+    #
+    # logit_preds = [keys[i] for i in range(len(glm.coef_[0])) if glm.coef_[0][i] != 0]
+    # return pd.DataFrame(index = logit_preds, data = [coef for coef in glm.coef_[0] if coef !=0], columns = ['coefficient']), glm
 
 def save_betas(settings, coefMatrix, lat, lon, predictand, suffix = "", logistic = False):
     """
