@@ -175,7 +175,7 @@ k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 
 #predict for all data using betas
 if settings['conditional']:
-    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
+    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, preds_to_keep, settings['stochastic_thresh'], settings['static_thresh'])
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
