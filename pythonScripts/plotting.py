@@ -446,7 +446,7 @@ def plot_dist(plotData, data, label):
     """
     data = eval(data)
     if plotData.predictand in ['pr', 'prec']:
-        data = data[data[plotData.predictand].values > 0]
+        data = data[data.values > 0]
     plt.hist(data,
              alpha = 0.5, #make translucent
              bins = 25,
