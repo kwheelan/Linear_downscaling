@@ -15,7 +15,13 @@ ncar_pylib
 #where the script is located
 cd /glade/work/kwheelan/Linear_downscaling/pythonScripts
 
-export PREDICTAND=tmax
+export PREDICTAND=prec
+
+#Set GCM
+export GCM=MPI-ESM-LR
+export GCMSERIES=$GCM
+#export GCM=GFDL_ESM2M
+#export GCMSERIES=GFDL-ESM2M
 
 
 export OBS=/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/$PREDICTAND.gridMET.NAM-22i.SGP.nc
@@ -30,7 +36,7 @@ do
       export END=2005-12-31
       export EXT=_19500101-20051231_dayavg_mpigrid.nc
 
-      export TMPDIR=/glade/work/$USER/Linear_downscaling/GCM_downscaled/$TIME
+      export TMPDIR=/glade/work/$USER/Linear_downscaling/output/$GCM/$TIME
       mkdir -p $TMPDIR
 
       python regress.py $LAT $LON
@@ -47,7 +53,7 @@ do
       export END=2099-12-31
       export EXT=_20060101-21001231_dayavg_mpigrid.nc
 
-      export TMPDIR=/glade/work/$USER/Linear_downscaling/GCM_downscaled/$TIME
+      export TMPDIR=/glade/work/$USER/Linear_downscaling/output/$GCM/$TIME
       mkdir -p $TMPDIR
 
       export ROOT=/glade/p/cisl/risc/rmccrary/DOE_ESD/LargeScale_DCA/MPI-ESM-LR/mpigrid/$TIME/

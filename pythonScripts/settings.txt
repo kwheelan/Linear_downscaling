@@ -9,7 +9,7 @@
 'dateEnd' : '2005-12-31',
 
 'obs_path' : '/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/prec.gridMET.NAM-22i.SGP.nc',
-'save_path' : '/glade/work/kwheelan/Linear_downscaling/GCM_downscaled/historical',
+'save_path' : '/glade/work/kwheelan/Linear_downscaling/output/ERA-I',
 
 'method' : 'OLS',
 'monthly' : True,

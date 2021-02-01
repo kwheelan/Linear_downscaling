@@ -63,6 +63,7 @@ print("Progress:")
 print(f"Lat: {lat}, Lon: {lon}")
 
 #import predictors
+# default = ERA-I preds
 if preds == ['all']:
     predictors = load_all_predictors()
 else:
