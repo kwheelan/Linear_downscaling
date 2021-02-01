@@ -118,6 +118,7 @@ coefMatrix = pd.read_csv(f"{beta_location}/betas.txt", index_col=0)
 
 #predict for all data using betas
 if settings['conditional']:
+    logit_betas = pd.read_csv(f"{beta_location}/logit_betas.txt", index_col=0)
     final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, predictand, glm, preds_to_keep, thresh = settings['static_thresh'], )
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
