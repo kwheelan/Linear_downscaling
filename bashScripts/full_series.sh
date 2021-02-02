@@ -21,10 +21,10 @@ export PREDICTAND=prec
 export SETTINGS=$HOME/settings.txt
 
 #Set GCM
-export GCM=MPI-ESM-LR
-export GCMSERIES=$GCM
-#export GCM=GFDL_ESM2M
-#export GCMSERIES=GFDL-ESM2M
+# export GCM=MPI-ESM-LR
+# export GCMSERIES=$GCM
+export GCM=GFDL_ESM2M
+export GCMSERIES=GFDL-ESM2M
 
 
 export OBS=/glade/p/cisl/risc/narccap/obs/gridMET/common/DCA/$PREDICTAND.gridMET.NAM-22i.SGP.nc

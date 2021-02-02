@@ -139,7 +139,9 @@ print("Generated time series for downscaled GCM")
 """ Make plots for future and historical GCM runs """
 #=================================================================
 
+#number of predictors
 k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
+
 Y_all['timecopy'] = Y_all['time']
 
 for folder in ['seasonalPlots', 'distributionPlots', 'timeSeriesPlots']:
