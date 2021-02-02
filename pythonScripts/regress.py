@@ -179,15 +179,14 @@ k = len([i for i in coefMatrix.iloc[:,0] if i != 0])
 
 #predict for all data using betas
 if settings['conditional']:
-    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, preds_to_keep, settings['stochastic_thresh'], settings['static_thresh'])
+    final_predictions = predict_conditional(X_all, coefMatrix, logit_betas,
+                                            preds_to_keep,
+                                            settings['stochastic_thresh'],
+                                            settings['static_thresh'],
+                                            settings['inflate'])
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
-
-if settings['inflate']:
-    # add stochasticity via "variance inflation", before undoing any data transformations
-    #final_predictions = inflate_variance_SDSM(Y_all[predictand], final_predictions, c=settings['inflate_var'])
-    final_predictions = inflate_variance(0, 1, final_predictions)
 
 if settings['transform']:
     # undo transformation
@@ -195,7 +194,6 @@ if settings['transform']:
 
 
 save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
-print(final_predictions)
 print("Saved predictions.")
 
 
