@@ -430,7 +430,7 @@ def plot_cold_days(plotData, future = False):
 
 def plot_wet_days(plotData, future=False):
     """todo"""
-    plot_cond_days(plotData, title="Number of Wet Days by Month", comp="more", thresh = 0)
+    plot_cond_days(plotData, title="Number of Wet Days by Month", comp="greater", thresh = 0.01)
     if not future:
         plot_cond_days_by_year(plotData, title="Number of Wet Days by Year", comp="more", thresh = 0)
 
