@@ -24,7 +24,7 @@
 'stochastic_thresh' : True,
 'static_thresh' : 0.5,
 
-'inflate' : False,
+'inflate' : True,
 'inflate_var' : 12,
 
 }
