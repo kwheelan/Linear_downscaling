@@ -585,8 +585,7 @@ def inflate_variance(mu, variance, preds):
     """
     sigma = math.sqrt(variance)
     stochast = np.random.normal(mu, sigma, preds.shape)
-    preds['preds'] = preds.preds + stochast
-    return preds
+    return preds + stochast
 
 def SE(y, preds):
     """
