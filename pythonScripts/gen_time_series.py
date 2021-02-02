@@ -122,7 +122,8 @@ if settings['conditional']:
     final_predictions = predict_conditional(X_all, coefMatrix, logit_betas, preds_to_keep,
                                             settings['stochastic_thresh'],
                                             settings['static_thresh'],
-                                            settings['inflate'])
+                                            settings['inflate'],
+                                            settings['inflate_var'])
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 

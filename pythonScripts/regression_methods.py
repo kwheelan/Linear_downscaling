@@ -505,7 +505,7 @@ def predict_linear(X_all, betas, preds_to_keep):
 
     return X_preds.sortby('time')
 
-def predict_conditional(X_all, betas, logit_betas, preds_to_keep, stoch = False, thresh = 0.5, inflate=False):
+def predict_conditional(X_all, betas, logit_betas, preds_to_keep, stoch = False, thresh = 0.5, inflate=False, var):
     """
         Uses logit_betas and betas to classify yes/no precip and then predict intensity.
         Inputs:
@@ -538,7 +538,7 @@ def predict_conditional(X_all, betas, logit_betas, preds_to_keep, stoch = False,
         #predict intensity
         intensity = np.matmul(X_all_hand[month-1], betas[monthsFull[month-1]])
         if inflate:
-            intensity = inflate_variance(0,1,intensity)
+            intensity = inflate_variance(0,var,intensity)
 
         X_month["preds"]= ({'time' : 'time'}, np.multiply(intensity,classifier))
         X_month['time'] = X_month['timecopy']

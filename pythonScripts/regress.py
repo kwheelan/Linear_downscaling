@@ -183,7 +183,8 @@ if settings['conditional']:
                                             preds_to_keep,
                                             settings['stochastic_thresh'],
                                             settings['static_thresh'],
-                                            settings['inflate'])
+                                            settings['inflate'],
+                                            settings['inflate_var'])
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 print("Calculated predictions for testing and training data.")
