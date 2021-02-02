@@ -1,0 +1,15 @@
+Summary Statistics
+Lat = 32.125, Lon = -101.875
+
+Observations:
+Mean: 1.1439518928527832
+Variance: 13.865740776062012
+
+Modeled Data (MPI historical):
+Mean: 4.105811662195329
+Variance: 345.18278199079344
+RMSE: 19.120200564997415
+AIC: 56056.45807763358
+R-squared: 25.527334465883694
+Adjusted R-squared: 25.54025583057966
+
