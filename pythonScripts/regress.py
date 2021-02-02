@@ -195,6 +195,7 @@ if settings['transform']:
 
 
 save_preds(settings['save_path'], final_predictions, lat, lon, predictand)
+print(final_predictions)
 print("Saved predictions.")
 
 
