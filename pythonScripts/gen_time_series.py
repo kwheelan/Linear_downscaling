@@ -123,11 +123,6 @@ if settings['conditional']:
 else:
     final_predictions = predict_linear(X_all, coefMatrix, preds_to_keep)
 
-if settings['inflate']:
-    # add stochasticity via "variance inflation", before undoing any data transformations
-    #final_predictions = inflate_variance_SDSM(Y_all[predictand], final_predictions, c=settings['inflate_var'])
-    final_predictions = inflate_variance(0, 1, final_predictions)
-
 if settings['transform']:
     # undo transformation
     final_predictions['preds'] = final_predictions.preds ** 4
