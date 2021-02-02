@@ -25,6 +25,6 @@
 'static_thresh' : 0.5,
 
 'inflate' : True,
-'inflate_var' : 0.5,
+'inflate_var' : 0.25,
 
 }
