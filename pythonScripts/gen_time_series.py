@@ -162,16 +162,15 @@ if not future:
 
 else:
     #future projections
-    #set years equal to plot
-    final_predictions['time'] =  int(Y_all.time[0]) - int(final_predictions.time[0]) + final_predictions.time
-
-    #compare historical and future
-    future = final_predictions
 
     #get historical data
     fp = os.path.join(ROOT, f"timeseries/finalPreds_{predictand}_{lat}_{lon}.nc")
     fp = fp.replace('rcp85','historical')
     historical = xr.open_dataset(fp)
+
+    #set years equal to plot for future
+    final_predictions['time'] =  int(historical.time[0]) - int(final_predictions.time[0]) + final_predictions.time
+    future = final_predictions
 
     # generate plots
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
