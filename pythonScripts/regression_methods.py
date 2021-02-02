@@ -505,7 +505,7 @@ def predict_linear(X_all, betas, preds_to_keep):
 
     return X_preds.sortby('time')
 
-def predict_conditional(X_all, betas, logit_betas, preds_to_keep, stoch = False, thresh = 0.5, inflate=False, var):
+def predict_conditional(X_all, betas, logit_betas, preds_to_keep, stoch = False, thresh = 0.5, inflate=False, var=1):
     """
         Uses logit_betas and betas to classify yes/no precip and then predict intensity.
         Inputs:
