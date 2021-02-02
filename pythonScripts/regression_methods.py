@@ -584,7 +584,7 @@ def inflate_variance(mu, variance, preds):
              predictions plus the stochastic elements
     """
     sigma = math.sqrt(variance)
-    stochast = np.random.normal(mu, sigma, preds.preds.shape[0])
+    stochast = np.random.normal(mu, sigma, preds.shape)
     preds['preds'] = preds.preds + stochast
     return preds
 
