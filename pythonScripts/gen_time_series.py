@@ -155,7 +155,7 @@ if not future:
     #historical
     #plot against obs 1980-2005
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
-                models = {'MPI historical': final_predictions.sel(time=slice('1980-01-01', end_date))},
+                models = {'GFDL historical': final_predictions.sel(time=slice('1980-01-01', end_date))},
                 startDate = '1980-01-01',
                 endDate = end_date, k = k)
     plot_all(plotData)
@@ -174,8 +174,8 @@ else:
 
     # generate plots
     plotData = Plot(save_location, lat, lon, predictand, obs = Y_all,
-                models = {'MPI historical': historical.sel(time=slice('1980-01-01', '2005-12-31')),
-                          'MPI future': future.sel(time=slice('1980-01-01', '2005-12-31'))},
+                models = {'GFDL historical': historical.sel(time=slice('1980-01-01', '2005-12-31')),
+                          'GFDL future': future.sel(time=slice('1980-01-01', '2005-12-31'))},
                 startDate = '1980-01-01',
                 endDate = '2005-12-31', k = k)
     plot_all_future(plotData)
