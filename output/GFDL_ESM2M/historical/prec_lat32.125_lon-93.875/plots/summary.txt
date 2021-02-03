@@ -1,0 +1,15 @@
+Summary Statistics
+Lat = 32.125, Lon = -93.875
+
+Observations:
+Mean: 3.67868709564209
+Variance: 85.61678314208984
+
+Modeled Data (GFDL historical):
+Mean: 3.5250723032285785
+Variance: 76.61931351525767
+RMSE: 12.683938725876786
+AIC: 48261.15197188566
+R-squared: 0.8951856254347337
+Adjusted R-squared: 0.8951304076628628
+
